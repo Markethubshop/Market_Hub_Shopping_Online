@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Supabase Shop</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #16a34a;
+    }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem; display: flex; flex-wrap: wrap;
+      justify-content: space-between; align-items: center; gap: 1rem;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .brand { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+    .nav-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    button {
+      background: var(--primary); color: #fff; border: none;
+      padding: 0.5rem 0.9rem; border-radius: 6px; cursor: pointer;
+      font-weight: 600; font-size: 0.9rem;
+    }
+    button:hover { background: var(--primary-dark); }
+    button.secondary { background: #e2e8f0; color: var(--text); }
+    button.secondary:hover { background: #cbd5e1; }
+    button.danger { background: var(--danger); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .container { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem; }
+    .badge {
+      background: #dbeafe; color: var(--primary-dark); padding: 0.2rem 0.6rem;
+      border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    }
+    .badge.admin { background: #fef3c7; color: #b45309; }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem; margin-top: 1rem;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card img { width: 100%; height: 170px; object-fit: cover; background: #e2e8f0; }
+    .card-body { padding: 1rem; }
+    .card-title { font-weight: 700; font-size: 1.05rem; margin: 0 0 0.3rem; }
+    .card-desc { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
+    .price { font-size: 1.1rem; font-weight: 700; color: var(--success); }
+    .stock { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; }
+    .panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.25rem; margin-bottom: 1.5rem;
+    }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+    input, textarea, select {
+      width: 100%; padding: 0.55rem; border: 1px solid var(--border);
+      border-radius: 6px; font-size: 0.9rem;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--border); }
+    .hidden { display: none !important; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55);
+      display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 50;
+    }
+    .modal {
+      background: var(--card); border-radius: 10px; max-width: 520px; width: 100%;
+      padding: 1.5rem; max-height: 90vh; overflow-y: auto;
+    }
+    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">🛒 Online Store</div>
+  <div class="nav-actions">
+    <span id="user-info" class="hidden"></span>
+    <span id="role-badge" class="badge hidden"></span>
+    <button id="btn-shop" class="secondary" onclick="switchView('shop')">Shop</button>
+    <button id="btn-orders" class="secondary hidden" onclick="switchView('orders')">Orders</button>
+    <button id="btn-admin" class="secondary hidden" onclick="switchView('admin')">Admin Panel</button>
+    <button id="btn-cart" class="hidden" onclick="openCart()">Cart (<span id="cart-count">0</span>)</button>
+    <button id="btn-login" onclick="openAuthModal()">Login / Sign Up</button>
+    <button id="btn-logout" class="danger hidden" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="container">
+  <!-- VIEW 1: SHOP CATALOG (Para sa lahat at Users) -->
+  <section id="view-shop">
+    <div class="row-between">
+      <h2>Mga Produkto</h2>
+      <input type="text" id="search-input" placeholder="Maghanap ng produkto..." style="max-width: 260px;" oninput="renderProducts()" />
+    </div>
+    <div id="product-grid" class="grid"></div>
+  </section>
+
+  <!-- VIEW 2: ORDERS (User sees own orders; Admin sees all & can update status) -->
+  <section id="view-orders" class="hidden">
+    <h2>Mga Orders</h2>
+    <div id="orders-list"></div>
+  </section>
+
+  <!-- VIEW 3: ADMIN PANEL (Add product & Edit price/stock) -->
+  <section id="view-admin" class="hidden">
+    <div class="panel">
+      <h3>➕ Magdagdag ng Bagong Produkto</h3>
+      <form id="add-product-form" onsubmit="addProduct(event)">
+        <div class="form-grid">
+          <input type="text" id="p-name" placeholder="Pangalan ng produkto" required />
+          <input type="number" id="p-price" step="0.01" min="0" placeholder="Presyo (₱)" required />
+          <input type="number" id="p-stock" min="0" placeholder="Stock quantity" required />
+          <input type="url" id="p-image" placeholder="Image URL (https://...)" />
+        </div>
+        <div style="margin-top: 0.75rem;">
+          <input type="text" id="p-desc" placeholder="Maikling deskripsyon ng produkto" />
+        </div>
+        <button type="submit" style="margin-top: 0.75rem;">I-save ang Produkto</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h3>✏️ I-edit ang Presyo, Stock, o Burahin ang Produkto</h3>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Produkto</th>
+              <th>Presyo (₱)</th>
+              <th>Stock</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="auth-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0;">Account Login / Sign Up</h3>
+      <button class="secondary" onclick="closeAuthModal()">✕</button>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--muted);">Mag-login para makapag-Add to Cart at makabili.</p>
+    <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+      <input type="email" id="auth-email" placeholder="Email address" />
+      <input type="password" id="auth-password" placeholder="Password (min. 6 characters)" />
+      <div class="row-between">
+        <button onclick="signIn()" style="flex:1;">Login</button>
+        <button class="secondary" onclick="signUp()" style="flex:1;">Sign Up</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART & CHECKOUT MODAL -->
+<div id="cart-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0;">🛒 Iyong Cart</h3>
+      <button class="secondary" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cart-items-container" style="margin: 1rem 0;"></div>
+    <div id="checkout-section" class="hidden">
+      <hr style="border:0; border-top:1px solid var(--border); margin:1rem 0;" />
+      <h4 style="margin:0 0 0.5rem;">Checkout Details</h4>
+      <div style="display:flex; flex-direction:column; gap:0.6rem;">
+        <input type="text" id="checkout-name" placeholder="Buong Pangalan" />
+        <textarea id="checkout-address" rows="2" placeholder="Kumpletong Delivery Address at Contact Number"></textarea>
+        <button onclick="checkout()">Place Order (Buy Now)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // PALITAN ITO NG IYONG SUPABASE PROJECT URL AT ANON PUBLIC KEY
+  const SUPABASE_URL = "https://YOUR_PROJECT_REF.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentUser = null;
+  let currentRole = "guest"; // 'guest' | 'user' | 'admin'
+  let products = [];
+  let cart = [];
+
+  // Initialize App
+  async function init() {
+    const { data: { session } } = await db.auth.getSession();
+    await handleSession(session);
+
+    db.auth.onAuthStateChange(async (_event, session) => {
+      await handleSession(session);
+    });
+
+    await loadProducts();
+  }
+
+  async function handleSession(session) {
+    currentUser = session?.user || null;
+
+    if (currentUser) {
+      const { data: profile } = await db
+        .from("profiles")
+        .select("role")
+        .eq("id", currentUser.id)
+        .single();
+
+      currentRole = profile?.role || "user";
+
+      document.getElementById("user-info").textContent = currentUser.email;
+      document.getElementById("user-info").classList.remove("hidden");
+
+      const badge = document.getElementById("role-badge");
+      badge.textContent = currentRole;
+      badge.className = "badge " + (currentRole === "admin" ? "admin" : "");
+      badge.classList.remove("hidden");
+
+      document.getElementById("btn-login").classList.add("hidden");
+      document.getElementById("btn-logout").classList.remove("hidden");
+      document.getElementById("btn-orders").classList.remove("hidden");
+      document.getElementById("btn-cart").classList.remove("hidden");
+
+      if (currentRole === "admin") {
+        document.getElementById("btn-admin").classList.remove("hidden");
+      } else {
+        document.getElementById("btn-admin").classList.add("hidden");
+      }
+
+      await loadCart();
+    } else {
+      currentRole = "guest";
+      cart = [];
+      updateCartBadge();
+      ["user-info", "role-badge", "btn-logout", "btn-orders", "btn-admin", "btn-cart"].forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      document.getElementById("btn-login").classList.remove("hidden");
+      switchView("shop");
+    }
+    renderProducts();
+  }
+
+  // NAVIGATION
+  function switchView(view) {
+    ["shop", "orders", "admin"].forEach(v => {
+      document.getElementById("view-" + v).classList.toggle("hidden", v !== view);
+    });
+    if (view === "orders") loadOrders();
+    if (view === "admin") renderAdminTable();
+  }
+
+  // AUTH FUNCTIONS
+  function openAuthModal() { document.getElementById("auth-modal").classList.remove("hidden"); }
+  function closeAuthModal() { document.getElementById("auth-modal").classList.add("hidden"); }
+
+  async function signUp() {
+    const email = document.getElementById("auth-email").value.trim();
+    const password = document.getElementById("auth-password").value;
+    const { error } = await db.auth.signUp({ email, password });
+    if (error) return alert(error.message);
+    alert("Account created! Pwede ka nang mag-login.");
+    closeAuthModal();
+  }
+
+  async function signIn() {
+    const email = document.getElementById("auth-email").value.trim();
+    const password = document.getElementById("auth-password").value;
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    if (error) return alert(error.message);
+    closeAuthModal();
+  }
+
+  async function logout() {
+    await db.auth.signOut();
+  }
+
+  // PRODUCTS
+  async function loadProducts() {
+    const { data, error } = await db.from("products").select("*").order("id", { ascending: false });
+    if (error) return console.error(error);
+    products = data || [];
+    renderProducts();
+    if (currentRole === "admin") renderAdminTable();
+  }
+
+  function renderProducts() {
+    const query = document.getElementById("search-input").value.toLowerCase();
+    const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+    const grid = document.getElementById("product-grid");
+
+    if (!filtered.length) {
+      grid.innerHTML = "<p>Walang nahanap na produkto.</p>";
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => `
+      <div class="card">
+        <img src="${p.image_url || 'https://via.placeholder.com/300x180?text=No+Image'}" alt="${p.name}" />
+        <div class="card-body">
+          <h3 class="card-title">${p.name}</h3>
+          <p class="card-desc">${p.description || ""}</p>
+          <div class="price">₱${Number(p.price).toFixed(2)}</div>
+          <div class="stock">Stock: ${p.stock}</div>
+          <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? "disabled" : ""} style="width:100%;">
+            ${p.stock <= 0 ? "Out of Stock" : "Add to Cart"}
+          </button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // ADMIN ACTIONS
+  async function addProduct(e) {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById("p-name").value.trim(),
+      price: parseFloat(document.getElementById("p-price").value),
+      stock: parseInt(document.getElementById("p-stock").value, 10),
+      image_url: document.getElementById("p-image").value.trim() || null,
+      description: document.getElementById("p-desc").value.trim()
+    };
+
+    const { error } = await db.from("products").insert(payload);
+    if (error) return alert("Error: " + error.message);
+
+    e.target.reset();
+    alert("Naidagdag na ang produkto!");
+    await loadProducts();
+  }
+
+  function renderAdminTable() {
+    const tbody = document.getElementById("admin-products-tbody");
+    tbody.innerHTML = products.map(p => `
+      <tr>
+        <td><strong>${p.name}</strong></td>
+        <td><input type="number" step="0.01" id="edit-price-${p.id}" value="${p.price}" style="width:110px;" /></td>
+        <td><input type="number" id="edit-stock-${p.id}" value="${p.stock}" style="width:90px;" /></td>
+        <td>
+          <button onclick="updateProduct(${p.id})">Save</button>
+          <button class="danger" onclick="deleteProduct(${p.id})">Delete</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  async function updateProduct(id) {
+    const price = parseFloat(document.getElementById(`edit-price-${id}`).value);
+    const stock = parseInt(document.getElementById(`edit-stock-${id}`).value, 10);
+
+    const { error } = await db.from("products").update({ price, stock }).eq("id", id);
+    if (error) return alert("Error: " + error.message);
+
+    alert("Na-update na ang presyo at stock!");
+    await loadProducts();
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm("Sigurado ka bang buburahin ang produktong ito?")) return;
+    const { error } = await db.from("products").delete().eq("id", id);
+    if (error) return alert("Error: " + error.message);
+    await loadProducts();
+  }
+
+  // CART (PER-USER DATABASE)
+  async function loadCart() {
+    if (!currentUser) return;
+    const { data, error } = await db
+      .from("cart_items")
+      .select("id, quantity, product_id, products(name, price, stock)")
+      .eq("user_id", currentUser.id);
+
+    if (error) return console.error(error);
+    cart = data || [];
+    updateCartBadge();
+  }
+
+  function updateCartBadge() {
+    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById("cart-count").textContent = totalQty;
+  }
+
+  async function addToCart(productId) {
+    if (!currentUser) {
+      openAuthModal();
+      return;
+    }
+
+    const existing = cart.find(item => item.product_id === productId);
+    if (existing) {
+      const { error } = await db
+        .from("cart_items")
+        .update({ quantity: existing.quantity + 1 })
+        .eq("id", existing.id);
+      if (error) return alert(error.message);
+    } else {
+      const { error } = await db
+        .from("cart_items")
+        .insert({ user_id: currentUser.id, product_id: productId, quantity: 1 });
+      if (error) return alert(error.message);
+    }
+
+    await loadCart();
+    alert("Idinagdag sa cart!");
+  }
+
+  function openCart() {
+    renderCartModal();
+    document.getElementById("cart-modal").classList.remove("hidden");
+  }
+  function closeCart() { document.getElementById("cart-modal").classList.add("hidden"); }
+
+  function renderCartModal() {
+    const container = document.getElementById("cart-items-container");
+    const checkoutSec = document.getElementById("checkout-section");
+
+    if (!cart.length) {
+      container.innerHTML = "<p>Walang laman ang iyong cart.</p>";
+      checkoutSec.classList.add("hidden");
+      return;
+    }
+
+    let grandTotal = 0;
+    container.innerHTML = cart.map(item => {
+      const p = item.products;
+      const subtotal = p.price * item.quantity;
+      grandTotal += subtotal;
+      return `
+        <div class="row-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
+          <div>
+            <strong>${p.name}</strong><br/>
+            <small>₱${Number(p.price).toFixed(2)} x ${item.quantity} = ₱${subtotal.toFixed(2)}</small>
+          </div>
+          <div style="display:flex; gap:0.3rem;">
+            <button class="secondary" onclick="changeCartQty(${item.id}, ${item.quantity - 1})">-</button>
+            <button class="secondary" onclick="changeCartQty(${item.id}, ${item.quantity + 1})">+</button>
+          </div>
+        </div>
+      `;
+    }).join("") + `<h4 style="text-align:right; margin-top:0.75rem;">Total: ₱${grandTotal.toFixed(2)}</h4>`;
+
+    checkoutSec.classList.remove("hidden");
+  }
+
+  async function changeCartQty(cartItemId, newQty) {
+    if (newQty <= 0) {
+      await db.from("cart_items").delete().eq("id", cartItemId);
+    } else {
+      await db.from("cart_items").update({ quantity: newQty }).eq("id", cartItemId);
+    }
+    await loadCart();
+    renderCartModal();
+  }
+
+  async function checkout() {
+    const name = document.getElementById("checkout-name").value.trim();
+    const address = document.getElementById("checkout-address").value.trim();
+    if (!name || !address) return alert("Ilagay ang iyong pangalan at address.");
+
+    const { data, error } = await db.rpc("checkout_cart", {
+      p_customer_name: name,
+      p_address: address
+    });
+
+    if (error) return alert("Checkout failed: " + error.message);
+
+    alert(`Order #${data} placed successfully!`);
+    closeCart();
+    await loadCart();
+    await loadProducts();
+    switchView("orders");
+  }
+
+  // ORDERS VIEW
+  async function loadOrders() {
+    const { data, error } = await db
+      .from("orders")
+      .select("*, order_items(*)")
+      .order("created_at", { ascending: false });
+
+    if (error) return console.error(error);
+
+    const list = document.getElementById("orders-list");
+    if (!data || !data.length) {
+      list.innerHTML = "<p>Wala pang orders.</p>";
+      return;
+    }
+
+    list.innerHTML = data.map(o => `
+      <div class="panel">
+        <div class="row-between">
+          <strong>Order #${o.id} — ${o.customer_name}</strong>
+          <span class="badge">${o.status}</span>
+        </div>
+        <p style="font-size:0.85rem; color:var(--muted); margin:0.3rem 0;">Address: ${o.address}</p>
+        <ul style="margin:0.5rem 0; padding-left:1.2rem; font-size:0.9rem;">
+          ${o.order_items.map(i => `<li>${i.product_name} (${i.quantity}x) — ₱${Number(i.unit_price * i.quantity).toFixed(2)}</li>`).join("")}
+        </ul>
+        <div class="row-between">
+          <strong>Total: ₱${Number(o.total_amount).toFixed(2)}</strong>
+          ${currentRole === "admin" ? `
+            <select onchange="updateOrderStatus(${o.id}, this.value)" style="width:auto;">
+              <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
+              <option value="Confirmed" ${o.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
+              <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped</option>
+              <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
+            </select>
+          ` : ""}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  async function updateOrderStatus(orderId, status) {
+    const { error } = await db.from("orders").update({ status }).eq("id", orderId);
+    if (error) return alert(error.message);
+    alert("Updated order status!");
+  }
+
+  init();
+</script>
+</body>
+</html>
