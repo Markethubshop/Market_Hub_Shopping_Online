@@ -3,33 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NovaMart — Modern Online Store</title>
+  <title>FreshHarvest Market — Fruits & Vegetables Online Store</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --primary-soft: #eff6ff;
-      --accent: #0ea5e9;
-      --bg: #f1f5f9;
-      --card: rgba(255, 255, 255, 0.94);
+      --primary: #15803d;
+      --primary-dark: #166534;
+      --primary-light: #16a34a;
+      --primary-soft: #dcfce7;
+      --accent: #ea580c;
+      --accent-soft: #ffedd5;
+      --bg: #f3f7f4;
+      --card: rgba(255, 255, 255, 0.95);
       --card-solid: #ffffff;
-      --text: #0f172a;
-      --text-secondary: #334155;
-      --muted: #64748b;
-      --border: #e2e8f0;
+      --text: #142419;
+      --text-secondary: #334639;
+      --muted: #607366;
+      --border: #dce6df;
       --danger: #dc2626;
       --danger-soft: #fef2f2;
-      --success: #059669;
+      --success: #15803d;
       --success-soft: #ecfdf5;
       --warning: #d97706;
       --warning-soft: #fffbeb;
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-      --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.16);
+      --shadow-sm: 0 1px 3px rgba(20, 36, 25, 0.06), 0 1px 2px rgba(20, 36, 25, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(20, 36, 25, 0.09), 0 8px 10px -6px rgba(20, 36, 25, 0.04);
+      --shadow-lg: 0 20px 35px -10px rgba(20, 36, 25, 0.18);
       --radius: 14px;
     }
 
@@ -42,24 +44,24 @@
       margin: 0;
       color: var(--text);
       background-color: var(--bg);
-      /* Realistic subtle studio lighting & fine grid texture background */
+      /* Fresh produce market soft backdrop + botanical organic lighting */
       background-image:
-        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.09) 0px, transparent 50%),
-        radial-gradient(at 100% 15%, rgba(14, 165, 233, 0.08) 0px, transparent 45%),
-        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
-        linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+        linear-gradient(180deg, rgba(243, 247, 244, 0.90) 0%, rgba(243, 247, 244, 0.94) 45%, rgba(236, 245, 239, 0.96) 100%),
+        radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.14) 0px, transparent 50%),
+        radial-gradient(at 100% 10%, rgba(234, 88, 12, 0.10) 0px, transparent 45%),
+        url('https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover, 100% 100%, 100% 100%, cover;
+      background-position: center, center, center, center top;
       background-attachment: fixed;
       min-height: 100vh;
     }
 
     /* Sticky Frosted Glass Header */
     header {
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.90);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+      border-bottom: 1px solid rgba(220, 230, 223, 0.95);
       padding: 0.85rem 1.5rem;
       display: flex;
       flex-wrap: wrap;
@@ -69,7 +71,7 @@
       position: sticky;
       top: 0;
       z-index: 40;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 4px 20px rgba(20, 36, 25, 0.05);
     }
 
     .brand {
@@ -84,22 +86,22 @@
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
       color: #fff;
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.28);
     }
 
     .brand span.sub {
       font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--primary);
+      font-weight: 700;
+      color: var(--primary-dark);
       background: var(--primary-soft);
-      padding: 0.15rem 0.5rem;
+      padding: 0.16rem 0.55rem;
       border-radius: 999px;
       letter-spacing: 0.02em;
     }
@@ -115,7 +117,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      background: #f8fafc;
+      background: #f6faf7;
       border: 1px solid var(--border);
       padding: 0.32rem 0.7rem;
       border-radius: 999px;
@@ -143,7 +145,7 @@
     button:hover:not(:disabled) {
       background: var(--primary-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.24);
     }
 
     button:active:not(:disabled) {
@@ -157,24 +159,24 @@
     }
 
     button.secondary:hover:not(:disabled) {
-      background: #f8fafc;
-      border-color: #cbd5e1;
+      background: #f4f9f5;
+      border-color: #bfd3c5;
       box-shadow: var(--shadow-sm);
     }
 
     button.secondary.active-nav {
       background: var(--primary-soft);
       color: var(--primary-dark);
-      border-color: #bfdbfe;
+      border-color: #86efac;
     }
 
     button.success-btn {
-      background: var(--success);
+      background: var(--primary-light);
     }
 
     button.success-btn:hover:not(:disabled) {
-      background: #047857;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      background: var(--primary-dark);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.26);
     }
 
     button.danger {
@@ -186,9 +188,21 @@
       box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
     }
 
+    button.danger-outline {
+      background: #fff;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    button.danger-outline:hover:not(:disabled) {
+      background: var(--danger-soft);
+      border-color: #fca5a5;
+      box-shadow: none;
+    }
+
     button.sm {
-      padding: 0.38rem 0.7rem;
-      font-size: 0.78rem;
+      padding: 0.36rem 0.68rem;
+      font-size: 0.77rem;
       border-radius: 7px;
     }
 
@@ -214,8 +228,8 @@
     }
 
     .notif-btn:hover {
-      background: #f8fafc;
-      border-color: #cbd5e1;
+      background: #f4f9f5;
+      border-color: #bfd3c5;
       box-shadow: var(--shadow-sm);
     }
 
@@ -241,7 +255,7 @@
       height: 19px;
       padding: 0 5px;
       border-radius: 999px;
-      background: var(--danger);
+      background: var(--accent);
       color: #fff;
       font-size: 0.7rem;
       font-weight: 700;
@@ -249,14 +263,14 @@
       align-items: center;
       justify-content: center;
       border: 2px solid #fff;
-      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4);
+      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.45);
     }
 
     .notif-dropdown {
       position: absolute;
       right: 0;
       top: calc(100% + 10px);
-      width: 370px;
+      width: 390px;
       max-width: calc(100vw - 24px);
       background: var(--card-solid);
       border: 1px solid var(--border);
@@ -268,21 +282,28 @@
 
     .notif-header {
       padding: 0.85rem 1rem;
-      background: #f8fafc;
+      background: #f4f9f5;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.5rem;
     }
 
     .notif-header h4 {
       margin: 0;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
     }
 
+    .notif-header-actions {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
     .notif-list {
-      max-height: 360px;
+      max-height: 370px;
       overflow-y: auto;
     }
 
@@ -297,11 +318,11 @@
     }
 
     .notif-item:hover {
-      background: #f8fafc;
+      background: #f8fbf9;
     }
 
     .notif-item.unread {
-      background: #eff6ff;
+      background: #f0fdf4;
       border-left: 3px solid var(--primary);
     }
 
@@ -332,8 +353,9 @@
 
     .notif-actions {
       display: flex;
-      gap: 0.45rem;
-      margin-top: 0.25rem;
+      gap: 0.4rem;
+      margin-top: 0.3rem;
+      flex-wrap: wrap;
     }
 
     .container {
@@ -342,17 +364,17 @@
       padding: 0 1.25rem;
     }
 
-    /* Realistic Storefront Hero Banner */
+    /* Realistic Fruits & Vegetables Storefront Hero Banner */
     .hero-banner {
       position: relative;
       border-radius: 18px;
       overflow: hidden;
       margin-bottom: 1.75rem;
-      padding: 2.4rem 2.2rem;
+      padding: 2.5rem 2.25rem;
       color: #ffffff;
       background:
-        linear-gradient(105deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 58, 138, 0.78) 55%, rgba(14, 116, 144, 0.68) 100%),
-        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+        linear-gradient(105deg, rgba(13, 42, 24, 0.90) 0%, rgba(20, 83, 45, 0.80) 52%, rgba(154, 52, 18, 0.62) 100%),
+        url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
       box-shadow: var(--shadow-md);
       display: flex;
       flex-wrap: wrap;
@@ -362,7 +384,7 @@
     }
 
     .hero-content {
-      max-width: 600px;
+      max-width: 630px;
     }
 
     .hero-kicker {
@@ -371,8 +393,8 @@
       gap: 0.4rem;
       background: rgba(255, 255, 255, 0.16);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 0.3rem 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.32rem 0.8rem;
       border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 600;
@@ -382,17 +404,17 @@
     }
 
     .hero-banner h1 {
-      margin: 0 0 0.5rem;
-      font-size: clamp(1.5rem, 3vw, 2.15rem);
+      margin: 0 0 0.55rem;
+      font-size: clamp(1.55rem, 3vw, 2.2rem);
       font-weight: 800;
       letter-spacing: -0.02em;
       line-height: 1.2;
     }
 
     .hero-banner p {
-      margin: 0 0 1.2rem;
+      margin: 0 0 1.25rem;
       font-size: 0.95rem;
-      color: rgba(241, 245, 249, 0.9);
+      color: rgba(240, 253, 244, 0.92);
       line-height: 1.5;
     }
 
@@ -406,9 +428,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(15, 23, 42, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 0.4rem 0.75rem;
+      background: rgba(13, 42, 24, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.42rem 0.78rem;
       border-radius: 10px;
       font-size: 0.78rem;
       font-weight: 500;
@@ -437,7 +459,7 @@
     }
 
     .filter-pill {
-      background: #f8fafc;
+      background: #f6faf7;
       color: var(--text-secondary);
       border: 1px solid var(--border);
       padding: 0.4rem 0.85rem;
@@ -447,21 +469,21 @@
     }
 
     .filter-pill.active {
-      background: var(--text);
+      background: var(--primary-dark);
       color: #fff;
-      border-color: var(--text);
+      border-color: var(--primary-dark);
     }
 
     .search-box {
       position: relative;
       flex: 1;
       min-width: 220px;
-      max-width: 320px;
+      max-width: 330px;
     }
 
     .search-box input {
       padding-left: 2.25rem;
-      background: #f8fafc;
+      background: #f6faf7;
     }
 
     .search-box svg {
@@ -474,7 +496,7 @@
     }
 
     .badge {
-      background: #dbeafe;
+      background: var(--primary-soft);
       color: var(--primary-dark);
       padding: 0.22rem 0.65rem;
       border-radius: 999px;
@@ -485,15 +507,15 @@
     }
 
     .badge.admin {
-      background: #fef3c7;
-      color: #b45309;
+      background: var(--accent-soft);
+      color: #c2410c;
     }
 
     .badge.status-pending { background: #fef3c7; color: #b45309; }
-    .badge.status-received { background: #e0e7ff; color: #3730a3; }
+    .badge.status-received { background: #dcfce7; color: #166534; }
     .badge.status-confirmed { background: #dbeafe; color: #1d4ed8; }
-    .badge.status-shipped { background: #cffafe; color: #0e7490; }
-    .badge.status-delivered { background: #dcfce7; color: #15803d; }
+    .badge.status-shipped { background: #ffedd5; color: #c2410c; }
+    .badge.status-delivered { background: #d1fae5; color: #065f46; }
 
     /* Product Cards */
     .grid {
@@ -517,7 +539,7 @@
     .card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-md);
-      border-color: #cbd5e1;
+      border-color: #a7f3d0;
     }
 
     .card-img-wrap {
@@ -525,7 +547,7 @@
       width: 100%;
       height: 195px;
       overflow: hidden;
-      background: linear-gradient(135deg, #e2e8f0, #f1f5f9);
+      background: linear-gradient(135deg, #dcfce7, #f0fdf4);
     }
 
     .card-img-wrap img {
@@ -543,18 +565,18 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      padding: 0.25rem 0.6rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 999px;
       font-size: 0.72rem;
       font-weight: 700;
       backdrop-filter: blur(8px);
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--success);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--primary-dark);
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .stock-tag.low {
-      color: var(--warning);
+      color: var(--accent);
     }
 
     .stock-tag.out {
@@ -590,13 +612,13 @@
       align-items: baseline;
       margin-bottom: 0.85rem;
       padding-top: 0.65rem;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid #eef5f0;
     }
 
     .price {
       font-size: 1.2rem;
       font-weight: 800;
-      color: var(--text);
+      color: var(--primary-dark);
       letter-spacing: -0.02em;
     }
 
@@ -618,8 +640,8 @@
     }
 
     .panel.highlight-order {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18), var(--shadow-md);
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.20), var(--shadow-md);
     }
 
     /* Order Progress Stepper */
@@ -629,7 +651,7 @@
       gap: 0.35rem;
       margin: 1rem 0;
       padding: 0.85rem;
-      background: #f8fafc;
+      background: #f6faf7;
       border: 1px solid var(--border);
       border-radius: 10px;
     }
@@ -649,7 +671,7 @@
       width: 24px;
       height: 24px;
       border-radius: 999px;
-      background: #e2e8f0;
+      background: #dce6df;
       color: var(--muted);
       display: grid;
       place-items: center;
@@ -660,22 +682,22 @@
     }
 
     .step-item.done .step-dot {
-      background: var(--success);
+      background: var(--primary-light);
       color: #fff;
     }
 
     .step-item.done {
-      color: var(--success);
+      color: var(--primary-dark);
     }
 
     .step-item.current .step-dot {
-      background: var(--primary);
+      background: var(--accent);
       color: #fff;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+      box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2);
     }
 
     .step-item.current {
-      color: var(--primary-dark);
+      color: var(--accent);
       font-weight: 700;
     }
 
@@ -716,8 +738,8 @@
 
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
     }
 
     .img-preview {
@@ -737,7 +759,7 @@
     }
 
     th {
-      background: #f8fafc;
+      background: #f4f9f5;
       color: var(--muted);
       font-weight: 700;
       text-transform: uppercase;
@@ -757,7 +779,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.58);
+      background: rgba(20, 36, 25, 0.58);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -800,12 +822,12 @@
     }
 
     .toast {
-      background: #0f172a;
-      color: #f8fafc;
+      background: #142419;
+      color: #f0fdf4;
       padding: 0.85rem 1rem;
       border-radius: 12px;
       box-shadow: var(--shadow-lg);
-      border-left: 4px solid var(--primary);
+      border-left: 4px solid var(--primary-light);
       font-size: 0.85rem;
       display: flex;
       align-items: flex-start;
@@ -814,8 +836,8 @@
       animation: slideInToast 0.25s ease-out;
     }
 
-    .toast.success { border-left-color: #10b981; }
-    .toast.warning { border-left-color: #f59e0b; }
+    .toast.success { border-left-color: #22c55e; }
+    .toast.warning { border-left-color: #f97316; }
     .toast.error { border-left-color: #ef4444; }
 
     @keyframes slideInToast {
@@ -827,7 +849,7 @@
       text-align: center;
       padding: 3rem 1rem;
       background: var(--card);
-      border: 1px dashed #cbd5e1;
+      border: 1px dashed #bfd3c5;
       border-radius: var(--radius);
       color: var(--muted);
     }
@@ -845,9 +867,9 @@
 <header>
   <div class="brand" onclick="switchView('shop')">
     <div class="brand-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
     </div>
-    <div>NovaMart <span class="sub">Official Store</span></div>
+    <div>FreshHarvest <span class="sub">Fruits & Vegetables</span></div>
   </div>
 
   <div class="nav-actions">
@@ -856,7 +878,7 @@
       <span id="role-badge" class="badge"></span>
     </div>
 
-    <button id="btn-shop" class="secondary active-nav" onclick="switchView('shop')">Storefront</button>
+    <button id="btn-shop" class="secondary active-nav" onclick="switchView('shop')">Produce Market</button>
     <button id="btn-orders" class="secondary hidden" onclick="switchView('orders')">Orders</button>
     <button id="btn-admin" class="secondary hidden" onclick="switchView('admin')">Admin Dashboard</button>
 
@@ -873,7 +895,10 @@
       <div id="notif-dropdown" class="notif-dropdown hidden" onclick="event.stopPropagation()">
         <div class="notif-header">
           <h4 id="notif-panel-title">Notifications</h4>
-          <button class="secondary sm" onclick="markAllNotificationsRead()">Mark all read</button>
+          <div class="notif-header-actions">
+            <button class="secondary sm" onclick="markAllNotificationsRead()">Mark read</button>
+            <button id="btn-clear-all-notifs" class="danger-outline sm" onclick="clearAllNotifications()">Clear all</button>
+          </div>
         </div>
         <div id="notif-list" class="notif-list">
           <div style="padding:1.5rem; text-align:center; color:var(--muted); font-size:0.84rem;">No notifications yet.</div>
@@ -883,7 +908,7 @@
 
     <button id="btn-cart" class="hidden" onclick="openCart()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-      Cart (<span id="cart-count">0</span>)
+      Basket (<span id="cart-count">0</span>)
     </button>
 
     <button id="btn-login" onclick="openAuthModal()">Sign In / Register</button>
@@ -898,25 +923,25 @@
   <section id="view-shop">
     <div class="hero-banner">
       <div class="hero-content">
-        <div class="hero-kicker">Verified Marketplace • Live Order Tracking</div>
-        <h1>Quality Essentials Delivered Straight to Your Door</h1>
-        <p>Browse our curated catalog with real-time stock availability, instant order confirmation, and live delivery status updates.</p>
+        <div class="hero-kicker">Farm-Fresh Fruits & Vegetables • Live Tracking</div>
+        <h1>Crisp, Harvest-Fresh Produce Delivered Straight to Your Kitchen</h1>
+        <p>Shop freshly picked fruits and vegetables with real-time stock availability, instant order confirmation, and live delivery status updates.</p>
         <div class="trust-badges">
-          <div class="trust-chip">⚡ Fast Order Processing</div>
-          <div class="trust-chip">🔔 Real-Time Status Alerts</div>
-          <div class="trust-chip">🛡️ Verified Inventory</div>
+          <div class="trust-chip">🥬 Harvested Fresh Daily</div>
+          <div class="trust-chip">🔔 Real-Time Order Alerts</div>
+          <div class="trust-chip">🚚 Fast Local Delivery</div>
         </div>
       </div>
     </div>
 
     <div class="catalog-toolbar">
       <div class="filter-pills">
-        <button id="filter-all" class="filter-pill active" onclick="setStockFilter('all')">All Products</button>
-        <button id="filter-instock" class="filter-pill" onclick="setStockFilter('instock')">In Stock Only</button>
+        <button id="filter-all" class="filter-pill active" onclick="setStockFilter('all')">All Fresh Produce</button>
+        <button id="filter-instock" class="filter-pill" onclick="setStockFilter('instock')">In Stock Today</button>
       </div>
       <div class="search-box">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="search-input" placeholder="Search products..." oninput="renderProducts()" />
+        <input type="text" id="search-input" placeholder="Search fruits & vegetables..." oninput="renderProducts()" />
       </div>
     </div>
 
@@ -928,7 +953,7 @@
     <div class="row-between" style="margin-bottom: 1rem;">
       <div>
         <h2 style="margin:0;">Order History & Live Tracking</h2>
-        <p style="margin:0.25rem 0 0; font-size:0.86rem; color:var(--muted);" id="orders-subtitle">Track order receipt, confirmation, and delivery progress in real time.</p>
+        <p style="margin:0.25rem 0 0; font-size:0.86rem; color:var(--muted);" id="orders-subtitle">Track order receipt, packing, and delivery progress in real time.</p>
       </div>
       <button class="secondary sm" onclick="loadOrders()">↻ Refresh Orders</button>
     </div>
@@ -938,50 +963,50 @@
   <!-- VIEW 3: ADMIN DASHBOARD -->
   <section id="view-admin" class="hidden">
     <div class="panel">
-      <h3 style="margin-top:0;">➕ Add New Product</h3>
+      <h3 style="margin-top:0;">➕ Add New Fruit or Vegetable</h3>
       <form id="add-product-form" onsubmit="addProduct(event)">
         <div class="form-grid">
           <div>
-            <label class="field-label">Product Name</label>
-            <input type="text" id="p-name" placeholder="e.g., Wireless Mechanical Keyboard" required />
+            <label class="field-label">Produce Name</label>
+            <input type="text" id="p-name" placeholder="e.g., Fresh Cavendish Bananas (1kg)" required />
           </div>
           <div>
             <label class="field-label">Price (₱)</label>
             <input type="number" id="p-price" step="0.01" min="0" placeholder="0.00" required />
           </div>
           <div>
-            <label class="field-label">Stock Quantity</label>
+            <label class="field-label">Available Stock (Packs / Kg)</label>
             <input type="number" id="p-stock" min="0" placeholder="0" required />
           </div>
           <div>
-            <label class="field-label">Upload Product Image</label>
+            <label class="field-label">Upload Produce Photo</label>
             <input type="file" id="p-image-file" accept="image/*" onchange="previewSelectedImage()" />
           </div>
         </div>
         <div style="margin-top: 0.85rem;" class="form-grid">
           <div>
             <label class="field-label">Or Paste Image URL</label>
-            <input type="url" id="p-image" placeholder="https://example.com/product.jpg" oninput="previewSelectedImage()" />
+            <input type="url" id="p-image" placeholder="https://example.com/fresh-produce.jpg" oninput="previewSelectedImage()" />
           </div>
           <div>
             <label class="field-label">Short Description</label>
-            <input type="text" id="p-desc" placeholder="Key features, size, or specifications" />
+            <input type="text" id="p-desc" placeholder="e.g., Sweet, farm-picked Grade A harvest per kilo" />
           </div>
         </div>
-        <img id="p-image-preview" class="img-preview hidden" alt="Product Image Preview" />
+        <img id="p-image-preview" class="img-preview hidden" alt="Produce Image Preview" />
         <div style="margin-top: 1rem;">
-          <button type="submit" id="btn-save-product">Save Product</button>
+          <button type="submit" id="btn-save-product">Save Produce Item</button>
         </div>
       </form>
     </div>
 
     <div class="panel">
-      <h3 style="margin-top:0;">📦 Inventory Management</h3>
+      <h3 style="margin-top:0;">🥬 Produce Inventory Management</h3>
       <div style="overflow-x: auto;">
         <table>
           <thead>
             <tr>
-              <th>Product</th>
+              <th>Produce Item</th>
               <th>Price (₱)</th>
               <th>Stock</th>
               <th>Actions</th>
@@ -1001,7 +1026,7 @@
       <h3 style="margin:0;">Account Sign In / Register</h3>
       <button class="secondary sm" onclick="closeAuthModal()">✕</button>
     </div>
-    <p style="font-size: 0.86rem; color: var(--muted); margin-top:0.4rem;">Sign in to add items to your cart, place orders, and receive real-time delivery alerts.</p>
+    <p style="font-size: 0.86rem; color: var(--muted); margin-top:0.4rem;">Sign in to add fresh fruits & vegetables to your basket, place orders, and receive live delivery updates.</p>
     <div style="display:flex; flex-direction:column; gap:0.85rem; margin-top:1rem;">
       <div>
         <label class="field-label">Email Address</label>
@@ -1023,13 +1048,13 @@
 <div id="cart-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeCart()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">🛒 Shopping Cart</h3>
+      <h3 style="margin:0;">🧺 Market Basket</h3>
       <button class="secondary sm" onclick="closeCart()">✕</button>
     </div>
     <div id="cart-items-container" style="margin: 1rem 0;"></div>
     <div id="checkout-section" class="hidden">
       <hr style="border:0; border-top:1px solid var(--border); margin:1rem 0;" />
-      <h4 style="margin:0 0 0.65rem;">Shipping & Contact Details</h4>
+      <h4 style="margin:0 0 0.65rem;">Delivery & Contact Details</h4>
       <div style="display:flex; flex-direction:column; gap:0.7rem;">
         <div>
           <label class="field-label">Recipient Full Name</label>
@@ -1039,7 +1064,7 @@
           <label class="field-label">Complete Delivery Address & Phone Number</label>
           <textarea id="checkout-address" rows="2" placeholder="House/Street, Barangay, City/Municipality, Province & Mobile Number"></textarea>
         </div>
-        <button onclick="checkout()" class="success-btn" style="margin-top:0.25rem;">Place Order Now</button>
+        <button onclick="checkout()" class="success-btn" style="margin-top:0.25rem;">Place Produce Order</button>
       </div>
     </div>
   </div>
@@ -1069,7 +1094,7 @@
     { key: "Pending", label: "Order Placed" },
     { key: "Order Received", label: "Received by Admin" },
     { key: "Confirmed", label: "Confirmed" },
-    { key: "Shipped", label: "In Transit" },
+    { key: "Shipped", label: "Out for Delivery" },
     { key: "Delivered", label: "Delivered" }
   ];
 
@@ -1088,7 +1113,7 @@
     toast.className = `toast ${type}`;
     toast.innerHTML = `
       <span>${escapeHtml(message)}</span>
-      <button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#94a3b8; font-size:0.85rem;">✕</button>
+      <button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#bbf7d0; font-size:0.85rem;">✕</button>
     `;
     container.appendChild(toast);
     setTimeout(() => {
@@ -1181,7 +1206,7 @@
 
       document.getElementById("orders-subtitle").textContent =
         currentRole === "admin"
-          ? "Acknowledge incoming orders and update shipment progress for customers."
+          ? "Acknowledge incoming produce orders, update delivery stages, or delete test orders."
           : "Track when the admin receives your order and follow its delivery progress.";
 
       if (currentRole === "admin") {
@@ -1248,15 +1273,19 @@
   }
 
   /* =========================================================
-     REAL-TIME NOTIFICATION BELL ENGINE (ADMIN & CUSTOMER)
+     REAL-TIME NOTIFICATION BELL ENGINE (WITH DELETE SUPPORT)
      ========================================================= */
-  function getNotifStorageKey() {
-    return currentUser ? `novamart_read_notifs_${currentUser.id}_${currentRole}` : "novamart_read_notifs";
+  function getNotifReadKey() {
+    return currentUser ? `freshharvest_read_notifs_${currentUser.id}_${currentRole}` : "freshharvest_read_notifs";
+  }
+
+  function getNotifDeletedKey() {
+    return currentUser ? `freshharvest_deleted_notifs_${currentUser.id}_${currentRole}` : "freshharvest_deleted_notifs";
   }
 
   function getReadNotifIds() {
     try {
-      return new Set(JSON.parse(localStorage.getItem(getNotifStorageKey()) || "[]"));
+      return new Set(JSON.parse(localStorage.getItem(getNotifReadKey()) || "[]"));
     } catch {
       return new Set();
     }
@@ -1264,7 +1293,21 @@
 
   function saveReadNotifIds(set) {
     try {
-      localStorage.setItem(getNotifStorageKey(), JSON.stringify([...set]));
+      localStorage.setItem(getNotifReadKey(), JSON.stringify([...set]));
+    } catch (_) {}
+  }
+
+  function getDeletedNotifIds() {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(getNotifDeletedKey()) || "[]"));
+    } catch {
+      return new Set();
+    }
+  }
+
+  function saveDeletedNotifIds(set) {
+    try {
+      localStorage.setItem(getNotifDeletedKey(), JSON.stringify([...set]));
     } catch (_) {}
   }
 
@@ -1288,6 +1331,27 @@
     renderNotifications();
   }
 
+  function deleteNotification(notifId) {
+    const deletedSet = getDeletedNotifIds();
+    deletedSet.add(notifId);
+    saveDeletedNotifIds(deletedSet);
+
+    notifications = notifications.filter(n => n.id !== notifId);
+    renderNotifications();
+    showToast("Notification deleted.", "info");
+  }
+
+  function clearAllNotifications() {
+    if (!notifications.length) return;
+    const deletedSet = getDeletedNotifIds();
+    notifications.forEach(n => deletedSet.add(n.id));
+    saveDeletedNotifIds(deletedSet);
+
+    notifications = [];
+    renderNotifications();
+    showToast("All notifications cleared.", "info");
+  }
+
   function formatRelativeTime(isoString) {
     if (!isoString) return "Just now";
     const diffSec = Math.max(1, Math.floor((Date.now() - new Date(isoString).getTime()) / 1000));
@@ -1301,6 +1365,7 @@
 
   function buildNotificationsFromOrders(ordersList) {
     const readSet = getReadNotifIds();
+    const deletedSet = getDeletedNotifIds();
     const built = [];
 
     for (const o of ordersList) {
@@ -1308,8 +1373,9 @@
       const totalFormatted = `₱${Number(o.total_amount || 0).toFixed(2)}`;
 
       if (currentRole === "admin") {
-        // Admin notification for every incoming customer order + acknowledgment state
         const notifId = `admin-order-${o.id}-${o.status}`;
+        if (deletedSet.has(notifId)) continue;
+
         const isPending = o.status === "Pending";
         built.push({
           id: notifId,
@@ -1324,26 +1390,27 @@
           desc: `${itemCount} item(s) • Total: ${totalFormatted} • Deliver to: ${o.address}`
         });
       } else {
-        // Customer notification showing whether Admin received the order & where it currently is
         const notifId = `user-order-${o.id}-${o.status}`;
+        if (deletedSet.has(notifId)) continue;
+
         let statusHeadline = `Order #${o.id}: ${o.status}`;
         let statusDetail = `Total ${totalFormatted} (${itemCount} item(s)).`;
 
         if (o.status === "Pending") {
           statusHeadline = `Order #${o.id} Placed — Awaiting Admin Receipt`;
-          statusDetail = `Your order (${totalFormatted}) has been sent to the store admin.`;
+          statusDetail = `Your produce order (${totalFormatted}) has been sent to the store admin.`;
         } else if (o.status === "Order Received") {
           statusHeadline = `Admin Received Your Order #${o.id}`;
-          statusDetail = `Good news! The admin has received and acknowledged your order.`;
+          statusDetail = `Good news! The admin has received and acknowledged your produce order.`;
         } else if (o.status === "Confirmed") {
-          statusHeadline = `Order #${o.id} Confirmed & Preparing`;
-          statusDetail = `Your items (${totalFormatted}) are now being packed for dispatch.`;
+          statusHeadline = `Order #${o.id} Confirmed & Packing`;
+          statusDetail = `Your fresh fruits & vegetables (${totalFormatted}) are now being packed.`;
         } else if (o.status === "Shipped") {
-          statusHeadline = `Order #${o.id} is In Transit`;
-          statusDetail = `Your package is on the way to ${o.address}.`;
+          statusHeadline = `Order #${o.id} is Out for Delivery`;
+          statusDetail = `Your produce basket is on the way to ${o.address}.`;
         } else if (o.status === "Delivered") {
           statusHeadline = `Order #${o.id} Delivered`;
-          statusDetail = `Your order has arrived. Thank you for shopping with NovaMart!`;
+          statusDetail = `Your fresh produce has arrived. Enjoy your harvest!`;
         }
 
         built.push({
@@ -1383,7 +1450,7 @@
     const list = document.getElementById("notif-list");
 
     if (!notifications.length) {
-      list.innerHTML = `<div style="padding:1.6rem; text-align:center; color:var(--muted); font-size:0.84rem;">No order notifications yet.</div>`;
+      list.innerHTML = `<div style="padding:1.6rem; text-align:center; color:var(--muted); font-size:0.84rem;">No order notifications right now.</div>`;
       return;
     }
 
@@ -1399,6 +1466,7 @@
             <button class="success-btn sm" onclick="acknowledgeOrderByAdmin(${n.orderId}, '${escapeHtml(n.id)}')">✓ Mark Received</button>
           ` : ""}
           <button class="secondary sm" onclick="openOrderFromNotification(${n.orderId}, '${escapeHtml(n.id)}')">View Order #${n.orderId}</button>
+          <button class="danger-outline sm" onclick="deleteNotification('${escapeHtml(n.id)}')" title="Delete this notification">🗑️ Delete</button>
         </div>
       </div>
     `).join("");
@@ -1444,13 +1512,11 @@
         const prevStatus = knownOrderSnapshots.get(o.id);
 
         if (prevStatus === undefined) {
-          // Brand-new order detected!
           if (currentRole === "admin") {
             playNotificationTone();
             showToast(`New Order #${o.id} placed by ${o.customer_name} (₱${Number(o.total_amount).toFixed(2)})!`, "warning");
           }
         } else if (prevStatus !== o.status) {
-          // Existing order changed status!
           if (currentRole !== "admin") {
             playNotificationTone();
             const label = o.status === "Order Received"
@@ -1475,7 +1541,6 @@
   function startOrderSync() {
     stopOrderSync();
 
-    // 1. Supabase Realtime listener for instant updates
     ordersChannel = db
       .channel("orders-live-notifications")
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, async () => {
@@ -1483,7 +1548,6 @@
       })
       .subscribe();
 
-    // 2. Fallback background polling every 12 seconds (in case Realtime replication is off)
     pollIntervalId = setInterval(() => {
       syncOrdersAndNotifications(false);
     }, 12000);
@@ -1501,7 +1565,7 @@
   }
 
   /* =========================================================
-     CATALOG & PRODUCTS
+     CATALOG & PRODUCE PRODUCTS
      ========================================================= */
   function setStockFilter(mode) {
     stockFilter = mode;
@@ -1534,7 +1598,7 @@
     const grid = document.getElementById("product-grid");
 
     if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No matching products found.</div>`;
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No matching fruits or vegetables found.</div>`;
       return;
     }
 
@@ -1553,18 +1617,18 @@
       return `
         <div class="card">
           <div class="card-img-wrap">
-            <img src="${escapeHtml(p.image_url || 'https://placehold.co/400x260/e2e8f0/475569?text=No+Product+Image')}" alt="${escapeHtml(p.name)}" />
+            <img src="${escapeHtml(p.image_url || 'https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=600&q=80')}" alt="${escapeHtml(p.name)}" />
             <span class="stock-tag ${stockTagClass}">${stockTagText}</span>
           </div>
           <div class="card-body">
             <h3 class="card-title">${escapeHtml(p.name)}</h3>
-            <p class="card-desc">${escapeHtml(p.description || "High-quality item ready for fast dispatch.")}</p>
+            <p class="card-desc">${escapeHtml(p.description || "Freshly harvested farm produce ready for fast delivery.")}</p>
             <div class="card-footer-meta">
               <div class="price">₱${Number(p.price).toFixed(2)}</div>
               <div class="stock">Available: ${stockNum}</div>
             </div>
             <button onclick="addToCart(${p.id})" ${stockNum <= 0 ? "disabled" : ""} style="width:100%;">
-              ${stockNum <= 0 ? "Sold Out" : "+ Add to Cart"}
+              ${stockNum <= 0 ? "Sold Out" : "+ Add to Basket"}
             </button>
           </div>
         </div>
@@ -1640,11 +1704,11 @@
 
       e.target.reset();
       previewSelectedImage();
-      showToast("Product added to catalog!", "success");
+      showToast("Produce item added to catalog!", "success");
       await loadProducts();
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = "Save Product";
+      saveBtn.textContent = "Save Produce Item";
     }
   }
 
@@ -1675,15 +1739,15 @@
   }
 
   async function deleteProduct(id) {
-    if (!confirm("Are you sure you want to permanently delete this product?")) return;
+    if (!confirm("Are you sure you want to permanently delete this produce item?")) return;
     const { error } = await db.from("products").delete().eq("id", id);
     if (error) return showToast("Error: " + error.message, "error");
-    showToast("Product deleted.", "info");
+    showToast("Produce item deleted.", "info");
     await loadProducts();
   }
 
   /* =========================================================
-     CART & CHECKOUT
+     BASKET & CHECKOUT
      ========================================================= */
   async function loadCart() {
     if (!currentUser) return;
@@ -1734,7 +1798,7 @@
     }
 
     await loadCart();
-    showToast(`Added "${prod ? prod.name : "Item"}" to your cart!`, "success");
+    showToast(`Added "${prod ? prod.name : "Produce"}" to your basket!`, "success");
   }
 
   function openCart() {
@@ -1748,7 +1812,7 @@
     const checkoutSec = document.getElementById("checkout-section");
 
     if (!cart.length) {
-      container.innerHTML = `<p style="color:var(--muted); text-align:center; padding:1.25rem 0;">Your shopping cart is currently empty.</p>`;
+      container.innerHTML = `<p style="color:var(--muted); text-align:center; padding:1.25rem 0;">Your market basket is currently empty.</p>`;
       checkoutSec.classList.add("hidden");
       return;
     }
@@ -1809,7 +1873,7 @@
   }
 
   /* =========================================================
-     ORDERS & STATUS STEPPER
+     ORDERS, STATUS STEPPER & ADMIN ORDER DELETE
      ========================================================= */
   function getStatusBadgeClass(status) {
     if (status === "Order Received") return "status-received";
@@ -1910,9 +1974,10 @@
                   <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
                   <option value="Order Received" ${o.status === "Order Received" ? "selected" : ""}>Order Received</option>
                   <option value="Confirmed" ${o.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
-                  <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped (In Transit)</option>
+                  <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped (Out for Delivery)</option>
                   <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
                 </select>
+                <button class="danger-outline sm" onclick="deleteOrder(${o.id})" title="Delete test order from database">🗑️ Delete Order</button>
               </div>
             ` : ""}
           </div>
@@ -1932,6 +1997,22 @@
         : `Order #${orderId} updated to "${status}".`,
       "success"
     );
+    await loadOrders();
+  }
+
+  async function deleteOrder(orderId) {
+    if (!confirm(`Delete Order #${orderId} permanently from the database?`)) return;
+
+    // Delete child order_items first (if cascade delete is not configured)
+    await db.from("order_items").delete().eq("order_id", orderId);
+    const { error } = await db.from("orders").delete().eq("id", orderId);
+
+    if (error) {
+      return showToast("Failed to delete order (check Supabase DELETE policy): " + error.message, "error");
+    }
+
+    knownOrderSnapshots.delete(orderId);
+    showToast(`Order #${orderId} deleted from database.`, "info");
     await loadOrders();
   }
 
