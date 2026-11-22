@@ -62,6 +62,10 @@
       background: var(--card); border: 1px solid var(--border); border-radius: 10px;
       padding: 1.25rem; margin-bottom: 1.5rem;
     }
+    .error-box {
+      background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+      padding: 0.85rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;
+    }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
     input, textarea, select {
       width: 100%; padding: 0.55rem; border: 1px solid var(--border);
@@ -98,7 +102,9 @@
 </header>
 
 <div class="container">
-  <!-- VIEW 1: SHOP CATALOG (Para sa lahat at Users) -->
+  <div id="status-error" class="error-box hidden"></div>
+
+  <!-- VIEW 1: SHOP CATALOG -->
   <section id="view-shop">
     <div class="row-between">
       <h2>Mga Produkto</h2>
@@ -107,13 +113,13 @@
     <div id="product-grid" class="grid"></div>
   </section>
 
-  <!-- VIEW 2: ORDERS (User sees own orders; Admin sees all & can update status) -->
+  <!-- VIEW 2: ORDERS -->
   <section id="view-orders" class="hidden">
     <h2>Mga Orders</h2>
     <div id="orders-list"></div>
   </section>
 
-  <!-- VIEW 3: ADMIN PANEL (Add product & Edit price/stock) -->
+  <!-- VIEW 3: ADMIN PANEL -->
   <section id="view-admin" class="hidden">
     <div class="panel">
       <h3>➕ Magdagdag ng Bagong Produkto</h3>
@@ -190,7 +196,6 @@
 </div>
 
 <script>
-  // PALITAN ITO NG IYONG SUPABASE PROJECT URL AT ANON PUBLIC KEY
   const SUPABASE_URL = "https://tvueqgzmsbpmtrnkjitn.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_Yvbk_uPNOu_ZNGOTNXpLIw_urRuUer2";
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -200,27 +205,45 @@
   let products = [];
   let cart = [];
 
-  // Initialize App
+  function showError(msg) {
+    const box = document.getElementById("status-error");
+    if (!msg) {
+      box.textContent = "";
+      box.classList.add("hidden");
+      return;
+    }
+    box.textContent = "Fetch / Database Error: " + msg;
+    box.classList.remove("hidden");
+  }
+
   async function init() {
-    const { data: { session } } = await db.auth.getSession();
+    await loadProducts();
+
+    const { data: { session }, error } = await db.auth.getSession();
+    if (error) {
+      console.error(error);
+      showError(error.message);
+    }
     await handleSession(session);
 
     db.auth.onAuthStateChange(async (_event, session) => {
       await handleSession(session);
     });
-
-    await loadProducts();
   }
 
   async function handleSession(session) {
     currentUser = session?.user || null;
 
     if (currentUser) {
-      const { data: profile } = await db
+      const { data: profile, error: profileErr } = await db
         .from("profiles")
         .select("role")
         .eq("id", currentUser.id)
         .single();
+
+      if (profileErr) {
+        console.warn("Profile fetch warning:", profileErr.message);
+      }
 
       currentRole = profile?.role || "user";
 
@@ -239,6 +262,7 @@
 
       if (currentRole === "admin") {
         document.getElementById("btn-admin").classList.remove("hidden");
+        renderAdminTable();
       } else {
         document.getElementById("btn-admin").classList.add("hidden");
       }
@@ -257,7 +281,6 @@
     renderProducts();
   }
 
-  // NAVIGATION
   function switchView(view) {
     ["shop", "orders", "admin"].forEach(v => {
       document.getElementById("view-" + v).classList.toggle("hidden", v !== view);
@@ -266,7 +289,6 @@
     if (view === "admin") renderAdminTable();
   }
 
-  // AUTH FUNCTIONS
   function openAuthModal() { document.getElementById("auth-modal").classList.remove("hidden"); }
   function closeAuthModal() { document.getElementById("auth-modal").classList.add("hidden"); }
 
@@ -291,10 +313,14 @@
     await db.auth.signOut();
   }
 
-  // PRODUCTS
   async function loadProducts() {
     const { data, error } = await db.from("products").select("*").order("id", { ascending: false });
-    if (error) return console.error(error);
+    if (error) {
+      console.error("loadProducts error:", error);
+      showError(error.message + " — Siguraduhing na-run ang SQL setup at tama ang API key.");
+      return;
+    }
+    showError(null);
     products = data || [];
     renderProducts();
     if (currentRole === "admin") renderAdminTable();
@@ -312,7 +338,7 @@
 
     grid.innerHTML = filtered.map(p => `
       <div class="card">
-        <img src="${p.image_url || 'https://via.placeholder.com/300x180?text=No+Image'}" alt="${p.name}" />
+        <img src="${p.image_url || 'https://placehold.co/300x180?text=No+Image'}" alt="${p.name}" />
         <div class="card-body">
           <h3 class="card-title">${p.name}</h3>
           <p class="card-desc">${p.description || ""}</p>
@@ -326,7 +352,6 @@
     `).join("");
   }
 
-  // ADMIN ACTIONS
   async function addProduct(e) {
     e.preventDefault();
     const payload = {
@@ -378,7 +403,6 @@
     await loadProducts();
   }
 
-  // CART (PER-USER DATABASE)
   async function loadCart() {
     if (!currentUser) return;
     const { data, error } = await db
@@ -386,7 +410,11 @@
       .select("id, quantity, product_id, products(name, price, stock)")
       .eq("user_id", currentUser.id);
 
-    if (error) return console.error(error);
+    if (error) {
+      console.error(error);
+      showError(error.message);
+      return;
+    }
     cart = data || [];
     updateCartBadge();
   }
@@ -402,11 +430,18 @@
       return;
     }
 
+    const prod = products.find(p => p.id === productId);
     const existing = cart.find(item => item.product_id === productId);
+    const nextQty = (existing ? existing.quantity : 0) + 1;
+
+    if (prod && nextQty > prod.stock) {
+      return alert(`Hanggang ${prod.stock} stock lang ang available para sa ${prod.name}.`);
+    }
+
     if (existing) {
       const { error } = await db
         .from("cart_items")
-        .update({ quantity: existing.quantity + 1 })
+        .update({ quantity: nextQty })
         .eq("id", existing.id);
       if (error) return alert(error.message);
     } else {
@@ -448,8 +483,8 @@
             <small>₱${Number(p.price).toFixed(2)} x ${item.quantity} = ₱${subtotal.toFixed(2)}</small>
           </div>
           <div style="display:flex; gap:0.3rem;">
-            <button class="secondary" onclick="changeCartQty(${item.id}, ${item.quantity - 1})">-</button>
-            <button class="secondary" onclick="changeCartQty(${item.id}, ${item.quantity + 1})">+</button>
+            <button class="secondary" onclick="changeCartQty(${item.id}, ${item.quantity - 1}, ${p.stock})">-</button>
+            <button class="secondary" onclick="changeCartQty(${item.id}, ${item.quantity + 1}, ${p.stock})">+</button>
           </div>
         </div>
       `;
@@ -458,9 +493,11 @@
     checkoutSec.classList.remove("hidden");
   }
 
-  async function changeCartQty(cartItemId, newQty) {
+  async function changeCartQty(cartItemId, newQty, maxStock) {
     if (newQty <= 0) {
       await db.from("cart_items").delete().eq("id", cartItemId);
+    } else if (typeof maxStock === "number" && newQty > maxStock) {
+      return alert(`Maximum stock available: ${maxStock}`);
     } else {
       await db.from("cart_items").update({ quantity: newQty }).eq("id", cartItemId);
     }
@@ -487,14 +524,17 @@
     switchView("orders");
   }
 
-  // ORDERS VIEW
   async function loadOrders() {
     const { data, error } = await db
       .from("orders")
       .select("*, order_items(*)")
       .order("created_at", { ascending: false });
 
-    if (error) return console.error(error);
+    if (error) {
+      console.error(error);
+      showError(error.message);
+      return;
+    }
 
     const list = document.getElementById("orders-list");
     if (!data || !data.length) {
