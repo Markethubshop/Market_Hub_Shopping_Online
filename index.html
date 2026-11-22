@@ -44,7 +44,6 @@
       margin: 0;
       color: var(--text);
       background-color: var(--bg);
-      /* Fresh produce market soft backdrop + botanical organic lighting */
       background-image:
         linear-gradient(180deg, rgba(243, 247, 244, 0.90) 0%, rgba(243, 247, 244, 0.94) 45%, rgba(236, 245, 239, 0.96) 100%),
         radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.14) 0px, transparent 50%),
@@ -116,14 +115,34 @@
     .user-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      background: #f6faf7;
-      border: 1px solid var(--border);
-      padding: 0.32rem 0.7rem;
+      gap: 0.5rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 0.34rem 0.78rem;
       border-radius: 999px;
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      font-weight: 500;
+      font-size: 0.83rem;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .user-pill:hover {
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+
+    .user-avatar-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      text-transform: uppercase;
     }
 
     button {
@@ -209,6 +228,68 @@
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
+    }
+
+    /* Auth Tabs */
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+      background: #f1f7f3;
+      padding: 0.32rem;
+      border-radius: 10px;
+      margin: 0.9rem 0 1.1rem;
+      border: 1px solid var(--border);
+    }
+
+    .auth-tab {
+      background: transparent;
+      color: var(--muted);
+      padding: 0.52rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    .auth-tab:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--text);
+      transform: none;
+      box-shadow: none;
+    }
+
+    .auth-tab.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Saved Delivery Summary Card in Checkout */
+    .delivery-summary-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 11px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .delivery-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .delivery-summary-meta {
+      margin-top: 0.45rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: var(--text-secondary);
+      font-size: 0.83rem;
     }
 
     /* Notification Bell & Dropdown */
@@ -873,9 +954,11 @@
   </div>
 
   <div class="nav-actions">
-    <div id="user-pill" class="user-pill hidden">
-      <span id="user-info"></span>
-      <span id="role-badge" class="badge"></span>
+    <!-- ACCOUNT OWNER'S COMPLETE NAME IN TOP NAVBAR -->
+    <div id="user-pill" class="user-pill hidden" onclick="openProfileModal()" title="Click to view or edit your saved delivery profile">
+      <span id="user-avatar-dot" class="user-avatar-dot">U</span>
+      <span id="user-info">Account Owner</span>
+      <span id="role-badge" class="badge">Customer</span>
     </div>
 
     <button id="btn-shop" class="secondary active-nav" onclick="switchView('shop')">Produce Market</button>
@@ -911,7 +994,7 @@
       Basket (<span id="cart-count">0</span>)
     </button>
 
-    <button id="btn-login" onclick="openAuthModal()">Sign In / Register</button>
+    <button id="btn-login" onclick="openAuthModal('signin')">Sign In / Register</button>
     <button id="btn-logout" class="danger hidden" onclick="logout()">Sign Out</button>
   </div>
 </header>
@@ -929,7 +1012,7 @@
         <div class="trust-badges">
           <div class="trust-chip">🥬 Harvested Fresh Daily</div>
           <div class="trust-chip">🔔 Real-Time Order Alerts</div>
-          <div class="trust-chip">🚚 Fast Local Delivery</div>
+          <div class="trust-chip">🚚 Express One-Click Checkout</div>
         </div>
       </div>
     </div>
@@ -1019,32 +1102,94 @@
   </section>
 </div>
 
-<!-- AUTH MODAL -->
+<!-- AUTH MODAL (SIGN IN & COMPLETE REGISTRATION) -->
 <div id="auth-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeAuthModal()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">Account Sign In / Register</h3>
+      <h3 style="margin:0;" id="auth-modal-title">Welcome to FreshHarvest</h3>
       <button class="secondary sm" onclick="closeAuthModal()">✕</button>
     </div>
-    <p style="font-size: 0.86rem; color: var(--muted); margin-top:0.4rem;">Sign in to add fresh fruits & vegetables to your basket, place orders, and receive live delivery updates.</p>
-    <div style="display:flex; flex-direction:column; gap:0.85rem; margin-top:1rem;">
+
+    <div class="auth-tabs">
+      <button type="button" id="tab-signin" class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
+      <button type="button" id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <form id="form-signin" onsubmit="signIn(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+      <p style="font-size: 0.85rem; color: var(--muted); margin:0;">Sign in to access your saved delivery details, basket, and order alerts.</p>
       <div>
         <label class="field-label">Email Address</label>
-        <input type="email" id="auth-email" placeholder="you@example.com" />
+        <input type="email" id="login-email" placeholder="you@example.com" required />
       </div>
       <div>
         <label class="field-label">Password</label>
-        <input type="password" id="auth-password" placeholder="Minimum 6 characters" />
+        <input type="password" id="login-password" placeholder="Enter your password" required />
       </div>
-      <div class="row-between" style="margin-top:0.25rem;">
-        <button onclick="signIn()" style="flex:1;">Sign In</button>
-        <button class="secondary" onclick="signUp()" style="flex:1;">Create Account</button>
+      <button type="submit" id="btn-submit-signin" style="margin-top:0.25rem;">Sign In</button>
+    </form>
+
+    <!-- COMPLETE REGISTRATION FORM -->
+    <form id="form-register" class="hidden" onsubmit="signUp(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
+      <p style="font-size: 0.84rem; color: var(--muted); margin:0;">Register once with your delivery info for fast, automatic checkout on every order.</p>
+      <div>
+        <label class="field-label">Complete Name *</label>
+        <input type="text" id="reg-name" placeholder="e.g., Juan Dela Cruz" required />
       </div>
-    </div>
+      <div>
+        <label class="field-label">Contact Number *</label>
+        <input type="tel" id="reg-phone" placeholder="e.g., 0917 123 4567" required />
+      </div>
+      <div>
+        <label class="field-label">Complete Delivery Address *</label>
+        <textarea id="reg-address" rows="2" placeholder="House/Street, Barangay, Town/City, Province" required></textarea>
+      </div>
+      <div class="form-grid" style="gap:0.75rem;">
+        <div>
+          <label class="field-label">Email Address *</label>
+          <input type="email" id="reg-email" placeholder="you@example.com" required />
+        </div>
+        <div>
+          <label class="field-label">Password *</label>
+          <input type="password" id="reg-password" minlength="6" placeholder="Min. 6 characters" required />
+        </div>
+      </div>
+      <button type="submit" id="btn-submit-register" class="success-btn" style="margin-top:0.25rem;">Complete Registration</button>
+    </form>
   </div>
 </div>
 
-<!-- CART & CHECKOUT MODAL -->
+<!-- ACCOUNT PROFILE MODAL (VIEW / EDIT SAVED DELIVERY INFO) -->
+<div id="profile-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProfileModal()">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0;">👤 Account & Delivery Profile</h3>
+      <button class="secondary sm" onclick="closeProfileModal()">✕</button>
+    </div>
+    <p style="font-size: 0.84rem; color: var(--muted); margin-top:0.35rem;">Your name appears in the navigation bar, and your address & contact number auto-fill whenever you order.</p>
+    <form onsubmit="saveUserProfile(event)" style="display:flex; flex-direction:column; gap:0.8rem; margin-top:0.85rem;">
+      <div>
+        <label class="field-label">Complete Name</label>
+        <input type="text" id="prof-name" placeholder="Your full name" required />
+      </div>
+      <div>
+        <label class="field-label">Contact Number</label>
+        <input type="tel" id="prof-phone" placeholder="Your mobile number" required />
+      </div>
+      <div>
+        <label class="field-label">Complete Delivery Address</label>
+        <textarea id="prof-address" rows="2" placeholder="House/Street, Barangay, Town/City, Province" required></textarea>
+      </div>
+      <div>
+        <label class="field-label">Account Email</label>
+        <input type="email" id="prof-email" disabled style="background:#f8fafc; color:var(--muted);" />
+      </div>
+      <button type="submit" id="btn-save-profile" class="success-btn">Save Profile Details</button>
+    </form>
+  </div>
+</div>
+
+<!-- CART & AUTOMATIC CHECKOUT MODAL -->
 <div id="cart-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeCart()">
   <div class="modal">
     <div class="row-between">
@@ -1054,18 +1199,43 @@
     <div id="cart-items-container" style="margin: 1rem 0;"></div>
     <div id="checkout-section" class="hidden">
       <hr style="border:0; border-top:1px solid var(--border); margin:1rem 0;" />
-      <h4 style="margin:0 0 0.65rem;">Delivery & Contact Details</h4>
-      <div style="display:flex; flex-direction:column; gap:0.7rem;">
+      <div class="row-between" style="margin-bottom:0.55rem;">
+        <h4 style="margin:0;">Delivery Information</h4>
+        <button type="button" id="btn-toggle-checkout-edit" class="secondary sm" onclick="toggleCheckoutEdit()">Edit Details</button>
+      </div>
+
+      <!-- AUTO-FILLED SAVED PROFILE CARD (NO TYPING NEEDED) -->
+      <div id="checkout-autofill-card" class="delivery-summary-card">
+        <div class="delivery-summary-row">
+          <strong style="color:var(--primary-dark);">✓ Ready for Instant Checkout</strong>
+          <span class="badge">Auto-Filled</span>
+        </div>
+        <div class="delivery-summary-meta">
+          <div><strong>Recipient:</strong> <span id="display-checkout-name">—</span></div>
+          <div><strong>Contact No.:</strong> <span id="display-checkout-phone">—</span></div>
+          <div><strong>Address:</strong> <span id="display-checkout-address">—</span></div>
+        </div>
+      </div>
+
+      <!-- EDITABLE INPUTS (HIDDEN BY DEFAULT WHEN PROFILE IS ALREADY COMPLETE) -->
+      <div id="checkout-edit-fields" class="hidden" style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:0.8rem;">
         <div>
           <label class="field-label">Recipient Full Name</label>
-          <input type="text" id="checkout-name" placeholder="Enter your full name" />
+          <input type="text" id="checkout-name" placeholder="Enter recipient full name" oninput="syncCheckoutPreview()" />
         </div>
         <div>
-          <label class="field-label">Complete Delivery Address & Phone Number</label>
-          <textarea id="checkout-address" rows="2" placeholder="House/Street, Barangay, City/Municipality, Province & Mobile Number"></textarea>
+          <label class="field-label">Contact Number</label>
+          <input type="tel" id="checkout-phone" placeholder="Enter mobile number" oninput="syncCheckoutPreview()" />
         </div>
-        <button onclick="checkout()" class="success-btn" style="margin-top:0.25rem;">Place Produce Order</button>
+        <div>
+          <label class="field-label">Complete Delivery Address</label>
+          <textarea id="checkout-address" rows="2" placeholder="House/Street, Barangay, City/Municipality, Province" oninput="syncCheckoutPreview()"></textarea>
+        </div>
       </div>
+
+      <button id="btn-place-order" onclick="checkout()" class="success-btn" style="width:100%; padding:0.72rem; font-size:0.95rem;">
+        Place Produce Order Now
+      </button>
     </div>
   </div>
 </div>
@@ -1080,6 +1250,7 @@
 
   let currentUser = null;
   let currentRole = "guest"; // 'guest' | 'user' | 'admin'
+  let userProfileData = { full_name: "", phone: "", address: "" };
   let products = [];
   let cart = [];
   let cachedOrders = [];
@@ -1089,6 +1260,7 @@
   let ordersChannel = null;
   let pollIntervalId = null;
   let knownOrderSnapshots = new Map(); // orderId -> status
+  let isCheckoutEditing = false;
 
   const ORDER_STAGES = [
     { key: "Pending", label: "Order Placed" },
@@ -1135,9 +1307,7 @@
       gain.connect(ctx.destination);
       osc.start();
       osc.stop(ctx.currentTime + 0.36);
-    } catch (_) {
-      // Ignore if audio context is blocked before user gesture
-    }
+    } catch (_) {}
   }
 
   function showError(msg) {
@@ -1170,15 +1340,43 @@
     });
   }
 
+  function getCachedRegistrationByEmail(email) {
+    if (!email) return null;
+    try {
+      const raw = localStorage.getItem(`freshharvest_reg_cache_${email.toLowerCase()}`);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function setCachedRegistrationByEmail(email, info) {
+    if (!email) return;
+    try {
+      localStorage.setItem(`freshharvest_reg_cache_${email.toLowerCase()}`, JSON.stringify(info));
+    } catch (_) {}
+  }
+
+  function applyOwnerHeaderDisplay() {
+    if (!currentUser) return;
+    const displayName = (userProfileData.full_name || "").trim() || currentUser.email;
+    const initial = displayName.charAt(0).toUpperCase() || "U";
+
+    document.getElementById("user-info").textContent = displayName;
+    document.getElementById("user-avatar-dot").textContent = initial;
+    document.getElementById("user-pill").classList.remove("hidden");
+  }
+
   async function handleSession(session) {
     currentUser = session?.user || null;
     stopOrderSync();
     knownOrderSnapshots.clear();
 
     if (currentUser) {
+      // 1. Load role and optional profile columns from public.profiles
       const { data: profile, error: profileErr } = await db
         .from("profiles")
-        .select("role")
+        .select("*")
         .eq("id", currentUser.id)
         .single();
 
@@ -1188,8 +1386,22 @@
 
       currentRole = profile?.role || "user";
 
-      document.getElementById("user-info").textContent = currentUser.email;
-      document.getElementById("user-pill").classList.remove("hidden");
+      // 2. Resolve Complete Name, Contact Number & Address from user_metadata, profiles, or registration cache
+      const meta = currentUser.user_metadata || {};
+      const cached = getCachedRegistrationByEmail(currentUser.email) || {};
+
+      userProfileData = {
+        full_name: (meta.full_name || profile?.full_name || cached.full_name || "").trim(),
+        phone: (meta.phone || profile?.phone || cached.phone || "").trim(),
+        address: (meta.address || profile?.address || cached.address || "").trim()
+      };
+
+      // If cached registration exists and user_metadata wasn't populated yet, sync it now
+      if (!meta.full_name && cached.full_name) {
+        await db.auth.updateUser({ data: userProfileData }).catch(() => {});
+      }
+
+      applyOwnerHeaderDisplay();
 
       const badge = document.getElementById("role-badge");
       badge.textContent = currentRole === "admin" ? "Admin" : "Customer";
@@ -1221,6 +1433,7 @@
       startOrderSync();
     } else {
       currentRole = "guest";
+      userProfileData = { full_name: "", phone: "", address: "" };
       cart = [];
       cachedOrders = [];
       notifications = [];
@@ -1245,31 +1458,168 @@
     if (view === "admin") renderAdminTable();
   }
 
-  function openAuthModal() { document.getElementById("auth-modal").classList.remove("hidden"); }
-  function closeAuthModal() { document.getElementById("auth-modal").classList.add("hidden"); }
-
-  async function signUp() {
-    const email = document.getElementById("auth-email").value.trim();
-    const password = document.getElementById("auth-password").value;
-    const { error } = await db.auth.signUp({ email, password });
-    if (error) return showToast(error.message, "error");
-    showToast("Account created! You can now sign in.", "success");
-    closeAuthModal();
+  /* =========================================================
+     AUTH MODAL (SIGN IN & COMPLETE REGISTRATION)
+     ========================================================= */
+  function switchAuthTab(mode) {
+    const isSignIn = mode === "signin";
+    document.getElementById("tab-signin").classList.toggle("active", isSignIn);
+    document.getElementById("tab-register").classList.toggle("active", !isSignIn);
+    document.getElementById("form-signin").classList.toggle("hidden", !isSignIn);
+    document.getElementById("form-register").classList.toggle("hidden", isSignIn);
+    document.getElementById("auth-modal-title").textContent = isSignIn
+      ? "Sign In to FreshHarvest"
+      : "Create Customer Account";
   }
 
-  async function signIn() {
-    const email = document.getElementById("auth-email").value.trim();
-    const password = document.getElementById("auth-password").value;
-    const { error } = await db.auth.signInWithPassword({ email, password });
-    if (error) return showToast(error.message, "error");
-    showToast("Signed in successfully.", "success");
-    closeAuthModal();
+  function openAuthModal(defaultTab = "signin") {
+    switchAuthTab(defaultTab);
+    document.getElementById("auth-modal").classList.remove("hidden");
+  }
+
+  function closeAuthModal() {
+    document.getElementById("auth-modal").classList.add("hidden");
+  }
+
+  async function signUp(e) {
+    if (e) e.preventDefault();
+    const fullName = document.getElementById("reg-name").value.trim();
+    const phone = document.getElementById("reg-phone").value.trim();
+    const address = document.getElementById("reg-address").value.trim();
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+
+    if (!fullName || !phone || !address || !email || !password) {
+      return showToast("Please complete all registration fields.", "warning");
+    }
+
+    const btn = document.getElementById("btn-submit-register");
+    btn.disabled = true;
+    btn.textContent = "Creating Account...";
+
+    try {
+      const profilePayload = {
+        full_name: fullName,
+        phone: phone,
+        address: address
+      };
+
+      const { data, error } = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          data: profilePayload
+        }
+      });
+
+      if (error) return showToast(error.message, "error");
+
+      setCachedRegistrationByEmail(email, profilePayload);
+
+      // Also attempt to store into public.profiles if those columns exist
+      if (data?.user?.id) {
+        try {
+          await db.from("profiles").upsert({
+            id: data.user.id,
+            full_name: fullName,
+            phone: phone,
+            address: address
+          });
+        } catch (_) {}
+      }
+
+      document.getElementById("form-register").reset();
+      closeAuthModal();
+
+      if (data?.session) {
+        showToast(`Welcome, ${fullName}! Your delivery info is saved for instant checkout.`, "success");
+      } else {
+        showToast(`Account registered for ${fullName}! Please sign in to continue.`, "success");
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Complete Registration";
+    }
+  }
+
+  async function signIn(e) {
+    if (e) e.preventDefault();
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    const btn = document.getElementById("btn-submit-signin");
+    btn.disabled = true;
+    btn.textContent = "Signing In...";
+
+    try {
+      const { error } = await db.auth.signInWithPassword({ email, password });
+      if (error) return showToast(error.message, "error");
+      document.getElementById("form-signin").reset();
+      showToast("Signed in successfully!", "success");
+      closeAuthModal();
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Sign In";
+    }
   }
 
   async function logout() {
     stopOrderSync();
     await db.auth.signOut();
     showToast("Signed out.", "info");
+  }
+
+  /* =========================================================
+     USER PROFILE MODAL (EDIT SAVED NAME, PHONE & ADDRESS)
+     ========================================================= */
+  function openProfileModal() {
+    if (!currentUser) return;
+    document.getElementById("prof-name").value = userProfileData.full_name || "";
+    document.getElementById("prof-phone").value = userProfileData.phone || "";
+    document.getElementById("prof-address").value = userProfileData.address || "";
+    document.getElementById("prof-email").value = currentUser.email || "";
+    document.getElementById("profile-modal").classList.remove("hidden");
+  }
+
+  function closeProfileModal() {
+    document.getElementById("profile-modal").classList.add("hidden");
+  }
+
+  async function saveUserProfile(e) {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    const fullName = document.getElementById("prof-name").value.trim();
+    const phone = document.getElementById("prof-phone").value.trim();
+    const address = document.getElementById("prof-address").value.trim();
+
+    if (!fullName || !phone || !address) {
+      return showToast("Please fill out your name, contact number, and address.", "warning");
+    }
+
+    const btn = document.getElementById("btn-save-profile");
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+
+    try {
+      const updated = { full_name: fullName, phone, address };
+      const { error } = await db.auth.updateUser({ data: updated });
+      if (error) return showToast("Could not update profile: " + error.message, "error");
+
+      userProfileData = updated;
+      setCachedRegistrationByEmail(currentUser.email, updated);
+      applyOwnerHeaderDisplay();
+
+      try {
+        await db.from("profiles").update(updated).eq("id", currentUser.id);
+      } catch (_) {}
+
+      closeProfileModal();
+      showToast("Profile updated! Your checkout info is ready.", "success");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Profile Details";
+    }
   }
 
   /* =========================================================
@@ -1747,7 +2097,7 @@
   }
 
   /* =========================================================
-     BASKET & CHECKOUT
+     BASKET & AUTOMATIC PRE-FILLED CHECKOUT
      ========================================================= */
   async function loadCart() {
     if (!currentUser) return;
@@ -1772,7 +2122,7 @@
 
   async function addToCart(productId) {
     if (!currentUser) {
-      openAuthModal();
+      openAuthModal("register");
       return;
     }
 
@@ -1801,11 +2151,59 @@
     showToast(`Added "${prod ? prod.name : "Produce"}" to your basket!`, "success");
   }
 
+  function populateCheckoutFromSavedProfile() {
+    const nameInput = document.getElementById("checkout-name");
+    const phoneInput = document.getElementById("checkout-phone");
+    const addrInput = document.getElementById("checkout-address");
+
+    nameInput.value = userProfileData.full_name || "";
+    phoneInput.value = userProfileData.phone || "";
+    addrInput.value = userProfileData.address || "";
+
+    const hasCompleteProfile = Boolean(
+      userProfileData.full_name && userProfileData.phone && userProfileData.address
+    );
+
+    isCheckoutEditing = !hasCompleteProfile;
+    updateCheckoutEditVisibility();
+    syncCheckoutPreview();
+  }
+
+  function updateCheckoutEditVisibility() {
+    const editFields = document.getElementById("checkout-edit-fields");
+    const summaryCard = document.getElementById("checkout-autofill-card");
+    const toggleBtn = document.getElementById("btn-toggle-checkout-edit");
+
+    editFields.classList.toggle("hidden", !isCheckoutEditing);
+    summaryCard.classList.toggle("hidden", isCheckoutEditing);
+    toggleBtn.textContent = isCheckoutEditing ? "Done Editing" : "Edit Details";
+  }
+
+  function toggleCheckoutEdit() {
+    isCheckoutEditing = !isCheckoutEditing;
+    updateCheckoutEditVisibility();
+    syncCheckoutPreview();
+  }
+
+  function syncCheckoutPreview() {
+    const name = document.getElementById("checkout-name").value.trim() || "Not set";
+    const phone = document.getElementById("checkout-phone").value.trim() || "Not set";
+    const address = document.getElementById("checkout-address").value.trim() || "Not set";
+
+    document.getElementById("display-checkout-name").textContent = name;
+    document.getElementById("display-checkout-phone").textContent = phone;
+    document.getElementById("display-checkout-address").textContent = address;
+  }
+
   function openCart() {
+    populateCheckoutFromSavedProfile();
     renderCartModal();
     document.getElementById("cart-modal").classList.remove("hidden");
   }
-  function closeCart() { document.getElementById("cart-modal").classList.add("hidden"); }
+
+  function closeCart() {
+    document.getElementById("cart-modal").classList.add("hidden");
+  }
 
   function renderCartModal() {
     const container = document.getElementById("cart-items-container");
@@ -1854,22 +2252,49 @@
 
   async function checkout() {
     const name = document.getElementById("checkout-name").value.trim();
+    const phone = document.getElementById("checkout-phone").value.trim();
     const address = document.getElementById("checkout-address").value.trim();
-    if (!name || !address) return showToast("Please enter your full name and delivery address.", "warning");
 
-    const { data, error } = await db.rpc("checkout_cart", {
-      p_customer_name: name,
-      p_address: address
-    });
+    if (!name || !phone || !address) {
+      isCheckoutEditing = true;
+      updateCheckoutEditVisibility();
+      return showToast("Please provide your name, contact number, and delivery address.", "warning");
+    }
 
-    if (error) return showToast("Checkout failed: " + error.message, "error");
+    const orderBtn = document.getElementById("btn-place-order");
+    orderBtn.disabled = true;
+    orderBtn.textContent = "Placing Order...";
 
-    showToast(`Order #${data} placed successfully! Waiting for admin receipt.`, "success");
-    closeCart();
-    await loadCart();
-    await loadProducts();
-    await syncOrdersAndNotifications(false);
-    switchView("orders");
+    try {
+      // Combine address and contact number cleanly for checkout_cart RPC
+      const combinedDeliveryAddress = `${address} | Contact: ${phone}`;
+
+      const { data, error } = await db.rpc("checkout_cart", {
+        p_customer_name: name,
+        p_address: combinedDeliveryAddress
+      });
+
+      if (error) return showToast("Checkout failed: " + error.message, "error");
+
+      // If user didn't have saved profile details yet, automatically save them for future orders
+      if (!userProfileData.full_name || !userProfileData.phone || !userProfileData.address) {
+        const updatedProfile = { full_name: name, phone, address };
+        userProfileData = updatedProfile;
+        setCachedRegistrationByEmail(currentUser.email, updatedProfile);
+        applyOwnerHeaderDisplay();
+        await db.auth.updateUser({ data: updatedProfile }).catch(() => {});
+      }
+
+      showToast(`Order #${data} placed successfully! Waiting for admin receipt.`, "success");
+      closeCart();
+      await loadCart();
+      await loadProducts();
+      await syncOrdersAndNotifications(false);
+      switchView("orders");
+    } finally {
+      orderBtn.disabled = false;
+      orderBtn.textContent = "Place Produce Order Now";
+    }
   }
 
   /* =========================================================
@@ -1950,7 +2375,7 @@
           </div>
 
           <p style="font-size:0.86rem; color:var(--text-secondary); margin:0.65rem 0 0;">
-            <strong>Delivery Address:</strong> ${escapeHtml(o.address)}
+            <strong>Delivery Details:</strong> ${escapeHtml(o.address)}
           </p>
 
           ${renderOrderStepper(o.status)}
@@ -2003,7 +2428,6 @@
   async function deleteOrder(orderId) {
     if (!confirm(`Delete Order #${orderId} permanently from the database?`)) return;
 
-    // Delete child order_items first (if cascade delete is not configured)
     await db.from("order_items").delete().eq("order_id", orderId);
     const { error } = await db.from("orders").delete().eq("id", orderId);
 
