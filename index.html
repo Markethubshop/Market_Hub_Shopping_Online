@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MarketHub — Multi-Shop E-Commerce</title>
+  <title>MarketHub — Verified Multi-Shop E-Commerce</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,38 +27,29 @@
       --border: #dce6df;
       --danger: #dc2626;
       --danger-soft: #fef2f2;
-      --success: #15803d;
-      --success-soft: #ecfdf5;
-      --warning: #d97706;
       --star: #f59e0b;
-      --shadow-sm: 0 1px 3px rgba(20, 36, 25, 0.06), 0 1px 2px rgba(20, 36, 25, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(20, 36, 25, 0.09), 0 8px 10px -6px rgba(20, 36, 25, 0.04);
+      --shadow-sm: 0 1px 3px rgba(20, 36, 25, 0.06);
+      --shadow-md: 0 10px 25px -5px rgba(20, 36, 25, 0.09);
       --shadow-lg: 0 20px 35px -10px rgba(20, 36, 25, 0.18);
       --radius: 14px;
     }
 
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    }
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 
     body {
       margin: 0;
       color: var(--text);
       background-color: var(--bg);
       background-image:
-        linear-gradient(180deg, rgba(243, 247, 244, 0.92) 0%, rgba(243, 247, 244, 0.96) 50%, rgba(236, 245, 239, 0.98) 100%),
-        radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 10%, rgba(234, 88, 12, 0.09) 0px, transparent 45%);
+        linear-gradient(180deg, rgba(243, 247, 244, 0.93) 0%, rgba(236, 245, 239, 0.98) 100%),
+        radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.11) 0px, transparent 50%);
       min-height: 100vh;
     }
 
-    /* Sticky Header */
     header {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(220, 230, 223, 0.95);
+      border-bottom: 1px solid var(--border);
       padding: 0.85rem 1.5rem;
       display: flex;
       flex-wrap: wrap;
@@ -75,10 +66,9 @@
       display: flex;
       align-items: center;
       gap: 0.65rem;
-      font-size: 1.22rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--text);
-      letter-spacing: -0.02em;
       cursor: pointer;
     }
 
@@ -100,15 +90,9 @@
       background: var(--primary-soft);
       padding: 0.16rem 0.55rem;
       border-radius: 999px;
-      letter-spacing: 0.02em;
     }
 
-    .nav-actions {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    .nav-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
     .user-pill {
       display: inline-flex;
@@ -119,15 +103,8 @@
       padding: 0.34rem 0.75rem;
       border-radius: 999px;
       font-size: 0.82rem;
-      color: var(--text);
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.18s ease;
-    }
-
-    .user-pill:hover {
-      background: #dcfce7;
-      border-color: #86efac;
     }
 
     .user-avatar-dot {
@@ -159,71 +136,20 @@
       transition: all 0.18s ease;
     }
 
-    button:hover:not(:disabled) {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.24);
-    }
-
-    button:active:not(:disabled) { transform: translateY(0); }
-
-    button.secondary {
-      background: #ffffff;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-    }
-
-    button.secondary:hover:not(:disabled) {
-      background: #f4f9f5;
-      border-color: #bfd3c5;
-      box-shadow: var(--shadow-sm);
-    }
-
-    button.secondary.active-nav {
-      background: var(--primary-soft);
-      color: var(--primary-dark);
-      border-color: #86efac;
-    }
-
-    button.shop-cta {
-      background: linear-gradient(135deg, #ea580c, #c2410c);
-      color: #fff;
-    }
-
-    button.shop-cta:hover:not(:disabled) {
-      background: linear-gradient(135deg, #c2410c, #9a3412);
-      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.28);
-    }
-
+    button:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
+    button.secondary { background: #fff; color: var(--text-secondary); border: 1px solid var(--border); }
+    button.secondary:hover:not(:disabled) { background: #f4f9f5; border-color: #bfd3c5; }
+    button.secondary.active-nav { background: var(--primary-soft); color: var(--primary-dark); border-color: #86efac; }
+    button.shop-cta { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; }
+    button.shop-cta:hover:not(:disabled) { background: linear-gradient(135deg, #c2410c, #9a3412); }
     button.success-btn { background: var(--primary-light); }
-    button.success-btn:hover:not(:disabled) { background: var(--primary-dark); }
-
     button.danger { background: var(--danger); }
     button.danger:hover:not(:disabled) { background: #b91c1c; }
+    button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
+    button.danger-outline:hover:not(:disabled) { background: var(--danger-soft); }
+    button.sm { padding: 0.34rem 0.65rem; font-size: 0.76rem; border-radius: 7px; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    button.danger-outline {
-      background: #fff;
-      color: var(--danger);
-      border: 1px solid #fecaca;
-    }
-    button.danger-outline:hover:not(:disabled) {
-      background: var(--danger-soft);
-      border-color: #fca5a5;
-      box-shadow: none;
-    }
-
-    button.sm {
-      padding: 0.34rem 0.65rem;
-      font-size: 0.76rem;
-      border-radius: 7px;
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    /* Auth Tabs & Sub-tabs */
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -242,56 +168,21 @@
       border-radius: 8px;
       font-size: 0.84rem;
       font-weight: 700;
-      box-shadow: none;
     }
-
-    .auth-tab:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.65);
-      color: var(--text);
-      transform: none;
-      box-shadow: none;
-    }
-
-    .auth-tab.active {
-      background: #ffffff;
-      color: var(--primary-dark);
-      box-shadow: var(--shadow-sm);
-    }
+    .auth-tab.active { background: #fff; color: var(--primary-dark); box-shadow: var(--shadow-sm); }
 
     /* Notification Bell */
     .notif-wrapper { position: relative; }
-
     .notif-btn {
       position: relative;
       width: 39px;
       height: 39px;
       padding: 0;
       border-radius: 10px;
-      background: #ffffff;
+      background: #fff;
       color: var(--text);
       border: 1px solid var(--border);
     }
-
-    .notif-btn:hover {
-      background: #f4f9f5;
-      border-color: #bfd3c5;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .notif-btn.has-unread svg {
-      animation: bellRing 1.4s ease-in-out;
-      color: var(--accent);
-    }
-
-    @keyframes bellRing {
-      0%, 100% { transform: rotate(0); }
-      15% { transform: rotate(14deg); }
-      30% { transform: rotate(-12deg); }
-      45% { transform: rotate(9deg); }
-      60% { transform: rotate(-6deg); }
-      75% { transform: rotate(3deg); }
-    }
-
     .notif-badge {
       position: absolute;
       top: -5px;
@@ -308,14 +199,12 @@
       align-items: center;
       justify-content: center;
       border: 2px solid #fff;
-      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.45);
     }
-
     .notif-dropdown {
       position: absolute;
       right: 0;
       top: calc(100% + 10px);
-      width: 400px;
+      width: 390px;
       max-width: calc(100vw - 24px);
       background: var(--card-solid);
       border: 1px solid var(--border);
@@ -324,7 +213,6 @@
       z-index: 60;
       overflow: hidden;
     }
-
     .notif-header {
       padding: 0.85rem 1rem;
       background: #f4f9f5;
@@ -332,56 +220,34 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
     }
-
-    .notif-header h4 { margin: 0; font-size: 0.9rem; font-weight: 700; }
-    .notif-list { max-height: 380px; overflow-y: auto; }
-
+    .notif-header h4 { margin: 0; font-size: 0.9rem; }
+    .notif-list { max-height: 360px; overflow-y: auto; }
     .notif-item {
-      padding: 0.85rem 1rem;
+      padding: 0.8rem 1rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 0.32rem;
-      transition: background 0.15s;
+      gap: 0.3rem;
       cursor: pointer;
     }
-
-    .notif-item:hover { background: #f8fbf9; }
-    .notif-item.unread {
-      background: #fff7ed;
-      border-left: 3px solid var(--accent);
-    }
-
-    .notif-item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .notif-title { font-size: 0.84rem; font-weight: 700; color: var(--text); }
+    .notif-item.unread { background: #fff7ed; border-left: 3px solid var(--accent); }
+    .notif-item-top { display: flex; justify-content: space-between; gap: 0.5rem; }
+    .notif-title { font-size: 0.83rem; font-weight: 700; }
     .notif-time { font-size: 0.71rem; color: var(--muted); white-space: nowrap; }
-    .notif-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; }
-    .notif-actions { display: flex; gap: 0.4rem; margin-top: 0.25rem; flex-wrap: wrap; }
+    .notif-desc { font-size: 0.79rem; color: var(--text-secondary); }
+    .notif-actions { display: flex; gap: 0.4rem; margin-top: 0.2rem; }
 
-    .container {
-      max-width: 1200px;
-      margin: 1.4rem auto 3rem;
-      padding: 0 1.25rem;
-    }
+    .container { max-width: 1200px; margin: 1.4rem auto 3rem; padding: 0 1.25rem; }
 
-    /* Marketplace Hero Banner */
+    /* Hero */
     .hero-banner {
-      position: relative;
       border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 1.35rem;
-      padding: 2.1rem 2rem;
-      color: #ffffff;
+      padding: 2rem;
+      margin-bottom: 1.3rem;
+      color: #fff;
       background:
-        linear-gradient(108deg, rgba(13, 42, 24, 0.92) 0%, rgba(20, 83, 45, 0.84) 55%, rgba(154, 52, 18, 0.72) 100%),
+        linear-gradient(108deg, rgba(13, 42, 24, 0.93) 0%, rgba(20, 83, 45, 0.85) 55%, rgba(154, 52, 18, 0.75) 100%),
         url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
       box-shadow: var(--shadow-md);
       display: flex;
@@ -390,55 +256,30 @@
       align-items: center;
       gap: 1.25rem;
     }
-
-    .hero-content { max-width: 680px; }
-
+    .hero-content { max-width: 670px; }
     .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      display: inline-block;
       background: rgba(255, 255, 255, 0.16);
-      backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.28);
-      padding: 0.3rem 0.78rem;
+      padding: 0.28rem 0.75rem;
       border-radius: 999px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 600;
-      letter-spacing: 0.03em;
       text-transform: uppercase;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.6rem;
     }
-
-    .hero-banner h1 {
-      margin: 0 0 0.5rem;
-      font-size: clamp(1.45rem, 2.8vw, 2.05rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-
-    .hero-banner p {
-      margin: 0 0 1.1rem;
-      font-size: 0.92rem;
-      color: rgba(240, 253, 244, 0.92);
-      line-height: 1.5;
-    }
-
-    .trust-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-
+    .hero-banner h1 { margin: 0 0 0.45rem; font-size: clamp(1.4rem, 2.7vw, 2rem); font-weight: 800; line-height: 1.2; }
+    .hero-banner p { margin: 0 0 1rem; font-size: 0.9rem; color: rgba(240, 253, 244, 0.92); line-height: 1.5; }
+    .trust-badges { display: flex; flex-wrap: wrap; gap: 0.55rem; }
     .trust-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.38rem;
-      background: rgba(13, 42, 24, 0.55);
+      background: rgba(13, 42, 24, 0.58);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 0.38rem 0.72rem;
+      padding: 0.35rem 0.7rem;
       border-radius: 10px;
-      font-size: 0.77rem;
-      font-weight: 500;
+      font-size: 0.76rem;
     }
 
-    /* Active Shops Strip */
+    /* Shops Strip */
     .shops-strip {
       background: var(--card);
       border: 1px solid var(--border);
@@ -447,23 +288,8 @@
       margin-bottom: 1rem;
       box-shadow: var(--shadow-sm);
     }
-
-    .shops-strip-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.65rem;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .shops-list-pills {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.2rem;
-    }
-
+    .shops-strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; gap: 0.5rem; flex-wrap: wrap; }
+    .shops-list-pills { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.2rem; }
     .shop-chip {
       background: #f8faf9;
       color: var(--text);
@@ -477,42 +303,24 @@
       align-items: center;
       gap: 0.45rem;
     }
+    .shop-chip.active { background: #142419; color: #fff; border-color: #142419; }
+    .shop-chip .cat-mini { font-size: 0.68rem; padding: 0.12rem 0.45rem; border-radius: 999px; background: rgba(22, 163, 74, 0.14); color: var(--primary-dark); }
+    .shop-chip.active .cat-mini { background: rgba(255, 255, 255, 0.18); color: #dcfce7; }
 
-    .shop-chip.active {
-      background: #142419;
-      color: #fff;
-      border-color: #142419;
-    }
-
-    .shop-chip .cat-mini {
-      font-size: 0.68rem;
-      padding: 0.12rem 0.45rem;
-      border-radius: 999px;
-      background: rgba(22, 163, 74, 0.14);
-      color: var(--primary-dark);
-    }
-
-    .shop-chip.active .cat-mini {
-      background: rgba(255, 255, 255, 0.18);
-      color: #dcfce7;
-    }
-
-    /* Selected Shop Banner */
     .selected-shop-banner {
       background: linear-gradient(135deg, #142419, #1e3a29);
       color: #fff;
       border-radius: var(--radius);
-      padding: 1.25rem 1.5rem;
+      padding: 1.2rem 1.45rem;
       margin-bottom: 1.15rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
-      box-shadow: var(--shadow-md);
     }
 
-    /* Toolbar & Filters */
+    /* Toolbar */
     .catalog-toolbar {
       background: var(--card);
       border: 1px solid var(--border);
@@ -524,74 +332,47 @@
       justify-content: space-between;
       align-items: center;
       gap: 0.85rem;
-      box-shadow: var(--shadow-sm);
     }
-
-    .filter-pills { display: flex; gap: 0.42rem; flex-wrap: wrap; }
-
+    .filter-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .filter-pill {
       background: #f6faf7;
       color: var(--text-secondary);
       border: 1px solid var(--border);
-      padding: 0.38rem 0.82rem;
+      padding: 0.36rem 0.8rem;
       border-radius: 999px;
-      font-size: 0.79rem;
+      font-size: 0.78rem;
       font-weight: 600;
     }
+    .filter-pill.active { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+    .search-box { position: relative; flex: 1; min-width: 220px; max-width: 320px; }
+    .search-box input { padding-left: 2.2rem; background: #f6faf7; }
+    .search-box svg { position: absolute; left: 0.72rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
 
-    .filter-pill.active {
-      background: var(--primary-dark);
-      color: #fff;
-      border-color: var(--primary-dark);
-    }
-
-    .search-box {
-      position: relative;
-      flex: 1;
-      min-width: 220px;
-      max-width: 330px;
-    }
-
-    .search-box input { padding-left: 2.25rem; background: #f6faf7; }
-
-    .search-box svg {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-    }
-
+    /* Badges */
     .badge {
       background: var(--primary-soft);
       color: var(--primary-dark);
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.58rem;
       border-radius: 999px;
-      font-size: 0.71rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
-
     .badge.seller { background: var(--accent-soft); color: #c2410c; }
     .badge.admin { background: var(--indigo-soft); color: var(--indigo); }
     .badge.cat-badge { background: #f1f5f9; color: #334155; text-transform: none; font-weight: 600; }
-
+    .badge.ship-free { background: #dcfce7; color: #15803d; text-transform: none; font-weight: 700; }
+    .badge.ship-paid { background: #eff6ff; color: #1d4ed8; text-transform: none; font-weight: 700; }
     .badge.status-pending { background: #fef3c7; color: #b45309; }
+    .badge.status-approved, .badge.status-delivered { background: #d1fae5; color: #065f46; }
     .badge.status-received { background: #dcfce7; color: #166534; }
     .badge.status-confirmed { background: #dbeafe; color: #1d4ed8; }
     .badge.status-shipped { background: #ffedd5; color: #c2410c; }
-    .badge.status-delivered { background: #d1fae5; color: #065f46; }
-    .badge.status-cancelled { background: #fee2e2; color: #b91c1c; }
+    .badge.status-cancelled, .badge.status-rejected, .badge.status-suspended { background: #fee2e2; color: #b91c1c; }
 
     /* Product Cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 1.3rem;
-    }
-
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 1.25rem; }
     .card {
       background: var(--card-solid);
       border: 1px solid var(--border);
@@ -601,78 +382,54 @@
       flex-direction: column;
       justify-content: space-between;
       box-shadow: var(--shadow-sm);
-      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-      border-color: #a7f3d0;
-    }
-
-    .card-img-wrap {
-      position: relative;
-      width: 100%;
-      height: 205px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #eef6f0, #f8fafc);
-      cursor: pointer;
-    }
-
-    .card-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.35s ease;
-    }
-
-    .card:hover .card-img-wrap img { transform: scale(1.05); }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #a7f3d0; }
+    .card-img-wrap { position: relative; width: 100%; height: 200px; overflow: hidden; background: #eef6f0; cursor: pointer; }
+    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .card:hover .card-img-wrap img { transform: scale(1.04); }
 
     .stock-tag {
       position: absolute;
       top: 10px;
       left: 10px;
-      padding: 0.24rem 0.62rem;
+      padding: 0.22rem 0.6rem;
       border-radius: 999px;
-      font-size: 0.71rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      backdrop-filter: blur(8px);
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.93);
       color: var(--primary-dark);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-
     .stock-tag.low { color: var(--accent); }
-    .stock-tag.out { background: rgba(220, 38, 38, 0.92); color: #fff; }
+    .stock-tag.out { background: rgba(220, 38, 38, 0.93); color: #fff; }
+
+    .ship-tag-overlay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 0.22rem 0.58rem;
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 700;
+      background: rgba(20, 36, 25, 0.84);
+      color: #dcfce7;
+    }
+    .ship-tag-overlay.free { background: rgba(21, 128, 61, 0.94); color: #fff; }
 
     .photo-count-pill {
       position: absolute;
       bottom: 10px;
       right: 10px;
-      padding: 0.2rem 0.55rem;
+      padding: 0.18rem 0.52rem;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       font-weight: 700;
       background: rgba(20, 36, 25, 0.78);
       color: #fff;
-      backdrop-filter: blur(6px);
     }
 
-    .card-body {
-      padding: 1.05rem 1.15rem 1.15rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .shop-link-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.4rem;
-    }
-
+    .card-body { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; flex: 1; }
+    .shop-link-row { display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem; }
     .shop-tag-btn {
       background: #f0fdf4;
       color: var(--primary-dark);
@@ -682,47 +439,30 @@
       font-size: 0.71rem;
       font-weight: 700;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
     }
 
-    .shop-tag-btn:hover {
-      background: #dcfce7;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .card-title {
-      font-weight: 700;
-      font-size: 1.02rem;
-      margin: 0 0 0.3rem;
-      color: var(--text);
-      cursor: pointer;
-    }
-
+    .card-title { font-weight: 700; font-size: 1.01rem; margin: 0 0 0.28rem; cursor: pointer; }
     .card-title:hover { color: var(--primary); }
-
     .card-desc {
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       color: var(--text-secondary);
-      margin: 0 0 0.55rem;
-      line-height: 1.42;
+      margin: 0 0 0.5rem;
+      line-height: 1.4;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    /* Shop Info Strip Below Product Description on Card */
+    /* Shop Owner Description Below Product */
     .card-shop-desc-box {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--muted);
       background: #f8faf9;
       border-left: 2.5px solid #86efac;
-      padding: 0.35rem 0.55rem;
+      padding: 0.34rem 0.52rem;
       border-radius: 0 6px 6px 0;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.65rem;
       line-height: 1.35;
       flex: 1;
       display: -webkit-box;
@@ -731,105 +471,43 @@
       overflow: hidden;
     }
 
-    /* Rating & Sold Metrics Row */
     .metrics-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
-      font-size: 0.78rem;
-      margin-bottom: 0.7rem;
-      padding: 0.38rem 0.6rem;
+      font-size: 0.77rem;
+      margin-bottom: 0.65rem;
+      padding: 0.36rem 0.58rem;
       background: #f8faf9;
       border-radius: 8px;
       border: 1px solid #ebf2ed;
     }
-
-    .rating-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
+    .rating-pill { font-weight: 700; }
     .star-icon { color: var(--star); }
+    .sold-pill { font-weight: 600; color: var(--text-secondary); }
 
-    .sold-pill {
-      font-weight: 600;
-      color: var(--text-secondary);
+    .card-footer-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.7rem; }
+    .price { font-size: 1.18rem; font-weight: 800; color: var(--primary-dark); }
+
+    /* KPI Grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 0.9rem; margin: 1rem 0 1.2rem; }
+    .kpi-card { background: #f8fbf9; border: 1px solid var(--border); border-radius: 12px; padding: 0.95rem 1.05rem; }
+    .kpi-card.highlight { background: linear-gradient(135deg, #eef2ff, #f5f3ff); border-color: #c7d2fe; }
+    .kpi-label { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    .kpi-value { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+    .kpi-card.highlight .kpi-value { color: var(--indigo); }
+    .kpi-sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.2rem; }
+
+    /* Shipping Mode Selector Box */
+    .shipping-config-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 11px;
+      padding: 0.85rem 1rem;
     }
 
-    .card-footer-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 0.75rem;
-    }
-
-    .price {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-      letter-spacing: -0.02em;
-    }
-
-    .stock { font-size: 0.76rem; color: var(--muted); font-weight: 500; }
-
-    /* Admin Commission KPI Cards */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.95rem;
-      margin: 1rem 0 1.25rem;
-    }
-
-    .kpi-card {
-      background: #f8fbf9;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-    }
-
-    .kpi-card.highlight {
-      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
-      border-color: #c7d2fe;
-    }
-
-    .kpi-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
-    }
-
-    .kpi-value {
-      font-size: 1.45rem;
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -0.02em;
-    }
-
-    .kpi-card.highlight .kpi-value {
-      color: var(--indigo);
-    }
-
-    .kpi-sub {
-      font-size: 0.76rem;
-      color: var(--text-secondary);
-      margin-top: 0.2rem;
-    }
-
-    /* 4-Photo Upload Slots Grid */
-    .photo-slots-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-    }
-
+    /* 4-Photo Slots */
+    .photo-slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; margin-top: 0.5rem; }
     .photo-slot {
       border: 2px dashed #bfd3c5;
       border-radius: 12px;
@@ -844,28 +522,9 @@
       text-align: center;
       padding: 0.4rem;
       cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
     }
-
-    .photo-slot:hover {
-      border-color: var(--primary);
-      background: #f0fdf4;
-    }
-
-    .photo-slot img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .photo-slot .slot-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
+    .photo-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .photo-slot .slot-label { font-size: 0.71rem; font-weight: 700; color: var(--muted); }
     .photo-slot .remove-slot-btn {
       position: absolute;
       top: 5px;
@@ -880,154 +539,48 @@
       z-index: 2;
     }
 
-    /* Product Detail Gallery Modal */
+    /* Product Detail Modal */
     .product-modal-wide { max-width: 780px; }
+    .detail-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.35rem; margin-top: 0.85rem; }
+    .gallery-main { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #f8fafc; }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.55rem; }
+    .gallery-thumb { aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; opacity: 0.72; }
+    .gallery-thumb.active, .gallery-thumb:hover { border-color: var(--primary); opacity: 1; }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .shop-about-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.8rem 0.95rem; margin: 0.75rem 0; }
 
-    .detail-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 1.4rem;
-      margin-top: 0.85rem;
-    }
+    .star-picker { display: inline-flex; gap: 0.3rem; margin: 0.35rem 0 0.6rem; }
+    .star-btn { background: #f8fafc; border: 1px solid var(--border); color: #cbd5e1; font-size: 1.2rem; padding: 0.22rem 0.52rem; border-radius: 8px; }
+    .star-btn.selected { color: var(--star); background: #fffbeb; border-color: #fde68a; }
+    .review-card { padding: 0.7rem; border: 1px solid var(--border); border-radius: 10px; background: #fbfdfb; margin-bottom: 0.55rem; }
 
-    .gallery-main {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-    }
-
-    .gallery-main img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .gallery-thumbs {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;
-      margin-top: 0.6rem;
-    }
-
-    .gallery-thumb {
-      aspect-ratio: 1 / 1;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 2px solid transparent;
-      cursor: pointer;
-      opacity: 0.72;
-      transition: all 0.15s;
-    }
-
-    .gallery-thumb.active, .gallery-thumb:hover {
-      border-color: var(--primary);
-      opacity: 1;
-    }
-
-    .gallery-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* About Shop Box inside Product Detail Modal */
-    .shop-about-card {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 11px;
-      padding: 0.85rem 1rem;
-      margin: 0.85rem 0;
-    }
-
-    /* Interactive Star Picker */
-    .star-picker {
-      display: inline-flex;
-      gap: 0.3rem;
-      margin: 0.35rem 0 0.65rem;
-    }
-
-    .star-btn {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      color: #cbd5e1;
-      font-size: 1.25rem;
-      padding: 0.25rem 0.55rem;
-      border-radius: 8px;
-    }
-
-    .star-btn.selected {
-      color: var(--star);
-      background: #fffbeb;
-      border-color: #fde68a;
-    }
-
-    .review-card {
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: #fbfdfb;
-      margin-bottom: 0.6rem;
-    }
-
-    /* Panels & Forms */
+    /* Panels & Stepper */
     .panel {
       background: var(--card-solid);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.35rem;
-      margin-bottom: 1.4rem;
+      padding: 1.3rem;
+      margin-bottom: 1.35rem;
       box-shadow: var(--shadow-sm);
     }
-
-    .panel.highlight-order {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22), var(--shadow-md);
-    }
+    .panel.highlight-order { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22); }
 
     .order-stepper {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 0.35rem;
-      margin: 0.95rem 0;
-      padding: 0.8rem;
+      margin: 0.9rem 0;
+      padding: 0.75rem;
       background: #f6faf7;
       border: 1px solid var(--border);
       border-radius: 10px;
     }
-
-    .step-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      font-size: 0.71rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .step-dot {
-      width: 23px;
-      height: 23px;
-      border-radius: 999px;
-      background: #dce6df;
-      color: var(--muted);
-      display: grid;
-      place-items: center;
-      font-size: 0.71rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-
+    .step-item { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+    .step-dot { width: 22px; height: 22px; border-radius: 999px; background: #dce6df; display: grid; place-items: center; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.28rem; }
     .step-item.done .step-dot { background: var(--primary-light); color: #fff; }
     .step-item.done { color: var(--primary-dark); }
-    .step-item.current .step-dot {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2);
-    }
+    .step-item.current .step-dot { background: var(--accent); color: #fff; }
     .step-item.current { color: var(--accent); font-weight: 700; }
 
     .cancelled-banner {
@@ -1036,77 +589,31 @@
       color: #991b1b;
       padding: 0.65rem 0.9rem;
       border-radius: 9px;
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      margin: 0.85rem 0;
+      margin: 0.8rem 0;
     }
 
-    .error-box {
-      background: var(--danger-soft);
-      border: 1px solid #fecaca;
-      color: #991b1b;
-      padding: 0.85rem 1rem;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      font-size: 0.86rem;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.8rem;
-    }
-
-    .field-label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 0.3rem;
-    }
+    .error-box { background: var(--danger-soft); border: 1px solid #fecaca; color: #991b1b; padding: 0.85rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.85rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.8rem; }
+    .field-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.28rem; }
 
     input, textarea, select {
       width: 100%;
-      padding: 0.58rem 0.75rem;
+      padding: 0.56rem 0.74rem;
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 0.87rem;
+      font-size: 0.86rem;
       color: var(--text);
       background: #fff;
-      transition: border-color 0.15s, box-shadow 0.15s;
     }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14); }
 
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.75rem;
-      font-size: 0.86rem;
-    }
-
-    th {
-      background: #f4f9f5;
-      color: var(--muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      letter-spacing: 0.04em;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 0.72rem;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.7rem; font-size: 0.85rem; }
+    th { background: #f4f9f5; color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 0.71rem; }
+    th, td { text-align: left; padding: 0.68rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
 
     .hidden { display: none !important; }
-
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1118,86 +625,34 @@
       padding: 1rem;
       z-index: 70;
     }
-
     .modal {
       background: var(--card-solid);
       border-radius: 16px;
-      max-width: 540px;
+      max-width: 550px;
       width: 100%;
-      padding: 1.45rem;
+      padding: 1.4rem;
       max-height: 92vh;
       overflow-y: auto;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
     }
 
-    .row-between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
+    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .delivery-summary-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.8rem 0.95rem; margin-bottom: 0.8rem; font-size: 0.84rem; }
 
-    .delivery-summary-card {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 11px;
-      padding: 0.85rem 1rem;
-      margin-bottom: 0.85rem;
-      font-size: 0.85rem;
-    }
-
-    .toast-container {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      z-index: 95;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      max-width: 370px;
-      width: calc(100vw - 2.5rem);
-    }
-
-    .toast {
-      background: #142419;
-      color: #f0fdf4;
-      padding: 0.85rem 1rem;
-      border-radius: 12px;
-      box-shadow: var(--shadow-lg);
-      border-left: 4px solid var(--primary-light);
-      font-size: 0.84rem;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 0.75rem;
-      animation: slideInToast 0.25s ease-out;
-    }
-
+    .toast-container { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 95; display: flex; flex-direction: column; gap: 0.55rem; max-width: 370px; width: calc(100vw - 2.4rem); }
+    .toast { background: #142419; color: #f0fdf4; padding: 0.8rem 0.95rem; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary-light); font-size: 0.83rem; display: flex; justify-content: space-between; gap: 0.7rem; }
     .toast.success { border-left-color: #22c55e; }
     .toast.warning { border-left-color: #f97316; }
     .toast.error { border-left-color: #ef4444; }
 
-    @keyframes slideInToast {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2.8rem 1rem;
-      background: var(--card);
-      border: 1px dashed #bfd3c5;
-      border-radius: var(--radius);
-      color: var(--muted);
-    }
+    .empty-state { text-align: center; padding: 2.6rem 1rem; background: var(--card); border: 1px dashed #bfd3c5; border-radius: var(--radius); color: var(--muted); }
 
     @media (max-width: 720px) {
       .detail-layout { grid-template-columns: 1fr; }
       .photo-slots-grid { grid-template-columns: repeat(2, 1fr); }
-      .order-stepper { grid-template-columns: 1fr; gap: 0.45rem; }
-      .step-item { flex-direction: row; text-align: left; gap: 0.6rem; }
+      .order-stepper { grid-template-columns: 1fr; gap: 0.4rem; }
+      .step-item { flex-direction: row; text-align: left; gap: 0.55rem; }
       .step-dot { margin-bottom: 0; }
     }
   </style>
@@ -1209,7 +664,7 @@
     <div class="brand-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     </div>
-    <div>MarketHub <span class="sub">Multi-Shop E-Commerce</span></div>
+    <div>MarketHub <span class="sub">Verified Multi-Shop</span></div>
   </div>
 
   <div class="nav-actions">
@@ -1224,9 +679,8 @@
     <button id="btn-orders" class="secondary hidden" onclick="switchView('orders')">Orders</button>
     <button id="btn-admin" class="secondary hidden" onclick="switchView('admin')">Platform Admin</button>
 
-    <!-- REAL-TIME NOTIFICATION BELL -->
     <div id="notif-wrapper" class="notif-wrapper hidden">
-      <button id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)" title="Order & Shop Notifications">
+      <button id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)" title="Notifications">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -1242,15 +696,12 @@
             <button class="danger-outline sm" onclick="clearAllNotifications()">Clear</button>
           </div>
         </div>
-        <div id="notif-list" class="notif-list">
-          <div style="padding:1.5rem; text-align:center; color:var(--muted); font-size:0.84rem;">No notifications yet.</div>
-        </div>
+        <div id="notif-list" class="notif-list"></div>
       </div>
     </div>
 
     <button id="btn-cart" class="hidden" onclick="openCart()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-      Cart (<span id="cart-count">0</span>)
+      🛒 Cart (<span id="cart-count">0</span>)
     </button>
 
     <button id="btn-login" onclick="openAuthModal('signin')">Sign In / Register</button>
@@ -1262,32 +713,32 @@
   <div id="status-error" class="error-box hidden"></div>
 
   <!-- =========================================================
-       VIEW 1: MULTI-SHOP MARKETPLACE CATALOG
+       VIEW 1: VERIFIED MULTI-SHOP MARKETPLACE
        ========================================================= -->
   <section id="view-shop">
     <div class="hero-banner">
       <div class="hero-content">
-        <div class="hero-kicker">Multi-Shop Marketplace • Fresh Produce, Apparel & More</div>
-        <h1>Shop From Multiple Local Stores or Open Your Own Online Shop</h1>
-        <p>Browse farm-fresh fruits & vegetables, trendy clothing & apparel, and local specialty stores—complete with 4-angle product galleries, verified sold counts, ratings, and instant seller alerts.</p>
+        <div class="hero-kicker">Verified Sellers Only • Free & Custom Shop Shipping</div>
+        <h1>Shop From Admin-Verified Stores or Apply to Open Your Own Shop</h1>
+        <p>Every shop is screened with ID/store proof before going live. Enjoy Free Shipping promos or clear seller-set shipping rates across fresh produce, apparel, and local goods.</p>
         <div class="trust-badges">
-          <div class="trust-chip">🏪 Open Your Own Shop</div>
+          <div class="trust-chip">🛡️ Admin-Verified Shops</div>
+          <div class="trust-chip">🚚 Free or Custom Shipping per Shop</div>
           <div class="trust-chip">📸 4-Angle Product Views</div>
-          <div class="trust-chip">⭐ Verified Ratings & Sold Count</div>
-          <div class="trust-chip">🔔 Instant Seller Order Alerts</div>
+          <div class="trust-chip">🔔 Instant Order Tracking</div>
         </div>
       </div>
       <div>
         <button class="shop-cta" onclick="handleStartSellingClick()" style="padding:0.75rem 1.25rem; font-size:0.92rem;">
-          🏪 Start Selling / Open a Shop
+          🏪 Apply to Open a Shop
         </button>
       </div>
     </div>
 
-    <!-- ACTIVE SHOPS DIRECTORY BAR -->
+    <!-- ACTIVE APPROVED SHOPS BAR -->
     <div class="shops-strip">
       <div class="shops-strip-header">
-        <strong style="font-size:0.84rem; color:var(--text-secondary);">🏪 Browse by Shop (<span id="shops-count">0</span> active stores)</strong>
+        <strong style="font-size:0.84rem; color:var(--text-secondary);">🏪 Verified Active Shops (<span id="shops-count">0</span>)</strong>
         <button id="btn-clear-shop-filter" class="secondary sm hidden" onclick="setShopFilter('all')">Show All Shops</button>
       </div>
       <div id="shops-list-pills" class="shops-list-pills"></div>
@@ -1299,19 +750,20 @@
         <div style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; margin-bottom:0.3rem;">
           <h2 id="banner-shop-name" style="margin:0; font-size:1.3rem;">Shop Name</h2>
           <span id="banner-shop-category" class="badge" style="background:rgba(255,255,255,0.18); color:#dcfce7;">Category</span>
+          <span id="banner-shop-shipping" class="badge ship-free">🚚 Free Shipping</span>
         </div>
         <p id="banner-shop-desc" style="margin:0; font-size:0.86rem; color:#d1fae5;">Shop description</p>
       </div>
-      <div style="display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap;">
+      <div style="display:flex; gap:1.1rem; align-items:center; flex-wrap:wrap;">
         <div style="text-align:center;">
-          <div id="banner-shop-products" style="font-size:1.2rem; font-weight:800;">0</div>
+          <div id="banner-shop-products" style="font-size:1.15rem; font-weight:800;">0</div>
           <div style="font-size:0.72rem; color:#a7f3d0;">Products</div>
         </div>
         <div style="text-align:center;">
-          <div id="banner-shop-sold" style="font-size:1.2rem; font-weight:800;">0</div>
+          <div id="banner-shop-sold" style="font-size:1.15rem; font-weight:800;">0</div>
           <div style="font-size:0.72rem; color:#a7f3d0;">Total Sold</div>
         </div>
-        <button class="secondary sm" onclick="setShopFilter('all')">← Back to All Shops</button>
+        <button class="secondary sm" onclick="setShopFilter('all')">← All Shops</button>
       </div>
     </div>
 
@@ -1320,7 +772,7 @@
       <div class="filter-pills" id="category-pills">
         <button class="filter-pill active" data-cat="all" onclick="setCategoryFilter('all')">All Categories</button>
         <button class="filter-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Fruits & Vegetables</button>
-        <button class="filter-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing & Apparel (Damit)</button>
+        <button class="filter-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing & Apparel</button>
         <button class="filter-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food & Drinks</button>
         <button class="filter-pill" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">📱 Gadgets</button>
         <button class="filter-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home & Living</button>
@@ -1340,62 +792,144 @@
   </section>
 
   <!-- =========================================================
-       VIEW 2: MY SHOP / SELLER CENTER
+       VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS
        ========================================================= -->
   <section id="view-seller" class="hidden">
-    <!-- STEP A: CREATE SHOP ONBOARDING -->
-    <div id="create-shop-panel" class="panel hidden" style="max-width:620px; margin:1rem auto;">
-      <div style="text-align:center; margin-bottom:1.25rem;">
-        <div style="font-size:2.4rem; margin-bottom:0.35rem;">🏪</div>
-        <h2 style="margin:0 0 0.35rem;">Open Your Own Online Shop</h2>
-        <p style="margin:0; font-size:0.88rem; color:var(--muted);">Create your storefront to list products (up to 4 photos each), receive live order alerts, and track sales. (10% platform commission applies per completed order.)</p>
+    <!-- STEP A: SELLER APPLICATION & VERIFICATION FORM -->
+    <div id="create-shop-panel" class="panel hidden" style="max-width:660px; margin:1rem auto;">
+      <div style="text-align:center; margin-bottom:1.2rem;">
+        <div style="font-size:2.3rem; margin-bottom:0.3rem;">🛡️🏪</div>
+        <h2 style="margin:0 0 0.35rem;">Apply to Open a Verified Seller Shop</h2>
+        <p style="margin:0; font-size:0.86rem; color:var(--muted);">To protect buyers from fake/troll stores, all shop applications require valid verification proof and Platform Admin approval before going live.</p>
       </div>
 
-      <form onsubmit="saveShopProfile(event)" style="display:flex; flex-direction:column; gap:0.9rem;">
-        <div>
-          <label class="field-label">Shop Name *</label>
-          <input type="text" id="new-shop-name" placeholder="e.g., Trendy Apparel Store or Gibo Fresh Farm" required />
+      <form onsubmit="submitShopApplication(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Shop Name *</label>
+            <input type="text" id="new-shop-name" placeholder="e.g., Trendy Apparel PH or Gibo Farm" required />
+          </div>
+          <div>
+            <label class="field-label">Main Shop Category *</label>
+            <select id="new-shop-category" required>
+              <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+              <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
+              <option value="Food & Beverages">Food & Beverages</option>
+              <option value="Gadgets & Accessories">Gadgets & Accessories</option>
+              <option value="Home & Living">Home & Living</option>
+              <option value="Health & Beauty">Health & Beauty</option>
+              <option value="General Merchandise">General Merchandise</option>
+            </select>
+          </div>
         </div>
-        <div>
-          <label class="field-label">Main Shop Category *</label>
-          <select id="new-shop-category" required>
-            <option value="Fruits & Vegetables">Fruits & Vegetables</option>
-            <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-            <option value="Food & Beverages">Food & Beverages</option>
-            <option value="Gadgets & Accessories">Gadgets & Accessories</option>
-            <option value="Home & Living">Home & Living</option>
-            <option value="Health & Beauty">Health & Beauty</option>
-            <option value="General Merchandise">General Merchandise</option>
-          </select>
+
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Active Seller Contact Number *</label>
+            <input type="tel" id="new-shop-phone" placeholder="e.g., 0917 123 4567" required />
+          </div>
+          <div>
+            <label class="field-label">Pickup / Store Address *</label>
+            <input type="text" id="new-shop-address" placeholder="Barangay, Town/City, Province" required />
+          </div>
         </div>
+
         <div>
-          <label class="field-label">Shop Description (Makikita ng mga buyers sa ibaba ng products mo)</label>
-          <textarea id="new-shop-desc" rows="2" placeholder="Tell buyers what you sell (e.g., Quality shirts, dresses, and streetwear at affordable prices)"></textarea>
+          <label class="field-label">Shop Description (Displayed below every product in your shop) *</label>
+          <textarea id="new-shop-desc" rows="2" placeholder="Describe your shop, return policy, or delivery schedule..." required></textarea>
         </div>
-        <button type="submit" id="btn-create-shop" class="shop-cta" style="padding:0.75rem; font-size:0.95rem;">
-          Launch My Shop Now
+
+        <!-- CUSTOM SHIPPING FEE SETUP -->
+        <div class="shipping-config-box">
+          <label class="field-label" style="color:var(--primary-dark);">🚚 Shop Shipping Fee Setting *</label>
+          <div class="form-grid">
+            <div>
+              <select id="new-shop-ship-mode" onchange="toggleNewShopShippingInput()">
+                <option value="paid">Customized Shipping Fee (Seller sets amount)</option>
+                <option value="free">Free Shipping (₱0.00 for buyers)</option>
+              </select>
+            </div>
+            <div id="new-shop-ship-amount-wrap">
+              <input type="number" id="new-shop-ship-fee" step="0.01" min="0" value="50" placeholder="Enter shipping fee (₱)" required />
+            </div>
+          </div>
+          <small style="display:block; margin-top:0.35rem; color:var(--text-secondary);">You can change this anytime between Free Shipping and a custom fee in your Shop Settings.</small>
+        </div>
+
+        <!-- MANDATORY VALID ID / STORE PROOF UPLOAD -->
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:11px; padding:0.85rem 1rem;">
+          <label class="field-label" style="color:#92400e;">🪪 Seller Verification Proof (Upload Valid ID or Physical Store/Inventory Photo) *</label>
+          <input type="file" id="new-shop-id-file" accept="image/*" required />
+          <small style="display:block; margin-top:0.35rem; color:#92400e;">Only visible to the Platform Admin for anti-scam verification.</small>
+        </div>
+
+        <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.82rem; color:var(--text-secondary); cursor:pointer;">
+          <input type="checkbox" id="new-shop-agree" required style="width:auto; margin-top:2px;" />
+          <span>I confirm that my shop details are legitimate, I will fulfill customer orders honestly, and I agree to the <strong>10% platform commission</strong> on product sales.</span>
+        </label>
+
+        <button type="submit" id="btn-create-shop" class="shop-cta" style="padding:0.75rem; font-size:0.94rem;">
+          Submit Shop Application for Admin Approval
         </button>
       </form>
     </div>
 
-    <!-- STEP B: ACTIVE SELLER DASHBOARD -->
+    <!-- STEP B: PENDING / REJECTED / SUSPENDED LOCK BANNER -->
+    <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:1rem auto; text-align:center;">
+      <div id="gate-icon" style="font-size:2.6rem; margin-bottom:0.4rem;">⏳</div>
+      <h2 id="gate-title" style="margin:0 0 0.4rem;">Shop Application Pending Approval</h2>
+      <p id="gate-message" style="margin:0 auto 1rem; max-width:500px; font-size:0.88rem; color:var(--text-secondary); line-height:1.5;"></p>
+      <div id="gate-admin-note" class="error-box hidden" style="text-align:left;"></div>
+
+      <form id="resubmit-shop-form" class="hidden" onsubmit="resubmitRejectedShop(event)" style="text-align:left; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:0.75rem;">
+        <h4 style="margin:0;">Update & Re-submit Shop Verification</h4>
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Shop Name</label>
+            <input type="text" id="resub-shop-name" required />
+          </div>
+          <div>
+            <label class="field-label">Contact Number</label>
+            <input type="tel" id="resub-shop-phone" required />
+          </div>
+        </div>
+        <div>
+          <label class="field-label">Pickup / Store Address</label>
+          <input type="text" id="resub-shop-address" required />
+        </div>
+        <div>
+          <label class="field-label">Shop Description</label>
+          <textarea id="resub-shop-desc" rows="2" required></textarea>
+        </div>
+        <div>
+          <label class="field-label">Upload Updated Valid ID / Store Proof (Optional if already clear)</label>
+          <input type="file" id="resub-shop-id-file" accept="image/*" />
+        </div>
+        <button type="submit" class="shop-cta">Re-submit for Admin Review</button>
+      </form>
+    </div>
+
+    <!-- STEP C: APPROVED ACTIVE SELLER DASHBOARD -->
     <div id="seller-dashboard-panel" class="hidden">
       <div class="panel" style="background:linear-gradient(135deg, #f0fdf4, #ffffff); border-color:#bbf7d0;">
         <div class="row-between">
           <div>
             <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
               <h2 id="my-shop-title" style="margin:0;">My Shop</h2>
+              <span class="badge status-approved">✓ Verified Shop</span>
               <span id="my-shop-cat-badge" class="badge seller">Category</span>
+              <span id="my-shop-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
             </div>
-            <p id="my-shop-desc-text" style="margin:0.3rem 0 0; font-size:0.86rem; color:var(--text-secondary);"></p>
+            <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.86rem; color:var(--text-secondary);"></p>
           </div>
           <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop & Description</button>
-            <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Incoming Shop Orders (<span id="seller-pending-count">0</span>)</button>
+            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop & Shipping Fee</button>
+            <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Incoming Orders (<span id="seller-pending-count">0</span>)</button>
           </div>
         </div>
 
-        <form id="edit-shop-box" class="hidden" onsubmit="saveShopProfile(event)" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
+        <!-- EDIT SHOP & SHIPPING SETTINGS -->
+        <form id="edit-shop-box" class="hidden" onsubmit="updateApprovedShopSettings(event)" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
           <div class="form-grid">
             <div>
               <label class="field-label">Shop Name</label>
@@ -1414,17 +948,36 @@
               </select>
             </div>
             <div>
-              <label class="field-label">Shop Description (Shown below products)</label>
-              <input type="text" id="edit-shop-desc" />
+              <label class="field-label">Contact Number</label>
+              <input type="tel" id="edit-shop-phone" required />
             </div>
           </div>
-          <div style="margin-top:0.75rem;">
-            <button type="submit" class="sm">Update Shop Info</button>
+
+          <div class="form-grid" style="margin-top:0.75rem;">
+            <div>
+              <label class="field-label">Shipping Fee Mode</label>
+              <select id="edit-shop-ship-mode" onchange="toggleEditShopShippingInput()">
+                <option value="paid">Customized Shipping Fee (Seller sets amount)</option>
+                <option value="free">Free Shipping (₱0.00)</option>
+              </select>
+            </div>
+            <div id="edit-shop-ship-amount-wrap">
+              <label class="field-label">Customized Shipping Fee Amount (₱)</label>
+              <input type="number" id="edit-shop-ship-fee" step="0.01" min="0" value="50" />
+            </div>
+            <div>
+              <label class="field-label">Shop Description (Shown below products)</label>
+              <input type="text" id="edit-shop-desc" required />
+            </div>
+          </div>
+
+          <div style="margin-top:0.8rem;">
+            <button type="submit" class="sm">Save Shop & Shipping Settings</button>
           </div>
         </form>
       </div>
 
-      <!-- Add / Edit Product Form with 4 Photos -->
+      <!-- Add / Edit Product Form -->
       <div class="panel">
         <div class="row-between" style="margin-bottom:0.75rem;">
           <h3 style="margin:0;" id="product-form-heading">➕ Add Product to Your Shop (Up to 4 Photos)</h3>
@@ -1436,7 +989,7 @@
           <div class="form-grid">
             <div>
               <label class="field-label">Product Name *</label>
-              <input type="text" id="p-name" placeholder="e.g., Oversized Cotton T-Shirt (Unisex)" required />
+              <input type="text" id="p-name" placeholder="e.g., Oversized Cotton T-Shirt" required />
             </div>
             <div>
               <label class="field-label">Product Category *</label>
@@ -1465,29 +1018,27 @@
             <textarea id="p-desc" rows="2" placeholder="Describe your item clearly for buyers..."></textarea>
           </div>
 
-          <!-- 4-PHOTO UPLOAD SLOTS -->
           <div style="margin-top:0.9rem;">
             <div class="row-between">
-              <label class="field-label" style="margin:0;">Product Photos (Up to 4 different views — Front, Back, Side, Close-up)</label>
+              <label class="field-label" style="margin:0;">Product Photos (Up to 4 views)</label>
               <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.32rem 0.65rem; border:1px solid var(--border); border-radius:7px; font-size:0.76rem; font-weight:600;">
                 📁 Select Multiple Photos (Max 4)
                 <input type="file" id="multi-photo-input" accept="image/*" multiple class="hidden" onchange="handleMultiPhotoSelect(event)" />
               </label>
             </div>
-
             <div class="photo-slots-grid" id="photo-slots-grid"></div>
             <input type="file" id="single-slot-file-input" accept="image/*" class="hidden" onchange="handleSingleSlotFile(event)" />
           </div>
 
-          <div style="margin-top: 1rem; display:flex; gap:0.6rem;">
+          <div style="margin-top: 1rem;">
             <button type="submit" id="btn-save-product" class="success-btn">Publish Product</button>
           </div>
         </form>
       </div>
 
-      <!-- Seller's Products Inventory Table -->
+      <!-- Inventory Table -->
       <div class="panel">
-        <h3 style="margin-top:0;">📦 My Shop Inventory & Sales Performance</h3>
+        <h3 style="margin-top:0;">📦 My Shop Inventory & Sales</h3>
         <div style="overflow-x: auto;">
           <table>
             <thead>
@@ -1515,7 +1066,7 @@
     <div class="row-between" style="margin-bottom: 0.85rem;">
       <div>
         <h2 style="margin:0;">Orders & Live Tracking</h2>
-        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">Manage your personal purchases (you can cancel while Pending) and incoming orders for your shop.</p>
+        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">Cancel your own order while Pending, or manage incoming orders for your shop.</p>
       </div>
       <button class="secondary sm" onclick="loadOrders()">↻ Refresh Orders</button>
     </div>
@@ -1529,15 +1080,42 @@
   </section>
 
   <!-- =========================================================
-       VIEW 4: PLATFORM ADMIN — 10% COMMISSION MONITOR & MODERATION
+       VIEW 4: PLATFORM ADMIN — SHOP APPROVAL QUEUE & 10% COMMISSION
        ========================================================= -->
   <section id="view-admin" class="hidden">
-    <!-- MONTHLY 10% COMMISSION BILLING MONITOR -->
+    <!-- 1. SHOP VERIFICATION & ANTI-TROLL MODERATION QUEUE -->
+    <div class="panel" style="border-color:#fde68a;">
+      <div class="row-between">
+        <div>
+          <h3 style="margin:0; color:#92400e;">🛡️ Shop Applications & Anti-Troll Verification Queue</h3>
+          <p style="margin:0.25rem 0 0; font-size:0.84rem; color:var(--muted);">Inspect seller ID/store proof before approving shops. Suspend or delete suspicious/troll shops anytime.</p>
+        </div>
+        <span id="admin-pending-shops-badge" class="badge status-pending">0 Pending Review</span>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Shop & Description</th>
+              <th>Contact & Pickup Address</th>
+              <th>Shipping Setup</th>
+              <th>ID / Store Proof</th>
+              <th>Status</th>
+              <th>Admin Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-shops-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. MONTHLY 10% COMMISSION MONITOR -->
     <div class="panel" style="border-color:#c7d2fe;">
       <div class="row-between">
         <div>
           <h3 style="margin:0; color:var(--indigo);">💰 Admin 10% Commission & Monthly Billing Monitor</h3>
-          <p style="margin:0.25rem 0 0; font-size:0.84rem; color:var(--muted);">Monitor total shop sales and the 10% platform commission collectible from each shop owner every month (Cancelled orders are excluded).</p>
+          <p style="margin:0.25rem 0 0; font-size:0.84rem; color:var(--muted);">10% commission is computed on product sales (shipping fees go 100% to sellers; cancelled orders excluded).</p>
         </div>
         <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
           <input type="month" id="admin-commission-month" onchange="onAdminMonthChange()" style="width:auto; font-weight:600;" />
@@ -1545,17 +1123,16 @@
         </div>
       </div>
 
-      <!-- KPI SUMMARY CARDS -->
       <div class="kpi-grid">
         <div class="kpi-card">
-          <div class="kpi-label">Gross Shop Sales</div>
+          <div class="kpi-label">Product Sales (Commissionable)</div>
           <div class="kpi-value" id="kpi-gross-sales">₱0.00</div>
           <div class="kpi-sub" id="kpi-orders-count">0 valid shop orders</div>
         </div>
         <div class="kpi-card highlight">
           <div class="kpi-label">Admin 10% Commission (Masisingil)</div>
           <div class="kpi-value" id="kpi-total-commission">₱0.00</div>
-          <div class="kpi-sub">10% rate across seller shops</div>
+          <div class="kpi-sub">10% rate on product sales</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Uncollected vs. Collected</div>
@@ -1563,23 +1140,22 @@
           <div class="kpi-sub">Collected: <strong id="kpi-collected" style="color:var(--primary-dark);">₱0.00</strong></div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Net Seller Payouts (90%)</div>
+          <div class="kpi-label">Seller Net + Shipping Fees</div>
           <div class="kpi-value" id="kpi-seller-net">₱0.00</div>
-          <div class="kpi-sub">Share retained by shop owners</div>
+          <div class="kpi-sub">90% product sales + shipping</div>
         </div>
       </div>
 
-      <!-- PER-SHOP MONTHLY COMMISSION BREAKDOWN TABLE -->
       <div style="overflow-x: auto;">
         <table>
           <thead>
             <tr>
               <th>Shop Name</th>
-              <th>Category</th>
               <th>Valid Orders</th>
-              <th>Gross Sales</th>
+              <th>Product Sales</th>
+              <th>Shipping Collected</th>
               <th>10% Commission (Masisingil)</th>
-              <th>Seller Net (90%)</th>
+              <th>Seller Net + Ship</th>
               <th>Billing Status</th>
               <th>Action</th>
             </tr>
@@ -1589,10 +1165,9 @@
       </div>
     </div>
 
-    <!-- GLOBAL PRODUCTS MODERATION TABLE -->
+    <!-- 3. GLOBAL PRODUCTS MODERATION -->
     <div class="panel">
-      <h3 style="margin-top:0;">🛡️ All Registered Shops & Products Moderation</h3>
-      <p style="font-size:0.84rem; color:var(--muted);">Overview of all active products across all shops on MarketHub.</p>
+      <h3 style="margin-top:0;">📦 All Marketplace Products Moderation</h3>
       <div style="overflow-x: auto;">
         <table>
           <thead>
@@ -1614,64 +1189,60 @@
 </div>
 
 <!-- =========================================================
-     PRODUCT DETAIL, 4-PHOTO GALLERY, SHOP DESCRIPTION & REVIEWS MODAL
+     PRODUCT DETAIL MODAL (4-PHOTO GALLERY, SHOP DESCRIPTION & SHIPPING)
      ========================================================= -->
 <div id="product-detail-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProductModal()">
   <div class="modal product-modal-wide">
     <div class="row-between">
-      <div style="display:flex; align-items:center; gap:0.5rem;">
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
         <span id="detail-shop-badge" class="shop-tag-btn">🏪 Shop Name</span>
         <span id="detail-cat-badge" class="badge cat-badge">Category</span>
+        <span id="detail-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
       </div>
       <button class="secondary sm" onclick="closeProductModal()">✕</button>
     </div>
 
     <div class="detail-layout">
-      <!-- Left: 4-Photo Gallery -->
       <div>
-        <div class="gallery-main">
-          <img id="detail-main-img" src="" alt="Product View" />
-        </div>
+        <div class="gallery-main"><img id="detail-main-img" src="" alt="Product View" /></div>
         <div id="detail-thumbs" class="gallery-thumbs"></div>
       </div>
 
-      <!-- Right: Product Info, Shop Description & Add to Cart -->
       <div style="display:flex; flex-direction:column; justify-content:space-between;">
         <div>
           <h2 id="detail-title" style="margin:0 0 0.45rem; font-size:1.35rem;">Product Title</h2>
 
-          <div class="metrics-row" style="margin-bottom:0.85rem;">
-            <span class="rating-pill"><span class="star-icon">★</span> <span id="detail-rating-avg">0.0</span> (<span id="detail-review-count">0</span> reviews)</span>
+          <div class="metrics-row" style="margin-bottom:0.8rem;">
+            <span class="rating-pill"><span class="star-icon">★</span> <span id="detail-rating-avg">0.0</span> (<span id="detail-review-count">0</span>)</span>
             <span class="sold-pill">🛍️ <strong id="detail-sold-count">0</strong> sold</span>
-            <span class="stock" id="detail-stock-text">Stock: 0</span>
+            <span style="font-size:0.76rem; color:var(--muted);" id="detail-stock-text">Stock: 0</span>
           </div>
 
-          <div id="detail-price" class="price" style="font-size:1.55rem; margin-bottom:0.65rem;">₱0.00</div>
-          <p id="detail-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.55; margin:0 0 0.75rem;"></p>
+          <div id="detail-price" class="price" style="font-size:1.55rem; margin-bottom:0.6rem;">₱0.00</div>
+          <p id="detail-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.5; margin:0 0 0.75rem;"></p>
 
-          <!-- SHOP OWNER DESCRIPTION BELOW PRODUCT -->
+          <!-- SHOP OWNER DESCRIPTION & SHIPPING INFO BELOW PRODUCT -->
           <div class="shop-about-card">
             <div class="row-between" style="margin-bottom:0.3rem;">
               <strong id="detail-shop-card-name" style="font-size:0.86rem; color:var(--primary-dark);">🏪 Shop Name</strong>
               <button type="button" id="detail-visit-shop-btn" class="secondary sm">Visit Shop →</button>
             </div>
-            <p id="detail-shop-card-desc" style="margin:0; font-size:0.8rem; color:var(--text-secondary); line-height:1.45;"></p>
+            <p id="detail-shop-card-desc" style="margin:0 0 0.35rem; font-size:0.8rem; color:var(--text-secondary); line-height:1.45;"></p>
+            <div id="detail-shop-ship-note" style="font-size:0.76rem; font-weight:700; color:var(--primary-dark);"></div>
           </div>
         </div>
 
-        <div style="padding-top:0.85rem; border-top:1px solid var(--border); display:flex; gap:0.6rem; align-items:center;">
+        <div style="padding-top:0.8rem; border-top:1px solid var(--border); display:flex; gap:0.6rem; align-items:center;">
           <input type="number" id="detail-qty" value="1" min="1" style="width:80px; text-align:center; font-weight:700;" />
           <button id="detail-add-btn" class="success-btn" style="flex:1; padding:0.7rem;">+ Add to Cart</button>
         </div>
       </div>
     </div>
 
-    <hr style="border:0; border-top:1px solid var(--border); margin:1.35rem 0 1rem;" />
+    <hr style="border:0; border-top:1px solid var(--border); margin:1.3rem 0 1rem;" />
 
-    <!-- Customer Ratings & Reviews Section -->
     <div>
-      <h3 style="margin:0 0 0.75rem; font-size:1.05rem;">⭐ Customer Ratings & Reviews</h3>
-
+      <h3 style="margin:0 0 0.7rem; font-size:1.05rem;">⭐ Customer Ratings & Reviews</h3>
       <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:#f8fbf9; border:1px solid var(--border); border-radius:12px; padding:0.9rem; margin-bottom:1rem;">
         <div class="row-between">
           <strong style="font-size:0.85rem;">Rate this product:</strong>
@@ -1684,12 +1255,11 @@
           <button type="button" class="star-btn selected" onclick="setReviewStar(4)">★</button>
           <button type="button" class="star-btn selected" onclick="setReviewStar(5)">★</button>
         </div>
-        <textarea id="review-comment" rows="2" placeholder="Share your feedback about the quality, sizing, or freshness..." required></textarea>
+        <textarea id="review-comment" rows="2" placeholder="Share your feedback..." required></textarea>
         <div style="margin-top:0.55rem; text-align:right;">
           <button type="submit" id="btn-submit-review" class="sm">Submit Review</button>
         </div>
       </form>
-
       <div id="detail-reviews-list"></div>
     </div>
   </div>
@@ -1709,7 +1279,6 @@
     </div>
 
     <form id="form-signin" onsubmit="signIn(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
-      <p style="font-size: 0.84rem; color: var(--muted); margin:0;">Sign in to shop, track orders, or manage your own store.</p>
       <div>
         <label class="field-label">Email Address</label>
         <input type="email" id="login-email" placeholder="you@example.com" required />
@@ -1722,7 +1291,6 @@
     </form>
 
     <form id="form-register" class="hidden" onsubmit="signUp(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
-      <p style="font-size: 0.83rem; color: var(--muted); margin:0;">Register once to buy from any shop or open your own seller storefront.</p>
       <div>
         <label class="field-label">Complete Name *</label>
         <input type="text" id="reg-name" placeholder="e.g., Juan Dela Cruz" required />
@@ -1774,7 +1342,7 @@
         <label class="field-label">Account Email</label>
         <input type="email" id="prof-email" disabled style="background:#f8fafc; color:var(--muted);" />
       </div>
-      <button type="submit" id="btn-save-profile" class="success-btn">Save Profile Details</button>
+      <button type="submit" class="success-btn">Save Profile Details</button>
     </form>
   </div>
 </div>
@@ -1836,7 +1404,7 @@
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let currentUser = null;
-  let currentRole = "guest"; // 'guest' | 'user' | 'admin'
+  let currentRole = "guest";
   let myShop = null;
   let userProfileData = { full_name: "", phone: "", address: "" };
 
@@ -1847,7 +1415,6 @@
   let cachedOrders = [];
   let notifications = [];
 
-  // Filters & Admin Monitor State
   let selectedCategory = "all";
   let selectedShopId = "all";
   let onlyInStock = false;
@@ -1855,7 +1422,6 @@
   let adminSelectedMonth = getCurrentYearMonth();
   let adminShowAllMonths = false;
 
-  // 4-Photo Slot Editor State
   let photoSlots = [
     { url: null, file: null, preview: null },
     { url: null, file: null, preview: null },
@@ -1864,11 +1430,9 @@
   ];
   let activeSlotIndexForSingleUpload = 0;
 
-  // Product Detail & Review State
   let activeDetailProductId = null;
   let selectedReviewStars = 5;
 
-  // Realtime sync
   let ordersChannel = null;
   let pollIntervalId = null;
   let knownOrderSnapshots = new Map();
@@ -1886,9 +1450,7 @@
 
   function getCurrentYearMonth() {
     const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   }
 
   function getOrderYearMonth(isoString) {
@@ -1910,12 +1472,9 @@
     const container = document.getElementById("toast-container");
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
-    toast.innerHTML = `
-      <span>${escapeHtml(message)}</span>
-      <button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#bbf7d0; font-size:0.85rem;">✕</button>
-    `;
+    toast.innerHTML = `<span>${escapeHtml(message)}</span><button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#bbf7d0;">✕</button>`;
     container.appendChild(toast);
-    setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5200);
+    setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
   }
 
   function playNotificationTone() {
@@ -1946,10 +1505,23 @@
     box.classList.remove("hidden");
   }
 
+  function getApprovedShops() {
+    return shops.filter(s => (s.status || "approved") === "approved");
+  }
+
+  function getShopShippingInfo(shop) {
+    if (!shop) return { isFree: true, fee: 0, label: "🚚 Free Shipping" };
+    const isFree = Boolean(shop.free_shipping) || Number(shop.shipping_fee || 0) <= 0;
+    const fee = isFree ? 0 : Number(shop.shipping_fee || 0);
+    return {
+      isFree,
+      fee,
+      label: isFree ? "🚚 Free Shipping" : `🚚 Shipping: ₱${fee.toFixed(2)}`
+    };
+  }
+
   function getProductImages(p) {
-    if (Array.isArray(p.images) && p.images.length > 0) {
-      return p.images.filter(Boolean).slice(0, 4);
-    }
+    if (Array.isArray(p.images) && p.images.length > 0) return p.images.filter(Boolean).slice(0, 4);
     if (p.image_url) return [p.image_url];
     return [DEFAULT_PLACEHOLDER_IMG];
   }
@@ -1962,7 +1534,7 @@
   }
 
   /* =========================================================
-     INITIALIZATION & AUTH SESSION
+     INITIALIZATION & SESSION
      ========================================================= */
   async function init() {
     document.addEventListener("click", () => {
@@ -1986,17 +1558,13 @@
 
   function getCachedRegistrationByEmail(email) {
     if (!email) return null;
-    try {
-      const raw = localStorage.getItem(`markethub_reg_cache_${email.toLowerCase()}`);
-      return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
+    try { return JSON.parse(localStorage.getItem(`markethub_reg_cache_${email.toLowerCase()}`) || "null"); }
+    catch { return null; }
   }
 
   function setCachedRegistrationByEmail(email, info) {
     if (!email) return;
-    try {
-      localStorage.setItem(`markethub_reg_cache_${email.toLowerCase()}`, JSON.stringify(info));
-    } catch (_) {}
+    try { localStorage.setItem(`markethub_reg_cache_${email.toLowerCase()}`, JSON.stringify(info)); } catch (_) {}
   }
 
   function applyOwnerHeaderDisplay() {
@@ -2007,15 +1575,13 @@
     document.getElementById("user-pill").classList.remove("hidden");
 
     const badge = document.getElementById("role-badge");
-    if (currentRole === "admin" && myShop) {
-      badge.textContent = `Admin • ${myShop.name}`;
+    if (currentRole === "admin") {
+      badge.textContent = myShop ? `Admin • ${myShop.name}` : "Platform Admin";
       badge.className = "badge admin";
     } else if (myShop) {
-      badge.textContent = `Seller • ${myShop.name}`;
-      badge.className = "badge seller";
-    } else if (currentRole === "admin") {
-      badge.textContent = "Admin";
-      badge.className = "badge admin";
+      const st = myShop.status || "pending";
+      badge.textContent = st === "approved" ? `Seller • ${myShop.name}` : `Shop (${st.toUpperCase()})`;
+      badge.className = st === "approved" ? "badge seller" : "badge status-pending";
     } else {
       badge.textContent = "Buyer";
       badge.className = "badge";
@@ -2040,6 +1606,7 @@
         address: (meta.address || profile?.address || cached.address || "").trim()
       };
 
+      await loadShops();
       await loadMyShop();
       applyOwnerHeaderDisplay();
 
@@ -2060,6 +1627,7 @@
       await loadCart();
       await syncOrdersAndNotifications(true);
       if (currentRole === "admin") {
+        renderAdminShopsModeration();
         renderAdminCommissionMonitor();
         renderAdminTable();
       }
@@ -2077,6 +1645,7 @@
         document.getElementById(id).classList.add("hidden");
       });
       document.getElementById("btn-login").classList.remove("hidden");
+      await loadShops();
       switchView("shop");
     }
     renderProducts();
@@ -2085,7 +1654,7 @@
   function handleStartSellingClick() {
     if (!currentUser) {
       openAuthModal("register");
-      showToast("Create an account first, then open your shop in 1 click!", "info");
+      showToast("Create an account first, then submit your verified shop application!", "info");
       return;
     }
     switchView("seller");
@@ -2097,10 +1666,13 @@
       const navBtn = document.getElementById("btn-" + v);
       if (navBtn) navBtn.classList.toggle("active-nav", v === view);
     });
-    if (view === "seller") renderSellerWorkspace();
+    if (view === "seller") {
+      loadMyShop().then(() => renderSellerWorkspace());
+    }
     if (view === "orders") loadOrders();
     if (view === "admin") {
-      loadOrders().then(() => {
+      Promise.all([loadShops(), loadOrders()]).then(() => {
+        renderAdminShopsModeration();
         renderAdminCommissionMonitor();
         renderAdminTable();
       });
@@ -2108,12 +1680,11 @@
   }
 
   /* =========================================================
-     SHOPS & SELLER CENTER ("MY SHOP")
+     SHOPS, ANTI-TROLL VERIFICATION & CUSTOM SHIPPING FEE
      ========================================================= */
   async function loadShops() {
-    const { data, error } = await db.from("shops").select("*").order("id", { ascending: true });
+    const { data, error } = await db.from("shops").select("*").order("id", { ascending: false });
     if (error) {
-      console.warn("shops table notice:", error.message);
       shops = [];
       renderShopsStrip();
       return;
@@ -2127,59 +1698,125 @@
       myShop = null;
       return;
     }
-    const { data, error } = await db
-      .from("shops")
-      .select("*")
-      .eq("owner_id", currentUser.id)
-      .maybeSingle();
-
-    if (error) {
-      myShop = null;
-      return;
-    }
+    const { data } = await db.from("shops").select("*").eq("owner_id", currentUser.id).maybeSingle();
     myShop = data || null;
   }
 
   function renderShopsStrip() {
+    const approvedShops = getApprovedShops();
     const container = document.getElementById("shops-list-pills");
-    document.getElementById("shops-count").textContent = shops.length;
+    document.getElementById("shops-count").textContent = approvedShops.length;
 
     const allBtn = `
       <button class="shop-chip ${selectedShopId === "all" ? "active" : ""}" onclick="setShopFilter('all')">
-        🌐 All Shops
+        🌐 All Verified Shops
       </button>
     `;
 
-    const shopBtns = shops.map(s => `
-      <button class="shop-chip ${String(selectedShopId) === String(s.id) ? "active" : ""}" onclick="setShopFilter(${s.id})">
-        🏪 ${escapeHtml(s.name)}
-        <span class="cat-mini">${escapeHtml(s.category)}</span>
-      </button>
-    `).join("");
+    const shopBtns = approvedShops.map(s => {
+      const ship = getShopShippingInfo(s);
+      return `
+        <button class="shop-chip ${String(selectedShopId) === String(s.id) ? "active" : ""}" onclick="setShopFilter(${s.id})">
+          🏪 ${escapeHtml(s.name)}
+          <span class="cat-mini">${ship.isFree ? "Free Ship" : `₱${ship.fee.toFixed(0)} Ship`}</span>
+        </button>
+      `;
+    }).join("");
 
     container.innerHTML = allBtn + shopBtns;
   }
 
+  function toggleNewShopShippingInput() {
+    const mode = document.getElementById("new-shop-ship-mode").value;
+    const wrap = document.getElementById("new-shop-ship-amount-wrap");
+    const input = document.getElementById("new-shop-ship-fee");
+    wrap.classList.toggle("hidden", mode === "free");
+    input.required = mode === "paid";
+  }
+
+  function toggleEditShopShippingInput() {
+    const mode = document.getElementById("edit-shop-ship-mode").value;
+    const wrap = document.getElementById("edit-shop-ship-amount-wrap");
+    wrap.classList.toggle("hidden", mode === "free");
+  }
+
   function renderSellerWorkspace() {
     const createPanel = document.getElementById("create-shop-panel");
+    const gatePanel = document.getElementById("shop-status-gate-panel");
     const dashPanel = document.getElementById("seller-dashboard-panel");
 
     if (!myShop) {
       createPanel.classList.remove("hidden");
+      gatePanel.classList.add("hidden");
       dashPanel.classList.add("hidden");
+      if (userProfileData.phone) document.getElementById("new-shop-phone").value = userProfileData.phone;
+      if (userProfileData.address) document.getElementById("new-shop-address").value = userProfileData.address;
       return;
     }
 
+    const status = myShop.status || "pending";
+
+    // BLOCK UNAPPROVED / REJECTED / SUSPENDED SHOPS FROM POSTING
+    if (status !== "approved") {
+      createPanel.classList.add("hidden");
+      dashPanel.classList.add("hidden");
+      gatePanel.classList.remove("hidden");
+
+      const noteBox = document.getElementById("gate-admin-note");
+      const resubForm = document.getElementById("resubmit-shop-form");
+
+      if (myShop.admin_note) {
+        noteBox.textContent = "Admin Note: " + myShop.admin_note;
+        noteBox.classList.remove("hidden");
+      } else {
+        noteBox.classList.add("hidden");
+      }
+
+      if (status === "pending") {
+        document.getElementById("gate-icon").textContent = "⏳";
+        document.getElementById("gate-title").textContent = `"${myShop.name}" is Pending Admin Verification`;
+        document.getElementById("gate-message").textContent = "Your shop details and ID/store proof have been submitted. Once the Platform Admin approves your application, your shop will appear in the Marketplace and you can start listing products.";
+        resubForm.classList.add("hidden");
+      } else if (status === "rejected") {
+        document.getElementById("gate-icon").textContent = "❌";
+        document.getElementById("gate-title").textContent = `Application Rejected: "${myShop.name}"`;
+        document.getElementById("gate-message").textContent = "Please review the Admin note below, update your verification details or ID proof, and re-submit.";
+        document.getElementById("resub-shop-name").value = myShop.name;
+        document.getElementById("resub-shop-phone").value = myShop.contact_phone || "";
+        document.getElementById("resub-shop-address").value = myShop.shop_address || "";
+        document.getElementById("resub-shop-desc").value = myShop.description || "";
+        resubForm.classList.remove("hidden");
+      } else {
+        document.getElementById("gate-icon").textContent = "🚫";
+        document.getElementById("gate-title").textContent = `Shop Suspended: "${myShop.name}"`;
+        document.getElementById("gate-message").textContent = "This shop has been suspended by the Platform Admin due to policy or verification issues.";
+        resubForm.classList.add("hidden");
+      }
+      return;
+    }
+
+    // APPROVED SHOP WORKSPACE
     createPanel.classList.add("hidden");
+    gatePanel.classList.add("hidden");
     dashPanel.classList.remove("hidden");
 
+    const ship = getShopShippingInfo(myShop);
     document.getElementById("my-shop-title").textContent = `🏪 ${myShop.name}`;
     document.getElementById("my-shop-cat-badge").textContent = myShop.category;
-    document.getElementById("my-shop-desc-text").textContent = myShop.description || "Manage your products, photos, and incoming customer orders.";
+
+    const shipBadge = document.getElementById("my-shop-ship-badge");
+    shipBadge.textContent = ship.label;
+    shipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
+
+    document.getElementById("my-shop-desc-text").textContent = myShop.description || "";
 
     document.getElementById("edit-shop-name").value = myShop.name;
     document.getElementById("edit-shop-category").value = myShop.category;
+    document.getElementById("edit-shop-phone").value = myShop.contact_phone || "";
     document.getElementById("edit-shop-desc").value = myShop.description || "";
+    document.getElementById("edit-shop-ship-mode").value = ship.isFree ? "free" : "paid";
+    document.getElementById("edit-shop-ship-fee").value = ship.isFree ? 0 : ship.fee;
+    toggleEditShopShippingInput();
 
     if (!document.getElementById("edit-prod-id").value) {
       document.getElementById("p-category").value = myShop.category;
@@ -2192,54 +1829,137 @@
     document.getElementById("edit-shop-box").classList.toggle("hidden");
   }
 
-  async function saveShopProfile(e) {
+  async function uploadVerificationImage(file) {
+    const rawExt = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const ext = rawExt.replace(/[^a-z0-9]/g, "") || "jpg";
+    const path = `verifications/${currentUser.id}-${Date.now()}.${ext}`;
+    const { error } = await db.storage.from("product-images").upload(path, file, { upsert: true });
+    if (error) throw new Error(error.message);
+    const { data } = db.storage.from("product-images").getPublicUrl(path);
+    return data.publicUrl;
+  }
+
+  async function submitShopApplication(e) {
     e.preventDefault();
     if (!currentUser) return;
 
-    const isCreating = !myShop;
-    const name = document.getElementById(isCreating ? "new-shop-name" : "edit-shop-name").value.trim();
-    const category = document.getElementById(isCreating ? "new-shop-category" : "edit-shop-category").value;
-    const description = document.getElementById(isCreating ? "new-shop-desc" : "edit-shop-desc").value.trim();
+    const idFile = document.getElementById("new-shop-id-file").files?.[0];
+    if (!idFile) return showToast("Please upload a Valid ID or Store/Product Photo.", "warning");
 
-    if (!name) return showToast("Please enter a shop name.", "warning");
+    const shipMode = document.getElementById("new-shop-ship-mode").value;
+    const isFree = shipMode === "free";
+    const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("new-shop-ship-fee").value) || 0);
 
-    if (isCreating) {
-      const btn = document.getElementById("btn-create-shop");
-      btn.disabled = true;
-      btn.textContent = "Creating Shop...";
-      try {
-        const { data, error } = await db
-          .from("shops")
-          .insert({ owner_id: currentUser.id, name, category, description })
-          .select()
-          .single();
+    const btn = document.getElementById("btn-create-shop");
+    btn.disabled = true;
+    btn.textContent = "Uploading Verification & Submitting...";
 
-        if (error) return showToast("Could not create shop: " + error.message, "error");
-        myShop = data;
-        showToast(`Congratulations! "${name}" is now live!`, "success");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Launch My Shop Now";
-      }
-    } else {
+    try {
+      const verificationUrl = await uploadVerificationImage(idFile);
+      const initialStatus = currentRole === "admin" ? "approved" : "pending";
+
       const { data, error } = await db
         .from("shops")
-        .update({ name, category, description })
+        .insert({
+          owner_id: currentUser.id,
+          name: document.getElementById("new-shop-name").value.trim(),
+          category: document.getElementById("new-shop-category").value,
+          contact_phone: document.getElementById("new-shop-phone").value.trim(),
+          shop_address: document.getElementById("new-shop-address").value.trim(),
+          description: document.getElementById("new-shop-desc").value.trim(),
+          free_shipping: isFree,
+          shipping_fee: shipFee,
+          verification_url: verificationUrl,
+          status: initialStatus
+        })
+        .select()
+        .single();
+
+      if (error) return showToast("Application failed: " + error.message, "error");
+
+      myShop = data;
+      document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
+      applyOwnerHeaderDisplay();
+      await loadShops();
+      renderSellerWorkspace();
+      showToast(
+        initialStatus === "approved"
+          ? "Admin shop created and approved!"
+          : "Shop application submitted! Waiting for Platform Admin approval.",
+        "success"
+      );
+    } catch (err) {
+      showToast("Verification upload failed: " + err.message, "error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Submit Shop Application for Admin Approval";
+    }
+  }
+
+  async function resubmitRejectedShop(e) {
+    e.preventDefault();
+    if (!myShop) return;
+
+    try {
+      let verificationUrl = myShop.verification_url;
+      const newFile = document.getElementById("resub-shop-id-file").files?.[0];
+      if (newFile) verificationUrl = await uploadVerificationImage(newFile);
+
+      const { data, error } = await db
+        .from("shops")
+        .update({
+          name: document.getElementById("resub-shop-name").value.trim(),
+          contact_phone: document.getElementById("resub-shop-phone").value.trim(),
+          shop_address: document.getElementById("resub-shop-address").value.trim(),
+          description: document.getElementById("resub-shop-desc").value.trim(),
+          verification_url: verificationUrl,
+          status: "pending"
+        })
         .eq("id", myShop.id)
         .select()
         .single();
 
-      if (error) return showToast("Update failed: " + error.message, "error");
+      if (error) return showToast("Re-submit failed: " + error.message, "error");
       myShop = data;
-      document.getElementById("edit-shop-box").classList.add("hidden");
-      showToast("Shop details & description updated!", "success");
+      applyOwnerHeaderDisplay();
+      renderSellerWorkspace();
+      showToast("Shop verification re-submitted for Admin review!", "success");
+    } catch (err) {
+      showToast(err.message, "error");
     }
+  }
 
+  async function updateApprovedShopSettings(e) {
+    e.preventDefault();
+    if (!myShop) return;
+
+    const shipMode = document.getElementById("edit-shop-ship-mode").value;
+    const isFree = shipMode === "free";
+    const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("edit-shop-ship-fee").value) || 0);
+
+    const { data, error } = await db
+      .from("shops")
+      .update({
+        name: document.getElementById("edit-shop-name").value.trim(),
+        category: document.getElementById("edit-shop-category").value,
+        contact_phone: document.getElementById("edit-shop-phone").value.trim(),
+        description: document.getElementById("edit-shop-desc").value.trim(),
+        free_shipping: isFree,
+        shipping_fee: shipFee
+      })
+      .eq("id", myShop.id)
+      .select()
+      .single();
+
+    if (error) return showToast("Update failed: " + error.message, "error");
+    myShop = data;
+    document.getElementById("edit-shop-box").classList.add("hidden");
     document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
     applyOwnerHeaderDisplay();
     await loadShops();
     renderSellerWorkspace();
     renderProducts();
+    showToast("Shop description & shipping fee updated!", "success");
   }
 
   /* =========================================================
@@ -2247,13 +1967,13 @@
      ========================================================= */
   function renderPhotoSlots() {
     const grid = document.getElementById("photo-slots-grid");
-    const slotLabels = ["Photo 1 (Main)", "Photo 2 (View 2)", "Photo 3 (View 3)", "Photo 4 (View 4)"];
+    const slotLabels = ["Photo 1 (Main)", "Photo 2", "Photo 3", "Photo 4"];
 
     grid.innerHTML = photoSlots.map((slot, idx) => {
       const imgSrc = slot.preview || slot.url;
       if (imgSrc) {
         return `
-          <div class="photo-slot" onclick="triggerSingleSlotUpload(${idx})" title="Click to replace photo">
+          <div class="photo-slot" onclick="triggerSingleSlotUpload(${idx})">
             <img src="${escapeHtml(imgSrc)}" alt="Slot ${idx + 1}" />
             <button type="button" class="remove-slot-btn" onclick="event.stopPropagation(); removePhotoSlot(${idx})">✕</button>
           </div>
@@ -2261,9 +1981,9 @@
       }
       return `
         <div class="photo-slot" onclick="triggerSingleSlotUpload(${idx})">
-          <div style="font-size:1.35rem; margin-bottom:0.2rem;">📷</div>
+          <div style="font-size:1.3rem;">📷</div>
           <div class="slot-label">${slotLabels[idx]}</div>
-          <div style="font-size:0.68rem; color:var(--muted);">Click to add</div>
+          <div style="font-size:0.67rem; color:var(--muted);">Click to add</div>
         </div>
       `;
     }).join("");
@@ -2288,7 +2008,6 @@
   function handleMultiPhotoSelect(e) {
     const files = Array.from(e.target.files || []).slice(0, 4);
     if (!files.length) return;
-
     let fileIdx = 0;
     for (let i = 0; i < 4 && fileIdx < files.length; i++) {
       if (!photoSlots[i].url && !photoSlots[i].file) {
@@ -2358,31 +2077,25 @@
 
   async function saveProduct(e) {
     e.preventDefault();
-    if (!myShop) return showToast("Create your shop first before adding products.", "warning");
+    if (!myShop || myShop.status !== "approved") {
+      return showToast("Your shop must be approved by the Admin before adding products.", "warning");
+    }
 
     const saveBtn = document.getElementById("btn-save-product");
     const editId = document.getElementById("edit-prod-id").value;
     saveBtn.disabled = true;
-    saveBtn.textContent = "Uploading Photos & Saving...";
+    saveBtn.textContent = "Saving...";
 
     try {
       const uploadedUrls = [];
-
       for (let i = 0; i < 4; i++) {
         const slot = photoSlots[i];
         if (slot.file) {
           const rawExt = slot.file.name.split(".").pop()?.toLowerCase() || "jpg";
           const ext = rawExt.replace(/[^a-z0-9]/g, "") || "jpg";
           const filePath = `shop-${myShop.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
-
-          const { error: uploadErr } = await db.storage
-            .from("product-images")
-            .upload(filePath, slot.file, { upsert: false, contentType: slot.file.type || undefined });
-
-          if (uploadErr) {
-            return showToast(`Photo ${i + 1} upload failed: ${uploadErr.message}`, "error");
-          }
-
+          const { error: uploadErr } = await db.storage.from("product-images").upload(filePath, slot.file, { upsert: false });
+          if (uploadErr) return showToast(`Photo ${i + 1} upload failed: ${uploadErr.message}`, "error");
           const { data: pubData } = db.storage.from("product-images").getPublicUrl(filePath);
           uploadedUrls.push(pubData.publicUrl);
         } else if (slot.url) {
@@ -2408,7 +2121,7 @@
       } else {
         const { error } = await db.from("products").insert(payload);
         if (error) return showToast("Insert error: " + error.message, "error");
-        showToast("Product published to your shop!", "success");
+        showToast("Product published!", "success");
       }
 
       resetProductForm();
@@ -2426,7 +2139,7 @@
     const tbody = document.getElementById("seller-products-tbody");
 
     if (!myItems.length) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:1.5rem;">No products in your shop yet. Add your first item above!</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:1.4rem;">No products yet. Add your first item above!</td></tr>`;
       return;
     }
 
@@ -2436,12 +2149,9 @@
       return `
         <tr>
           <td>
-            <div style="display:flex; align-items:center; gap:0.6rem;">
-              <img src="${escapeHtml(imgs[0])}" style="width:44px; height:44px; border-radius:8px; object-fit:cover; border:1px solid var(--border);" />
-              <div>
-                <strong>${escapeHtml(p.name)}</strong><br/>
-                <small style="color:var(--muted);">📷 ${imgs.length} photo(s)</small>
-              </div>
+            <div style="display:flex; align-items:center; gap:0.55rem;">
+              <img src="${escapeHtml(imgs[0])}" style="width:42px; height:42px; border-radius:8px; object-fit:cover; border:1px solid var(--border);" />
+              <div><strong>${escapeHtml(p.name)}</strong><br/><small style="color:var(--muted);">📷 ${imgs.length} photo(s)</small></div>
             </div>
           </td>
           <td><span class="badge cat-badge">${escapeHtml(p.category || myShop.category)}</span></td>
@@ -2471,8 +2181,106 @@
   }
 
   /* =========================================================
-     PLATFORM ADMIN — 10% COMMISSION MONITOR & BILLING
+     PLATFORM ADMIN — SHOP VERIFICATION & 10% COMMISSION MONITOR
      ========================================================= */
+  function renderAdminShopsModeration() {
+    if (currentRole !== "admin") return;
+
+    const pendingCount = shops.filter(s => (s.status || "pending") === "pending").length;
+    document.getElementById("admin-pending-shops-badge").textContent = `${pendingCount} Pending Review`;
+
+    const tbody = document.getElementById("admin-shops-tbody");
+    if (!shops.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:1.4rem;">No shop applications yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = shops.map(s => {
+      const st = s.status || "pending";
+      const ship = getShopShippingInfo(s);
+      const badgeClass =
+        st === "approved" ? "status-approved" :
+        st === "pending" ? "status-pending" : "status-suspended";
+
+      const idLinkHtml = s.verification_url
+        ? `<a href="${escapeHtml(s.verification_url)}" target="_blank" rel="noopener">
+             <img src="${escapeHtml(s.verification_url)}" style="width:56px; height:42px; object-fit:cover; border-radius:6px; border:1px solid var(--border);" title="Click to view full ID/Store photo" />
+           </a>`
+        : `<small style="color:var(--muted);">Legacy / None</small>`;
+
+      let actionButtons = "";
+      if (st === "pending") {
+        actionButtons = `
+          <button class="success-btn sm" onclick="moderateShop(${s.id}, 'approved')">✓ Approve</button>
+          <button class="danger-outline sm" onclick="moderateShop(${s.id}, 'rejected')">✕ Reject</button>
+        `;
+      } else if (st === "approved") {
+        actionButtons = `
+          <button class="danger-outline sm" onclick="moderateShop(${s.id}, 'suspended')">🚫 Suspend</button>
+        `;
+      } else {
+        actionButtons = `
+          <button class="success-btn sm" onclick="moderateShop(${s.id}, 'approved')">✓ Re-Approve</button>
+        `;
+      }
+
+      return `
+        <tr>
+          <td>
+            <strong>🏪 ${escapeHtml(s.name)}</strong> <span class="badge cat-badge">${escapeHtml(s.category)}</span><br/>
+            <small style="color:var(--text-secondary);">${escapeHtml(s.description || "")}</small>
+            ${s.admin_note ? `<br/><small style="color:var(--danger);">Note: ${escapeHtml(s.admin_note)}</small>` : ""}
+          </td>
+          <td>
+            <div style="font-size:0.8rem;"><strong>📞</strong> ${escapeHtml(s.contact_phone || "—")}</div>
+            <div style="font-size:0.77rem; color:var(--muted);">📍 ${escapeHtml(s.shop_address || "—")}</div>
+          </td>
+          <td><span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span></td>
+          <td>${idLinkHtml}</td>
+          <td><span class="badge ${badgeClass}">${escapeHtml(st)}</span></td>
+          <td>
+            <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+              ${actionButtons}
+              <button class="danger sm" onclick="deleteShopByAdmin(${s.id}, '${escapeHtml(s.name)}')">🗑️ Delete</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  async function moderateShop(shopId, newStatus) {
+    let adminNote = null;
+    if (newStatus === "rejected" || newStatus === "suspended") {
+      const reason = prompt(`Enter reason for ${newStatus} (visible to seller):`, "Incomplete or unclear verification proof.");
+      if (reason === null) return;
+      adminNote = reason.trim();
+    }
+
+    const { error } = await db
+      .from("shops")
+      .update({ status: newStatus, admin_note: adminNote })
+      .eq("id", shopId);
+
+    if (error) return showToast("Action failed: " + error.message, "error");
+
+    showToast(`Shop status updated to ${newStatus.toUpperCase()}!`, "success");
+    await Promise.all([loadShops(), loadProducts()]);
+    renderAdminShopsModeration();
+    renderAdminTable();
+  }
+
+  async function deleteShopByAdmin(shopId, shopName) {
+    if (!confirm(`Delete shop "${shopName}" and all of its products permanently?`)) return;
+    const { error } = await db.from("shops").delete().eq("id", shopId);
+    if (error) return showToast("Delete failed: " + error.message, "error");
+    showToast(`Shop "${shopName}" deleted.`, "info");
+    await Promise.all([loadShops(), loadProducts()]);
+    renderAdminShopsModeration();
+    renderAdminCommissionMonitor();
+    renderAdminTable();
+  }
+
   function onAdminMonthChange() {
     adminSelectedMonth = document.getElementById("admin-commission-month").value || getCurrentYearMonth();
     adminShowAllMonths = false;
@@ -2489,7 +2297,6 @@
   function renderAdminCommissionMonitor() {
     if (currentRole !== "admin") return;
 
-    // Filter valid (non-cancelled) orders belonging to seller shops
     const validShopOrders = cachedOrders.filter(o => {
       if (!o.shop_id) return false;
       if (o.status === "Cancelled") return false;
@@ -2499,83 +2306,72 @@
       return true;
     });
 
-    let totalGross = 0;
+    let totalProductSales = 0;
     let totalCommission = 0;
     let totalCollected = 0;
     let totalUncollected = 0;
-    let totalSellerNet = 0;
+    let totalSellerNetWithShip = 0;
 
-    // Group by shop_id
     const perShopMap = new Map();
     shops.forEach(s => {
       perShopMap.set(String(s.id), {
         shop: s,
         orderCount: 0,
-        gross: 0,
+        productSales: 0,
+        shippingTotal: 0,
         commission: 0,
         collected: 0,
         uncollected: 0,
-        sellerNet: 0,
-        unpaidOrderIds: [],
-        allOrderIds: []
+        sellerNetWithShip: 0
       });
     });
 
     for (const o of validShopOrders) {
-      const gross = Number(o.total_amount || 0);
+      const shipFee = Number(o.shipping_fee || 0);
+      const prodSales = o.subtotal_amount != null && Number(o.subtotal_amount) > 0
+        ? Number(o.subtotal_amount)
+        : Math.max(0, Number(o.total_amount || 0) - shipFee);
       const comm = o.commission_amount != null && Number(o.commission_amount) > 0
         ? Number(o.commission_amount)
-        : Number((gross * 0.10).toFixed(2));
-      const net = o.seller_payout != null && Number(o.seller_payout) > 0
-        ? Number(o.seller_payout)
-        : Number((gross - comm).toFixed(2));
+        : Number((prodSales * 0.10).toFixed(2));
+      const sellerNet = Number(((prodSales - comm) + shipFee).toFixed(2));
 
-      totalGross += gross;
+      totalProductSales += prodSales;
       totalCommission += comm;
-      totalSellerNet += net;
-
-      if (o.commission_paid) {
-        totalCollected += comm;
-      } else {
-        totalUncollected += comm;
-      }
+      totalSellerNetWithShip += sellerNet;
+      if (o.commission_paid) totalCollected += comm;
+      else totalUncollected += comm;
 
       const key = String(o.shop_id);
       if (!perShopMap.has(key)) {
         perShopMap.set(key, {
           shop: { id: o.shop_id, name: `Shop #${o.shop_id}`, category: "General" },
           orderCount: 0,
-          gross: 0,
+          productSales: 0,
+          shippingTotal: 0,
           commission: 0,
           collected: 0,
           uncollected: 0,
-          sellerNet: 0,
-          unpaidOrderIds: [],
-          allOrderIds: []
+          sellerNetWithShip: 0
         });
       }
 
       const entry = perShopMap.get(key);
       entry.orderCount += 1;
-      entry.gross += gross;
+      entry.productSales += prodSales;
+      entry.shippingTotal += shipFee;
       entry.commission += comm;
-      entry.sellerNet += net;
-      entry.allOrderIds.push(o.id);
-
-      if (o.commission_paid) {
-        entry.collected += comm;
-      } else {
-        entry.uncollected += comm;
-        entry.unpaidOrderIds.push(o.id);
-      }
+      entry.sellerNetWithShip += sellerNet;
+      if (o.commission_paid) entry.collected += comm;
+      else entry.uncollected += comm;
     }
 
-    document.getElementById("kpi-gross-sales").textContent = `₱${totalGross.toFixed(2)}`;
+    document.getElementById("kpi-gross-sales").textContent = `₱${totalProductSales.toFixed(2)}`;
     document.getElementById("kpi-orders-count").textContent = `${validShopOrders.length} valid shop order(s)`;
     document.getElementById("kpi-total-commission").textContent = `₱${totalCommission.toFixed(2)}`;
     document.getElementById("kpi-uncollected").textContent = `₱${totalUncollected.toFixed(2)}`;
     document.getElementById("kpi-collected").textContent = `₱${totalCollected.toFixed(2)}`;
-    document.getElementById("kpi-seller-net").textContent = `₱${totalSellerNet.toFixed(2)}`;
+    document.getElementById("kpi-seller-net").textContent = `₱${totalSellerNetWithShip.toFixed(2)}`;
 
     const tbody = document.getElementById("admin-commission-tbody");
     const rows = Array.from(perShopMap.values());
@@ -2601,15 +2397,12 @@
 
       return `
         <tr>
-          <td>
-            <strong>🏪 ${escapeHtml(r.shop.name)}</strong><br/>
-            <small style="color:var(--muted);">${escapeHtml(r.shop.description || "")}</small>
-          </td>
-          <td><span class="badge cat-badge">${escapeHtml(r.shop.category || "General")}</span></td>
+          <td><strong>🏪 ${escapeHtml(r.shop.name)}</strong></td>
           <td>${r.orderCount}</td>
-          <td>₱${r.gross.toFixed(2)}</td>
+          <td>₱${r.productSales.toFixed(2)}</td>
+          <td>₱${r.shippingTotal.toFixed(2)}</td>
           <td><strong style="color:var(--indigo); font-size:0.95rem;">₱${r.commission.toFixed(2)}</strong></td>
-          <td>₱${r.sellerNet.toFixed(2)}</td>
+          <td>₱${r.sellerNetWithShip.toFixed(2)}</td>
           <td>${billingBadge}</td>
           <td>${actionHtml}</td>
         </tr>
@@ -2628,21 +2421,13 @@
     });
 
     if (!targetOrders.length) return;
-    const orderIds = targetOrders.map(o => o.id);
-
     const { error } = await db
       .from("orders")
       .update({ commission_paid: markAsPaid })
-      .in("id", orderIds);
+      .in("id", targetOrders.map(o => o.id));
 
     if (error) return showToast("Failed to update billing status: " + error.message, "error");
-
-    showToast(
-      markAsPaid
-        ? "Monthly 10% commission marked as Collected!"
-        : "Commission status reverted to Unpaid.",
-      "success"
-    );
+    showToast(markAsPaid ? "10% commission marked as Collected!" : "Reverted to Unpaid.", "success");
     await loadOrders();
     renderAdminCommissionMonitor();
   }
@@ -2707,12 +2492,16 @@
     if (selectedShopId === "all") {
       banner.classList.add("hidden");
     } else {
-      const shop = shops.find(s => String(s.id) === String(selectedShopId));
+      const shop = getApprovedShops().find(s => String(s.id) === String(selectedShopId));
       if (shop) {
         const shopProds = products.filter(p => String(p.shop_id) === String(shop.id));
         const totalSold = shopProds.reduce((sum, p) => sum + Number(p.sold_count || 0), 0);
+        const ship = getShopShippingInfo(shop);
         document.getElementById("banner-shop-name").textContent = `🏪 ${shop.name}`;
         document.getElementById("banner-shop-category").textContent = shop.category;
+        const shipBadge = document.getElementById("banner-shop-shipping");
+        shipBadge.textContent = ship.label;
+        shipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
         document.getElementById("banner-shop-desc").textContent = shop.description || "Verified MarketHub Seller Storefront";
         document.getElementById("banner-shop-products").textContent = shopProds.length;
         document.getElementById("banner-shop-sold").textContent = totalSold;
@@ -2733,13 +2522,8 @@
   }
 
   async function loadAllReviews() {
-    const { data, error } = await db
-      .from("product_reviews")
-      .select("*")
-      .order("created_at", { ascending: false });
-
+    const { data, error } = await db.from("product_reviews").select("*").order("created_at", { ascending: false });
     if (error) return;
-
     reviewsByProduct.clear();
     (data || []).forEach(r => {
       if (!reviewsByProduct.has(r.product_id)) reviewsByProduct.set(r.product_id, []);
@@ -2750,9 +2534,15 @@
 
   function renderProducts() {
     const query = document.getElementById("search-input").value.toLowerCase().trim();
+    const approvedShops = getApprovedShops();
 
     const filtered = products.filter(p => {
-      const shop = shops.find(s => String(s.id) === String(p.shop_id));
+      // Hide unapproved/suspended shop products from public marketplace
+      if (p.shop_id != null && !approvedShops.some(s => String(s.id) === String(p.shop_id))) {
+        return false;
+      }
+
+      const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
       const shopName = shop ? shop.name.toLowerCase() : "freshharvest official";
       const shopDesc = shop ? (shop.description || "").toLowerCase() : "";
       const cat = p.category || (shop ? shop.category : "Fruits & Vegetables");
@@ -2774,7 +2564,7 @@
 
     const grid = document.getElementById("product-grid");
     if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No matching items found in this shop or category.</div>`;
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No verified items found in this shop or category.</div>`;
       return;
     }
 
@@ -2783,11 +2573,10 @@
       const soldNum = Number(p.sold_count || 0);
       const imgs = getProductImages(p);
       const rating = getProductRatingStats(p.id);
-      const shop = shops.find(s => String(s.id) === String(p.shop_id));
+      const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
       const shopLabel = shop ? shop.name : "FreshHarvest Official";
-      const shopDescText = shop?.description
-        ? shop.description
-        : "Verified MarketHub store offering quality items & fast shipping.";
+      const ship = getShopShippingInfo(shop);
+      const shopDescText = shop?.description || "Admin-verified MarketHub storefront.";
       const catLabel = p.category || (shop ? shop.category : "Fruits & Vegetables");
 
       let stockTagClass = "";
@@ -2805,6 +2594,7 @@
           <div class="card-img-wrap" onclick="openProductModal(${p.id})">
             <img src="${escapeHtml(imgs[0])}" alt="${escapeHtml(p.name)}" />
             <span class="stock-tag ${stockTagClass}">${stockTagText}</span>
+            <span class="ship-tag-overlay ${ship.isFree ? "free" : ""}">${ship.isFree ? "Free Ship" : `Ship ₱${ship.fee.toFixed(0)}`}</span>
             ${imgs.length > 1 ? `<span class="photo-count-pill">📷 ${imgs.length} views</span>` : ""}
           </div>
           <div class="card-body">
@@ -2816,18 +2606,15 @@
             </div>
 
             <h3 class="card-title" onclick="openProductModal(${p.id})">${escapeHtml(p.name)}</h3>
-            <p class="card-desc">${escapeHtml(p.description || "Click to inspect all views, ratings, and details.")}</p>
+            <p class="card-desc">${escapeHtml(p.description || "Click to inspect all views and details.")}</p>
 
-            <!-- SHOP OWNER DESCRIPTION SA IBABA NG PRODUCT -->
+            <!-- SHOP DESCRIPTION BELOW PRODUCT -->
             <div class="card-shop-desc-box" title="${escapeHtml(shopDescText)}">
               <strong>🏪 ${escapeHtml(shopLabel)}:</strong> ${escapeHtml(shopDescText)}
             </div>
 
             <div class="metrics-row">
-              <span class="rating-pill">
-                <span class="star-icon">★</span>
-                ${rating.count > 0 ? `${rating.avg} (${rating.count})` : "New"}
-              </span>
+              <span class="rating-pill"><span class="star-icon">★</span> ${rating.count > 0 ? `${rating.avg} (${rating.count})` : "New"}</span>
               <span class="sold-pill">${soldNum} sold</span>
             </div>
 
@@ -2846,7 +2633,7 @@
   }
 
   /* =========================================================
-     PRODUCT DETAIL MODAL (4-PHOTO GALLERY + SHOP DESCRIPTION + REVIEWS)
+     PRODUCT DETAIL MODAL
      ========================================================= */
   function openProductModal(productId) {
     const p = products.find(item => item.id === productId);
@@ -2854,16 +2641,19 @@
 
     activeDetailProductId = productId;
     const imgs = getProductImages(p);
-    const shop = shops.find(s => String(s.id) === String(p.shop_id));
+    const shop = getApprovedShops().find(s => String(s.id) === String(p.shop_id));
+    const ship = getShopShippingInfo(shop);
     const rating = getProductRatingStats(p.id);
     const stockNum = Number(p.stock || 0);
 
     document.getElementById("detail-shop-badge").textContent = `🏪 ${shop ? shop.name : "FreshHarvest Official"}`;
-    document.getElementById("detail-shop-badge").onclick = () => {
-      closeProductModal();
-      if (shop) setShopFilter(shop.id);
-    };
+    document.getElementById("detail-shop-badge").onclick = () => { closeProductModal(); if (shop) setShopFilter(shop.id); };
     document.getElementById("detail-cat-badge").textContent = p.category || (shop ? shop.category : "Fruits & Vegetables");
+
+    const detailShipBadge = document.getElementById("detail-ship-badge");
+    detailShipBadge.textContent = ship.label;
+    detailShipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
+
     document.getElementById("detail-title").textContent = p.name;
     document.getElementById("detail-rating-avg").textContent = rating.count > 0 ? rating.avg : "0.0";
     document.getElementById("detail-review-count").textContent = rating.count;
@@ -2872,15 +2662,12 @@
     document.getElementById("detail-price").textContent = `₱${Number(p.price).toFixed(2)}`;
     document.getElementById("detail-desc").textContent = p.description || "No additional product description provided.";
 
-    // Populate Shop Owner Description Card below the product
     document.getElementById("detail-shop-card-name").textContent = `🏪 ${shop ? shop.name : "FreshHarvest Official"}`;
-    document.getElementById("detail-shop-card-desc").textContent = shop?.description
-      ? shop.description
-      : "Official MarketHub Seller — Verified storefront with real-time order updates.";
-    document.getElementById("detail-visit-shop-btn").onclick = () => {
-      closeProductModal();
-      if (shop) setShopFilter(shop.id);
-    };
+    document.getElementById("detail-shop-card-desc").textContent = shop?.description || "Verified MarketHub Seller.";
+    document.getElementById("detail-shop-ship-note").textContent = ship.isFree
+      ? "✓ This shop offers FREE SHIPPING on orders."
+      : `Delivery Rate: ₱${ship.fee.toFixed(2)} flat shipping fee per shop order.`;
+    document.getElementById("detail-visit-shop-btn").onclick = () => { closeProductModal(); if (shop) setShopFilter(shop.id); };
 
     const qtyInput = document.getElementById("detail-qty");
     qtyInput.value = 1;
@@ -2906,14 +2693,10 @@
     if (currentUser) {
       reviewForm.classList.remove("hidden");
       const hasPurchased = cachedOrders.some(o =>
-        o.user_id === currentUser.id &&
-        o.status !== "Cancelled" &&
+        o.user_id === currentUser.id && o.status !== "Cancelled" &&
         (o.order_items || []).some(item => Number(item.product_id) === Number(productId))
       );
-      document.getElementById("review-eligibility-note").textContent = hasPurchased
-        ? "✓ Verified Buyer"
-        : "Leave a customer rating";
-
+      document.getElementById("review-eligibility-note").textContent = hasPurchased ? "✓ Verified Buyer" : "Leave a rating";
       const existingReview = (reviewsByProduct.get(productId) || []).find(r => r.user_id === currentUser.id);
       setReviewStar(existingReview ? existingReview.rating : 5);
       document.getElementById("review-comment").value = existingReview ? (existingReview.comment || "") : "";
@@ -2932,22 +2715,17 @@
 
   function selectGalleryImage(idx, url) {
     document.getElementById("detail-main-img").src = url;
-    document.querySelectorAll("#detail-thumbs .gallery-thumb").forEach((el, i) => {
-      el.classList.toggle("active", i === idx);
-    });
+    document.querySelectorAll("#detail-thumbs .gallery-thumb").forEach((el, i) => el.classList.toggle("active", i === idx));
   }
 
   function setReviewStar(val) {
     selectedReviewStars = val;
-    document.querySelectorAll("#star-picker .star-btn").forEach((btn, i) => {
-      btn.classList.toggle("selected", i < val);
-    });
+    document.querySelectorAll("#star-picker .star-btn").forEach((btn, i) => btn.classList.toggle("selected", i < val));
   }
 
   async function submitProductReview(e) {
     e.preventDefault();
     if (!currentUser || !activeDetailProductId) return;
-
     const comment = document.getElementById("review-comment").value.trim();
     const reviewerName = userProfileData.full_name || currentUser.email.split("@")[0];
     const btn = document.getElementById("btn-submit-review");
@@ -2955,19 +2733,11 @@
 
     try {
       const { error } = await db.from("product_reviews").upsert(
-        {
-          product_id: activeDetailProductId,
-          user_id: currentUser.id,
-          reviewer_name: reviewerName,
-          rating: selectedReviewStars,
-          comment
-        },
+        { product_id: activeDetailProductId, user_id: currentUser.id, reviewer_name: reviewerName, rating: selectedReviewStars, comment },
         { onConflict: "product_id,user_id" }
       );
-
-      if (error) return showToast("Could not post review: " + error.message, "error");
-
-      showToast("Thank you! Your rating & review has been posted.", "success");
+      if (error) return showToast("Review failed: " + error.message, "error");
+      showToast("Review posted!", "success");
       await loadAllReviews();
       openProductModal(activeDetailProductId);
     } finally {
@@ -2978,22 +2748,16 @@
   function renderProductReviewsList(productId) {
     const list = reviewsByProduct.get(productId) || [];
     const container = document.getElementById("detail-reviews-list");
-
     if (!list.length) {
-      container.innerHTML = `<p style="font-size:0.84rem; color:var(--muted); text-align:center; padding:0.75rem 0;">No reviews yet. Be the first to rate this item!</p>`;
+      container.innerHTML = `<p style="font-size:0.84rem; color:var(--muted); text-align:center;">No reviews yet.</p>`;
       return;
     }
-
     container.innerHTML = list.map(r => {
       const stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
-      const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
       return `
         <div class="review-card">
-          <div class="row-between" style="margin-bottom:0.25rem;">
-            <strong style="font-size:0.84rem;">${escapeHtml(r.reviewer_name)}</strong>
-            <span style="font-size:0.74rem; color:var(--muted);">${escapeHtml(dateStr)}</span>
-          </div>
-          <div style="color:var(--star); font-size:0.9rem; margin-bottom:0.25rem;">${stars}</div>
+          <div class="row-between"><strong>${escapeHtml(r.reviewer_name)}</strong></div>
+          <div style="color:var(--star); font-size:0.9rem;">${stars}</div>
           <div style="font-size:0.84rem; color:var(--text-secondary);">${escapeHtml(r.comment || "")}</div>
         </div>
       `;
@@ -3001,7 +2765,7 @@
   }
 
   /* =========================================================
-     CART & MULTI-SHOP CHECKOUT
+     CART & CHECKOUT (WITH SHIPPING FEE BREAKDOWN PER SHOP)
      ========================================================= */
   async function loadCart() {
     if (!currentUser) return;
@@ -3009,15 +2773,14 @@
       .from("cart_items")
       .select("id, quantity, product_id, products(name, price, stock, shop_id)")
       .eq("user_id", currentUser.id);
-
-    if (error) return;
-    cart = data || [];
-    updateCartBadge();
+    if (!error) {
+      cart = data || [];
+      updateCartBadge();
+    }
   }
 
   function updateCartBadge() {
-    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById("cart-count").textContent = totalQty;
+    document.getElementById("cart-count").textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
   }
 
   async function addToCart(productId, addQty = 1) {
@@ -3025,18 +2788,13 @@
       openAuthModal("register");
       return;
     }
-
     const prod = products.find(p => p.id === productId);
     if (prod && myShop && String(prod.shop_id) === String(myShop.id)) {
       return showToast("You cannot buy your own shop's product.", "warning");
     }
-
     const existing = cart.find(item => item.product_id === productId);
     const nextQty = (existing ? existing.quantity : 0) + addQty;
-
-    if (prod && nextQty > prod.stock) {
-      return showToast(`Only ${prod.stock} unit(s) available for ${prod.name}.`, "warning");
-    }
+    if (prod && nextQty > prod.stock) return showToast(`Only ${prod.stock} available.`, "warning");
 
     if (existing) {
       const { error } = await db.from("cart_items").update({ quantity: nextQty }).eq("id", existing.id);
@@ -3045,7 +2803,6 @@
       const { error } = await db.from("cart_items").insert({ user_id: currentUser.id, product_id: productId, quantity: addQty });
       if (error) return showToast(error.message, "error");
     }
-
     await loadCart();
     showToast(`Added "${prod ? prod.name : "Item"}" to cart!`, "success");
   }
@@ -3054,7 +2811,6 @@
     document.getElementById("checkout-name").value = userProfileData.full_name || "";
     document.getElementById("checkout-phone").value = userProfileData.phone || "";
     document.getElementById("checkout-address").value = userProfileData.address || "";
-
     const complete = Boolean(userProfileData.full_name && userProfileData.phone && userProfileData.address);
     isCheckoutEditing = !complete;
     updateCheckoutEditVisibility();
@@ -3099,39 +2855,69 @@
       return;
     }
 
-    let grandTotal = 0;
-    container.innerHTML = cart.map(item => {
-      const p = item.products;
-      const shop = shops.find(s => String(s.id) === String(p.shop_id));
-      const subtotal = p.price * item.quantity;
-      grandTotal += subtotal;
+    // Group cart items by shop to show each shop's shipping fee accurately
+    const groups = new Map();
+    cart.forEach(item => {
+      const shopKey = String(item.products.shop_id ?? "official");
+      if (!groups.has(shopKey)) {
+        const shopObj = getApprovedShops().find(s => String(s.id) === shopKey);
+        groups.set(shopKey, { shop: shopObj, items: [], itemsSubtotal: 0 });
+      }
+      const g = groups.get(shopKey);
+      g.items.push(item);
+      g.itemsSubtotal += Number(item.products.price) * item.quantity;
+    });
+
+    let totalItemsCost = 0;
+    let totalShippingCost = 0;
+
+    const groupsHtml = Array.from(groups.values()).map(g => {
+      const ship = getShopShippingInfo(g.shop);
+      totalItemsCost += g.itemsSubtotal;
+      totalShippingCost += ship.fee;
+
       return `
-        <div class="row-between" style="padding:0.65rem 0; border-bottom:1px solid var(--border);">
-          <div>
-            <div style="font-size:0.72rem; color:var(--primary-dark); font-weight:700;">🏪 ${escapeHtml(shop ? shop.name : "FreshHarvest Official")}</div>
-            <strong>${escapeHtml(p.name)}</strong><br/>
-            <small style="color:var(--muted);">₱${Number(p.price).toFixed(2)} × ${item.quantity} = <strong>₱${subtotal.toFixed(2)}</strong></small>
+        <div style="border:1px solid var(--border); border-radius:11px; padding:0.75rem; margin-bottom:0.75rem; background:#fbfdfb;">
+          <div class="row-between" style="margin-bottom:0.45rem; padding-bottom:0.35rem; border-bottom:1px dashed var(--border);">
+            <strong style="font-size:0.82rem; color:var(--primary-dark);">🏪 ${escapeHtml(g.shop ? g.shop.name : "FreshHarvest Official")}</strong>
+            <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span>
           </div>
-          <div style="display:flex; gap:0.35rem; align-items:center;">
-            <button class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity - 1}, ${p.stock})">−</button>
-            <span style="min-width:20px; text-align:center; font-weight:600;">${item.quantity}</span>
-            <button class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity + 1}, ${p.stock})">+</button>
+          ${g.items.map(item => `
+            <div class="row-between" style="padding:0.4rem 0;">
+              <div>
+                <strong style="font-size:0.88rem;">${escapeHtml(item.products.name)}</strong><br/>
+                <small style="color:var(--muted);">₱${Number(item.products.price).toFixed(2)} × ${item.quantity} = <strong>₱${(item.products.price * item.quantity).toFixed(2)}</strong></small>
+              </div>
+              <div style="display:flex; gap:0.35rem; align-items:center;">
+                <button class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity - 1}, ${item.products.stock})">−</button>
+                <span style="min-width:20px; text-align:center; font-weight:600;">${item.quantity}</span>
+                <button class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity + 1}, ${item.products.stock})">+</button>
+              </div>
+            </div>
+          `).join("")}
+          <div style="text-align:right; font-size:0.78rem; color:var(--text-secondary); margin-top:0.3rem;">
+            Shop Subtotal: ₱${g.itemsSubtotal.toFixed(2)} + Shipping: <strong>${ship.isFree ? "FREE" : `₱${ship.fee.toFixed(2)}`}</strong>
           </div>
         </div>
       `;
-    }).join("") + `<h4 style="text-align:right; margin-top:0.85rem; font-size:1.05rem;">Grand Total: ₱${grandTotal.toFixed(2)}</h4>`;
+    }).join("");
+
+    const grandTotal = totalItemsCost + totalShippingCost;
+    container.innerHTML = groupsHtml + `
+      <div style="text-align:right; font-size:0.86rem; color:var(--text-secondary);">
+        <div>Items Total: ₱${totalItemsCost.toFixed(2)}</div>
+        <div>Total Shipping Fee: ₱${totalShippingCost.toFixed(2)}</div>
+        <h4 style="margin:0.35rem 0 0; font-size:1.1rem; color:var(--text);">Grand Total: ₱${grandTotal.toFixed(2)}</h4>
+      </div>
+    `;
 
     checkoutSec.classList.remove("hidden");
   }
 
   async function changeCartQty(cartItemId, newQty, maxStock) {
-    if (newQty <= 0) {
-      await db.from("cart_items").delete().eq("id", cartItemId);
-    } else if (typeof maxStock === "number" && newQty > maxStock) {
-      return showToast(`Maximum stock: ${maxStock}`, "warning");
-    } else {
-      await db.from("cart_items").update({ quantity: newQty }).eq("id", cartItemId);
-    }
+    if (newQty <= 0) await db.from("cart_items").delete().eq("id", cartItemId);
+    else if (typeof maxStock === "number" && newQty > maxStock) return showToast(`Maximum stock: ${maxStock}`, "warning");
+    else await db.from("cart_items").update({ quantity: newQty }).eq("id", cartItemId);
     await loadCart();
     renderCartModal();
   }
@@ -3153,11 +2939,7 @@
 
     try {
       const combinedAddress = `${address} | Contact: ${phone}`;
-      const { error } = await db.rpc("checkout_cart", {
-        p_customer_name: name,
-        p_address: combinedAddress
-      });
-
+      const { error } = await db.rpc("checkout_cart", { p_customer_name: name, p_address: combinedAddress });
       if (error) return showToast("Checkout failed: " + error.message, "error");
 
       showToast("Order placed! Each shop seller has been notified.", "success");
@@ -3174,7 +2956,7 @@
   }
 
   /* =========================================================
-     ORDERS (BUYER PURCHASES + CANCEL ORDER + SELLER SALES)
+     ORDERS & CANCEL ORDER
      ========================================================= */
   function switchOrdersSubTab(tab) {
     ordersSubTab = tab;
@@ -3192,15 +2974,8 @@
   }
 
   async function loadOrders() {
-    const { data, error } = await db
-      .from("orders")
-      .select("*, order_items(*)")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      showError(error.message);
-      return;
-    }
+    const { data, error } = await db.from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
+    if (error) return showError(error.message);
 
     cachedOrders = data || [];
     cachedOrders.forEach(o => knownOrderSnapshots.set(o.id, o.status));
@@ -3229,29 +3004,18 @@
 
   function renderOrderStepper(currentStatus) {
     if (currentStatus === "Cancelled") {
-      return `<div class="cancelled-banner">✕ This order was cancelled while Pending. Item stock has been restored and no commission is charged.</div>`;
+      return `<div class="cancelled-banner">✕ This order was cancelled while Pending. Item stock has been restored.</div>`;
     }
-
     const idx = ORDER_STAGES.findIndex(s => s.key === currentStatus);
     const activeIndex = idx === -1 ? 0 : idx;
-
     return `
       <div class="order-stepper">
         ${ORDER_STAGES.map((stage, i) => {
           let stateClass = "";
           let icon = i + 1;
-          if (i < activeIndex || (stage.key === "Delivered" && currentStatus === "Delivered")) {
-            stateClass = "done";
-            icon = "✓";
-          } else if (i === activeIndex) {
-            stateClass = "current";
-          }
-          return `
-            <div class="step-item ${stateClass}">
-              <div class="step-dot">${icon}</div>
-              <span>${stage.label}</span>
-            </div>
-          `;
+          if (i < activeIndex || (stage.key === "Delivered" && currentStatus === "Delivered")) { stateClass = "done"; icon = "✓"; }
+          else if (i === activeIndex) { stateClass = "current"; }
+          return `<div class="step-item ${stateClass}"><div class="step-dot">${icon}</div><span>${stage.label}</span></div>`;
         }).join("")}
       </div>
     `;
@@ -3259,17 +3023,10 @@
 
   function renderOrdersList() {
     const list = document.getElementById("orders-list");
-    const filteredOrders = cachedOrders.filter(o => {
-      if (ordersSubTab === "sales") return isIncomingSaleForCurrentUser(o);
-      return o.user_id === currentUser?.id;
-    });
+    const filteredOrders = cachedOrders.filter(o => ordersSubTab === "sales" ? isIncomingSaleForCurrentUser(o) : o.user_id === currentUser?.id);
 
     if (!filteredOrders.length) {
-      list.innerHTML = `<div class="empty-state">${
-        ordersSubTab === "sales"
-          ? "No incoming customer orders for your shop yet."
-          : "You haven't placed any orders yet."
-      }</div>`;
+      list.innerHTML = `<div class="empty-state">${ordersSubTab === "sales" ? "No incoming orders for your shop yet." : "You haven't placed any orders yet."}</div>`;
       return;
     }
 
@@ -3280,17 +3037,13 @@
 
       const shop = shops.find(s => String(s.id) === String(o.shop_id));
       const shopName = shop ? shop.name : "FreshHarvest Official";
-      const placedDate = o.created_at
-        ? new Date(o.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
-        : "";
+      const placedDate = o.created_at ? new Date(o.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : "";
 
+      const shipFee = Number(o.shipping_fee || 0);
       const grossAmt = Number(o.total_amount || 0);
-      const commAmt = o.status === "Cancelled"
-        ? 0
-        : (o.commission_amount != null && Number(o.commission_amount) > 0
-            ? Number(o.commission_amount)
-            : (o.shop_id ? Number((grossAmt * 0.10).toFixed(2)) : 0));
-      const netAmt = o.status === "Cancelled" ? 0 : Number((grossAmt - commAmt).toFixed(2));
+      const prodSubtotal = o.subtotal_amount != null && Number(o.subtotal_amount) > 0 ? Number(o.subtotal_amount) : Math.max(0, grossAmt - shipFee);
+      const commAmt = o.status === "Cancelled" ? 0 : (o.commission_amount != null && Number(o.commission_amount) > 0 ? Number(o.commission_amount) : (o.shop_id ? Number((prodSubtotal * 0.10).toFixed(2)) : 0));
+      const sellerNet = o.status === "Cancelled" ? 0 : Number(((prodSubtotal - commAmt) + shipFee).toFixed(2));
 
       return `
         <div class="panel" id="order-card-${o.id}">
@@ -3305,9 +3058,7 @@
             <span class="badge ${getStatusBadgeClass(o.status)}">${escapeHtml(o.status)}</span>
           </div>
 
-          <p style="font-size:0.86rem; color:var(--text-secondary); margin:0.65rem 0 0;">
-            <strong>Delivery Details:</strong> ${escapeHtml(o.address)}
-          </p>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin:0.65rem 0 0;"><strong>Delivery Details:</strong> ${escapeHtml(o.address)}</p>
 
           ${renderOrderStepper(o.status)}
 
@@ -3315,39 +3066,32 @@
             ${(o.order_items || []).map(i => `
               <li style="margin-bottom:0.35rem;">
                 ${escapeHtml(i.product_name)} (${i.quantity}×) — <strong>₱${Number(i.unit_price * i.quantity).toFixed(2)}</strong>
-                ${isBuyerOrder && o.status !== "Cancelled" && i.product_id ? `
-                  <button class="secondary sm" style="margin-left:0.5rem;" onclick="openProductModal(${i.product_id})">⭐ Rate Item</button>
-                ` : ""}
+                ${isBuyerOrder && o.status !== "Cancelled" && i.product_id ? `<button class="secondary sm" style="margin-left:0.5rem;" onclick="openProductModal(${i.product_id})">⭐ Rate Item</button>` : ""}
               </li>
             `).join("")}
           </ul>
 
           <div class="row-between" style="margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid var(--border);">
             <div>
-              <strong style="font-size:1.05rem;">Order Total: ₱${grossAmt.toFixed(2)}</strong>
+              <div style="font-size:0.8rem; color:var(--muted);">Items: ₱${prodSubtotal.toFixed(2)} • Shipping Fee: <strong>${shipFee <= 0 ? "FREE" : `₱${shipFee.toFixed(2)}`}</strong></div>
+              <strong style="font-size:1.05rem;">Total Paid: ₱${grossAmt.toFixed(2)}</strong>
               ${ordersSubTab === "sales" && o.shop_id && o.status !== "Cancelled" ? `
                 <div style="font-size:0.77rem; color:var(--muted); margin-top:0.2rem;">
-                  Platform Fee (10%): <span style="color:var(--accent); font-weight:600;">−₱${commAmt.toFixed(2)}</span> • Your Net Earnings: <strong style="color:var(--primary-dark);">₱${netAmt.toFixed(2)}</strong>
+                  Admin Fee (10% on items): <span style="color:var(--accent); font-weight:600;">−₱${commAmt.toFixed(2)}</span> • Your Net + Shipping: <strong style="color:var(--primary-dark);">₱${sellerNet.toFixed(2)}</strong>
                 </div>
               ` : ""}
             </div>
 
-            <!-- BUYER CANCEL ORDER BUTTON (WHILE PENDING) -->
-            ${canBuyerCancel ? `
-              <button class="danger-outline sm" onclick="cancelOrderByBuyer(${o.id})">✕ Cancel Order</button>
-            ` : ""}
+            ${canBuyerCancel ? `<button class="danger-outline sm" onclick="cancelOrderByBuyer(${o.id})">✕ Cancel Order</button>` : ""}
 
-            <!-- SELLER ORDER MANAGEMENT CONTROLS -->
             ${canManageOrder && ordersSubTab === "sales" ? `
               <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                ${o.status === "Pending" ? `
-                  <button class="success-btn sm" onclick="updateOrderStatus(${o.id}, 'Order Received', true)">✓ Acknowledge Order</button>
-                ` : ""}
+                ${o.status === "Pending" ? `<button class="success-btn sm" onclick="updateOrderStatus(${o.id}, 'Order Received', true)">✓ Acknowledge Order</button>` : ""}
                 <select onchange="updateOrderStatus(${o.id}, this.value)" style="width:auto; padding:0.4rem 0.65rem; font-size:0.84rem;" ${o.status === "Cancelled" ? "disabled" : ""}>
                   <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
                   <option value="Order Received" ${o.status === "Order Received" ? "selected" : ""}>Order Received</option>
                   <option value="Confirmed" ${o.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
-                  <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped (Out for Delivery)</option>
+                  <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped</option>
                   <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
                   ${o.status === "Cancelled" ? `<option value="Cancelled" selected>Cancelled</option>` : ""}
                 </select>
@@ -3361,13 +3105,11 @@
   }
 
   async function cancelOrderByBuyer(orderId) {
-    if (!confirm(`Cancel Order #${orderId}? You can only cancel before the seller processes your order.`)) return;
-
+    if (!confirm(`Cancel Order #${orderId}? You can only cancel before the seller processes it.`)) return;
     const { error } = await db.rpc("cancel_order", { p_order_id: orderId });
-    if (error) return showToast("Could not cancel order: " + error.message, "error");
-
+    if (error) return showToast("Cancel failed: " + error.message, "error");
     knownOrderSnapshots.set(orderId, "Cancelled");
-    showToast(`Order #${orderId} cancelled. Stock has been restored.`, "info");
+    showToast(`Order #${orderId} cancelled and stock restored.`, "info");
     await loadProducts();
     await loadOrders();
   }
@@ -3375,14 +3117,8 @@
   async function updateOrderStatus(orderId, status, fromAck = false) {
     const { error } = await db.from("orders").update({ status }).eq("id", orderId);
     if (error) return showToast(error.message, "error");
-
     knownOrderSnapshots.set(orderId, status);
-    showToast(
-      fromAck
-        ? `Order #${orderId} acknowledged! Buyer has been notified.`
-        : `Order #${orderId} updated to "${status}".`,
-      "success"
-    );
+    showToast(fromAck ? `Order #${orderId} acknowledged!` : `Order #${orderId} updated to "${status}".`, "success");
     await loadOrders();
   }
 
@@ -3397,79 +3133,20 @@
   }
 
   /* =========================================================
-     REAL-TIME NOTIFICATIONS (FOR BOTH SHOP SELLERS & BUYERS)
+     NOTIFICATIONS & REALTIME SYNC
      ========================================================= */
-  function getNotifReadKey() {
-    return currentUser ? `markethub_read_notifs_${currentUser.id}` : "markethub_read_notifs";
-  }
+  function getNotifReadKey() { return currentUser ? `markethub_read_notifs_${currentUser.id}` : "markethub_read_notifs"; }
+  function getNotifDeletedKey() { return currentUser ? `markethub_del_notifs_${currentUser.id}` : "markethub_del_notifs"; }
+  function getReadNotifIds() { try { return new Set(JSON.parse(localStorage.getItem(getNotifReadKey()) || "[]")); } catch { return new Set(); } }
+  function saveReadNotifIds(set) { try { localStorage.setItem(getNotifReadKey(), JSON.stringify([...set])); } catch (_) {} }
+  function getDeletedNotifIds() { try { return new Set(JSON.parse(localStorage.getItem(getNotifDeletedKey()) || "[]")); } catch { return new Set(); } }
+  function saveDeletedNotifIds(set) { try { localStorage.setItem(getNotifDeletedKey(), JSON.stringify([...set])); } catch (_) {} }
 
-  function getNotifDeletedKey() {
-    return currentUser ? `markethub_del_notifs_${currentUser.id}` : "markethub_del_notifs";
-  }
-
-  function getReadNotifIds() {
-    try { return new Set(JSON.parse(localStorage.getItem(getNotifReadKey()) || "[]")); }
-    catch { return new Set(); }
-  }
-
-  function saveReadNotifIds(set) {
-    try { localStorage.setItem(getNotifReadKey(), JSON.stringify([...set])); } catch (_) {}
-  }
-
-  function getDeletedNotifIds() {
-    try { return new Set(JSON.parse(localStorage.getItem(getNotifDeletedKey()) || "[]")); }
-    catch { return new Set(); }
-  }
-
-  function saveDeletedNotifIds(set) {
-    try { localStorage.setItem(getNotifDeletedKey(), JSON.stringify([...set])); } catch (_) {}
-  }
-
-  function toggleNotifDropdown(e) {
-    e.stopPropagation();
-    document.getElementById("notif-dropdown").classList.toggle("hidden");
-  }
-
-  function markAllNotificationsRead() {
-    const readSet = getReadNotifIds();
-    notifications.forEach(n => readSet.add(n.id));
-    saveReadNotifIds(readSet);
-    renderNotifications();
-  }
-
-  function markNotificationRead(notifId) {
-    const readSet = getReadNotifIds();
-    readSet.add(notifId);
-    saveReadNotifIds(readSet);
-    renderNotifications();
-  }
-
-  function deleteNotification(notifId) {
-    const delSet = getDeletedNotifIds();
-    delSet.add(notifId);
-    saveDeletedNotifIds(delSet);
-    notifications = notifications.filter(n => n.id !== notifId);
-    renderNotifications();
-  }
-
-  function clearAllNotifications() {
-    const delSet = getDeletedNotifIds();
-    notifications.forEach(n => delSet.add(n.id));
-    saveDeletedNotifIds(delSet);
-    notifications = [];
-    renderNotifications();
-  }
-
-  function formatRelativeTime(isoString) {
-    if (!isoString) return "Just now";
-    const diffSec = Math.max(1, Math.floor((Date.now() - new Date(isoString).getTime()) / 1000));
-    if (diffSec < 60) return "Just now";
-    const diffMin = Math.floor(diffSec / 60);
-    if (diffMin < 60) return `${diffMin}m ago`;
-    const diffHr = Math.floor(diffMin / 60);
-    if (diffHr < 24) return `${diffHr}h ago`;
-    return new Date(isoString).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  }
+  function toggleNotifDropdown(e) { e.stopPropagation(); document.getElementById("notif-dropdown").classList.toggle("hidden"); }
+  function markAllNotificationsRead() { const s = getReadNotifIds(); notifications.forEach(n => s.add(n.id)); saveReadNotifIds(s); renderNotifications(); }
+  function markNotificationRead(id) { const s = getReadNotifIds(); s.add(id); saveReadNotifIds(s); renderNotifications(); }
+  function deleteNotification(id) { const s = getDeletedNotifIds(); s.add(id); saveDeletedNotifIds(s); notifications = notifications.filter(n => n.id !== id); renderNotifications(); }
+  function clearAllNotifications() { const s = getDeletedNotifIds(); notifications.forEach(n => s.add(n.id)); saveDeletedNotifIds(s); notifications = []; renderNotifications(); }
 
   function buildNotificationsFromOrders(ordersList) {
     const readSet = getReadNotifIds();
@@ -3477,11 +3154,8 @@
     const built = [];
 
     for (const o of ordersList) {
-      const itemCount = (o.order_items || []).reduce((sum, i) => sum + Number(i.quantity || 0), 0);
       const totalFormatted = `₱${Number(o.total_amount || 0).toFixed(2)}`;
-      const isSellerOrder = isIncomingSaleForCurrentUser(o);
-
-      if (isSellerOrder) {
+      if (isIncomingSaleForCurrentUser(o)) {
         const notifId = `seller-order-${o.id}-${o.status}`;
         if (!delSet.has(notifId)) {
           built.push({
@@ -3490,36 +3164,28 @@
             targetTab: "sales",
             isPending: o.status === "Pending",
             unread: !readSet.has(notifId),
-            time: formatRelativeTime(o.created_at),
-            title: o.status === "Pending"
-              ? `🛍️ New Shop Order #${o.id} from ${o.customer_name}!`
-              : o.status === "Cancelled"
-                ? `✕ Order #${o.id} Cancelled by ${o.customer_name}`
-                : `Shop Order #${o.id} — ${o.status}`,
-            desc: `${itemCount} item(s) • ${totalFormatted} • Deliver to: ${o.address}`
+            time: o.created_at ? new Date(o.created_at).toLocaleDateString() : "Now",
+            title: o.status === "Pending" ? `🛍️ New Order #${o.id} from ${o.customer_name}!` : `Shop Order #${o.id} — ${o.status}`,
+            desc: `${totalFormatted} • ${o.address}`
           });
         }
       }
-
       if (o.user_id === currentUser?.id) {
         const notifId = `buyer-order-${o.id}-${o.status}`;
         if (!delSet.has(notifId)) {
-          const shop = shops.find(s => String(s.id) === String(o.shop_id));
-          const shopTag = shop ? `[${shop.name}] ` : "";
           built.push({
             id: notifId,
             orderId: o.id,
             targetTab: "purchases",
             isPending: false,
             unread: !readSet.has(notifId),
-            time: formatRelativeTime(o.created_at),
-            title: `${shopTag}Order #${o.id}: ${o.status}`,
-            desc: `Total ${totalFormatted} (${itemCount} item(s)).`
+            time: o.created_at ? new Date(o.created_at).toLocaleDateString() : "Now",
+            title: `Order #${o.id}: ${o.status}`,
+            desc: `Total ${totalFormatted}`
           });
         }
       }
     }
-
     notifications = built;
     renderNotifications();
   }
@@ -3527,39 +3193,27 @@
   function updateNotifBadge() {
     const unreadCount = notifications.filter(n => n.unread).length;
     const badge = document.getElementById("notif-badge");
-    const btn = document.getElementById("btn-notif");
-
     if (unreadCount > 0) {
       badge.textContent = unreadCount > 99 ? "99+" : unreadCount;
       badge.classList.remove("hidden");
-      btn.classList.add("has-unread");
     } else {
       badge.classList.add("hidden");
-      btn.classList.remove("has-unread");
     }
   }
 
   function renderNotifications() {
     updateNotifBadge();
     const list = document.getElementById("notif-list");
-
     if (!notifications.length) {
-      list.innerHTML = `<div style="padding:1.6rem; text-align:center; color:var(--muted); font-size:0.84rem;">No notifications right now.</div>`;
+      list.innerHTML = `<div style="padding:1.4rem; text-align:center; color:var(--muted); font-size:0.84rem;">No notifications.</div>`;
       return;
     }
-
     list.innerHTML = notifications.map(n => `
       <div class="notif-item ${n.unread ? "unread" : ""}" onclick="openOrderFromNotification(${n.orderId}, '${escapeHtml(n.id)}', '${n.targetTab}')">
-        <div class="notif-item-top">
-          <span class="notif-title">${escapeHtml(n.title)}</span>
-          <span class="notif-time">${escapeHtml(n.time)}</span>
-        </div>
+        <div class="notif-item-top"><span class="notif-title">${escapeHtml(n.title)}</span><span class="notif-time">${escapeHtml(n.time)}</span></div>
         <div class="notif-desc">${escapeHtml(n.desc)}</div>
         <div class="notif-actions" onclick="event.stopPropagation()">
-          ${n.targetTab === "sales" && n.isPending ? `
-            <button class="success-btn sm" onclick="markNotificationRead('${escapeHtml(n.id)}'); updateOrderStatus(${n.orderId}, 'Order Received', true)">✓ Acknowledge</button>
-          ` : ""}
-          <button class="secondary sm" onclick="openOrderFromNotification(${n.orderId}, '${escapeHtml(n.id)}', '${n.targetTab}')">Open Order</button>
+          <button class="secondary sm" onclick="openOrderFromNotification(${n.orderId}, '${escapeHtml(n.id)}', '${n.targetTab}')">Open</button>
           <button class="danger-outline sm" onclick="deleteNotification('${escapeHtml(n.id)}')">🗑️</button>
         </div>
       </div>
@@ -3572,46 +3226,24 @@
     switchOrdersSubTab(targetTab);
     switchView("orders");
     await loadOrders();
-    setTimeout(() => {
-      const card = document.getElementById(`order-card-${orderId}`);
-      if (card) {
-        card.scrollIntoView({ behavior: "smooth", block: "center" });
-        card.classList.add("highlight-order");
-        setTimeout(() => card.classList.remove("highlight-order"), 2400);
-      }
-    }, 120);
   }
 
   async function syncOrdersAndNotifications(isInitialLoad = false) {
     if (!currentUser) return;
-
-    const { data, error } = await db
-      .from("orders")
-      .select("*, order_items(*)")
-      .order("created_at", { ascending: false });
-
+    const { data, error } = await db.from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
     if (error) return;
     const latestOrders = data || [];
 
     if (!isInitialLoad) {
       for (const o of latestOrders) {
-        const prevStatus = knownOrderSnapshots.get(o.id);
-
-        if (prevStatus === undefined && isIncomingSaleForCurrentUser(o)) {
+        const prev = knownOrderSnapshots.get(o.id);
+        if (prev === undefined && isIncomingSaleForCurrentUser(o)) {
           playNotificationTone();
-          showToast(`🛍️ New Order #${o.id} in your shop from ${o.customer_name} (₱${Number(o.total_amount).toFixed(2)})!`, "warning");
+          showToast(`🛍️ New Order #${o.id} in your shop (₱${Number(o.total_amount).toFixed(2)})!`, "warning");
           await loadProducts();
-          if (myShop) renderSellerProductsTable();
-        } else if (prevStatus !== undefined && prevStatus !== o.status) {
-          if (isIncomingSaleForCurrentUser(o) && o.status === "Cancelled") {
-            playNotificationTone();
-            showToast(`Order #${o.id} was cancelled by ${o.customer_name}.`, "warning");
-            await loadProducts();
-            if (myShop) renderSellerProductsTable();
-          } else if (o.user_id === currentUser.id) {
-            playNotificationTone();
-            showToast(`Order #${o.id} status updated to: ${o.status}`, "success");
-          }
+        } else if (prev !== undefined && prev !== o.status && o.user_id === currentUser.id) {
+          playNotificationTone();
+          showToast(`Order #${o.id} is now: ${o.status}`, "success");
         }
       }
     }
@@ -3621,38 +3253,22 @@
     cachedOrders = latestOrders;
     updateSellerOrderCounters();
     buildNotificationsFromOrders(latestOrders);
-
-    if (!document.getElementById("view-orders").classList.contains("hidden")) {
-      renderOrdersList();
-    }
-    if (currentRole === "admin" && !document.getElementById("view-admin").classList.contains("hidden")) {
-      renderAdminCommissionMonitor();
-    }
+    if (!document.getElementById("view-orders").classList.contains("hidden")) renderOrdersList();
+    if (currentRole === "admin" && !document.getElementById("view-admin").classList.contains("hidden")) renderAdminCommissionMonitor();
   }
 
   function startOrderSync() {
     stopOrderSync();
     ordersChannel = db
       .channel("marketplace-live-orders")
-      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, async () => {
-        await syncOrdersAndNotifications(false);
-      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => syncOrdersAndNotifications(false))
       .subscribe();
-
-    pollIntervalId = setInterval(() => {
-      syncOrdersAndNotifications(false);
-    }, 10000);
+    pollIntervalId = setInterval(() => syncOrdersAndNotifications(false), 10000);
   }
 
   function stopOrderSync() {
-    if (ordersChannel) {
-      db.removeChannel(ordersChannel);
-      ordersChannel = null;
-    }
-    if (pollIntervalId) {
-      clearInterval(pollIntervalId);
-      pollIntervalId = null;
-    }
+    if (ordersChannel) { db.removeChannel(ordersChannel); ordersChannel = null; }
+    if (pollIntervalId) { clearInterval(pollIntervalId); pollIntervalId = null; }
   }
 
   /* =========================================================
@@ -3664,19 +3280,11 @@
     document.getElementById("tab-register").classList.toggle("active", !isSignIn);
     document.getElementById("form-signin").classList.toggle("hidden", !isSignIn);
     document.getElementById("form-register").classList.toggle("hidden", isSignIn);
-    document.getElementById("auth-modal-title").textContent = isSignIn
-      ? "Sign In to MarketHub"
-      : "Create Buyer / Seller Account";
+    document.getElementById("auth-modal-title").textContent = isSignIn ? "Sign In to MarketHub" : "Create Account";
   }
 
-  function openAuthModal(defaultTab = "signin") {
-    switchAuthTab(defaultTab);
-    document.getElementById("auth-modal").classList.remove("hidden");
-  }
-
-  function closeAuthModal() {
-    document.getElementById("auth-modal").classList.add("hidden");
-  }
+  function openAuthModal(tab = "signin") { switchAuthTab(tab); document.getElementById("auth-modal").classList.remove("hidden"); }
+  function closeAuthModal() { document.getElementById("auth-modal").classList.add("hidden"); }
 
   async function signUp(e) {
     e.preventDefault();
@@ -3688,65 +3296,41 @@
 
     const btn = document.getElementById("btn-submit-register");
     btn.disabled = true;
-    btn.textContent = "Creating Account...";
-
     try {
       const profilePayload = { full_name: fullName, phone, address };
-      const { data, error } = await db.auth.signUp({
-        email,
-        password,
-        options: { data: profilePayload }
-      });
-
+      const { data, error } = await db.auth.signUp({ email, password, options: { data: profilePayload } });
       if (error) return showToast(error.message, "error");
       setCachedRegistrationByEmail(email, profilePayload);
-
       if (data?.user?.id) {
-        try {
-          await db.from("profiles").upsert({ id: data.user.id, full_name: fullName, phone, address });
-        } catch (_) {}
+        try { await db.from("profiles").upsert({ id: data.user.id, full_name: fullName, phone, address }); } catch (_) {}
       }
-
       document.getElementById("form-register").reset();
       closeAuthModal();
-      showToast(
-        data?.session
-          ? `Welcome, ${fullName}! Click "Open a Shop" anytime to start selling.`
-          : `Account created for ${fullName}! Please sign in.`,
-        "success"
-      );
+      showToast(data?.session ? `Welcome, ${fullName}!` : "Account created! Please sign in.", "success");
     } finally {
       btn.disabled = false;
-      btn.textContent = "Complete Registration";
     }
   }
 
   async function signIn(e) {
     e.preventDefault();
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value;
-
     const btn = document.getElementById("btn-submit-signin");
     btn.disabled = true;
-    btn.textContent = "Signing In...";
-
     try {
-      const { error } = await db.auth.signInWithPassword({ email, password });
+      const { error } = await db.auth.signInWithPassword({
+        email: document.getElementById("login-email").value.trim(),
+        password: document.getElementById("login-password").value
+      });
       if (error) return showToast(error.message, "error");
       document.getElementById("form-signin").reset();
-      showToast("Signed in successfully!", "success");
       closeAuthModal();
+      showToast("Signed in!", "success");
     } finally {
       btn.disabled = false;
-      btn.textContent = "Sign In";
     }
   }
 
-  async function logout() {
-    stopOrderSync();
-    await db.auth.signOut();
-    showToast("Signed out.", "info");
-  }
+  async function logout() { stopOrderSync(); await db.auth.signOut(); showToast("Signed out.", "info"); }
 
   function openProfileModal() {
     if (!currentUser) return;
@@ -3757,23 +3341,18 @@
     document.getElementById("profile-modal").classList.remove("hidden");
   }
 
-  function closeProfileModal() {
-    document.getElementById("profile-modal").classList.add("hidden");
-  }
+  function closeProfileModal() { document.getElementById("profile-modal").classList.add("hidden"); }
 
   async function saveUserProfile(e) {
     e.preventDefault();
     if (!currentUser) return;
-
     const updated = {
       full_name: document.getElementById("prof-name").value.trim(),
       phone: document.getElementById("prof-phone").value.trim(),
       address: document.getElementById("prof-address").value.trim()
     };
-
     const { error } = await db.auth.updateUser({ data: updated });
     if (error) return showToast(error.message, "error");
-
     userProfileData = updated;
     setCachedRegistrationByEmail(currentUser.email, updated);
     applyOwnerHeaderDisplay();
