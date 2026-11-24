@@ -1,0 +1,19 @@
+{
+  "name": "MarketHub — All-in-One Online Shop",
+  "short_name": "MarketHub",
+  "description": "Verified Multi-Shop E-Commerce Marketplace",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3f7f4",
+  "theme_color": "#15803d",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
