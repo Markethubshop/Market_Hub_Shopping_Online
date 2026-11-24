@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>MarketHub — Verified Multi-Shop E-Commerce</title>
+
+  <!-- PWA & Mobile App Meta Tags (Android & iOS) -->
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#15803d" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MarketHub" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,26 +47,38 @@
 
     * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
       color: var(--text);
       background-color: var(--bg);
       background-image:
         linear-gradient(180deg, rgba(243, 247, 244, 0.93) 0%, rgba(236, 245, 239, 0.98) 100%),
         radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.11) 0px, transparent 50%);
       min-height: 100vh;
+      min-height: 100dvh;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
+    img { max-width: 100%; display: block; }
+
     header {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
-      padding: 0.85rem 1.5rem;
+      padding: calc(0.75rem + env(safe-area-inset-top)) 1.25rem 0.75rem;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.65rem;
       position: sticky;
       top: 0;
       z-index: 40;
@@ -65,74 +88,77 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      font-size: 1.2rem;
+      gap: 0.6rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--text);
       cursor: pointer;
     }
 
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
       color: #fff;
       display: grid;
       place-items: center;
+      flex-shrink: 0;
       box-shadow: 0 4px 12px rgba(21, 128, 61, 0.28);
     }
 
     .brand span.sub {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--primary-dark);
       background: var(--primary-soft);
-      padding: 0.16rem 0.55rem;
+      padding: 0.15rem 0.5rem;
       border-radius: 999px;
     }
 
-    .nav-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .nav-actions { display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap; }
 
     .user-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
-      padding: 0.34rem 0.75rem;
+      padding: 0.3rem 0.68rem;
       border-radius: 999px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
+      max-width: 100%;
     }
 
     .user-avatar-dot {
-      width: 22px;
-      height: 22px;
+      width: 21px;
+      height: 21px;
       border-radius: 999px;
       background: var(--primary);
       color: #fff;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       display: grid;
       place-items: center;
       text-transform: uppercase;
+      flex-shrink: 0;
     }
 
     button {
       background: var(--primary);
       color: #fff;
       border: none;
-      padding: 0.52rem 0.95rem;
+      padding: 0.52rem 0.9rem;
       border-radius: 9px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.42rem;
+      gap: 0.38rem;
       transition: all 0.18s ease;
     }
 
@@ -142,12 +168,13 @@
     button.secondary.active-nav { background: var(--primary-soft); color: var(--primary-dark); border-color: #86efac; }
     button.shop-cta { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; box-shadow: 0 3px 10px rgba(234, 88, 12, 0.25); }
     button.shop-cta:hover:not(:disabled) { background: linear-gradient(135deg, #c2410c, #9a3412); }
+    button.install-pwa-btn { background: linear-gradient(135deg, #1d4ed8, #1e40af); color: #fff; }
     button.success-btn { background: var(--primary-light); }
     button.danger { background: var(--danger); }
     button.danger:hover:not(:disabled) { background: #b91c1c; }
     button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
     button.danger-outline:hover:not(:disabled) { background: var(--danger-soft); }
-    button.sm { padding: 0.34rem 0.65rem; font-size: 0.76rem; border-radius: 7px; }
+    button.sm { padding: 0.36rem 0.65rem; font-size: 0.76rem; border-radius: 8px; }
     button:disabled { opacity: 0.55; cursor: not-allowed; }
 
     button.google-btn {
@@ -155,7 +182,7 @@
       background: #ffffff;
       color: #1f2937;
       border: 1px solid #cbd5e1;
-      padding: 0.62rem 1rem;
+      padding: 0.65rem 1rem;
       font-size: 0.88rem;
       font-weight: 700;
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
@@ -223,8 +250,8 @@
     .notif-wrapper { position: relative; }
     .notif-btn {
       position: relative;
-      width: 39px;
-      height: 39px;
+      width: 38px;
+      height: 38px;
       padding: 0;
       border-radius: 10px;
       background: #fff;
@@ -252,7 +279,7 @@
       position: absolute;
       right: 0;
       top: calc(100% + 10px);
-      width: 390px;
+      width: 380px;
       max-width: calc(100vw - 24px);
       background: var(--card-solid);
       border: 1px solid var(--border);
@@ -262,46 +289,46 @@
       overflow: hidden;
     }
     .notif-header {
-      padding: 0.85rem 1rem;
+      padding: 0.8rem 0.95rem;
       background: #f4f9f5;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .notif-header h4 { margin: 0; font-size: 0.9rem; }
-    .notif-list { max-height: 360px; overflow-y: auto; }
+    .notif-header h4 { margin: 0; font-size: 0.88rem; }
+    .notif-list { max-height: 340px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .notif-item {
-      padding: 0.8rem 1rem;
+      padding: 0.75rem 0.95rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.28rem;
       cursor: pointer;
     }
     .notif-item.unread { background: #fff7ed; border-left: 3px solid var(--accent); }
     .notif-item-top { display: flex; justify-content: space-between; gap: 0.5rem; }
-    .notif-title { font-size: 0.83rem; font-weight: 700; }
-    .notif-time { font-size: 0.71rem; color: var(--muted); white-space: nowrap; }
-    .notif-desc { font-size: 0.79rem; color: var(--text-secondary); }
+    .notif-title { font-size: 0.82rem; font-weight: 700; }
+    .notif-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+    .notif-desc { font-size: 0.78rem; color: var(--text-secondary); }
     .notif-actions { display: flex; gap: 0.4rem; margin-top: 0.2rem; }
 
-    .container { max-width: 1200px; margin: 1.4rem auto 3rem; padding: 0 1.25rem; }
+    .container { max-width: 1200px; margin: 1.1rem auto 2.5rem; padding: 0 1rem; }
 
     /* Hero */
     .hero-banner {
-      border-radius: 20px;
-      padding: 2.1rem 2.2rem;
-      margin-bottom: 1.35rem;
+      border-radius: 18px;
+      padding: 1.9rem 2rem;
+      margin-bottom: 1.15rem;
       color: #fff;
       background:
         linear-gradient(115deg, rgba(15, 23, 42, 0.92) 0%, rgba(20, 83, 45, 0.86) 52%, rgba(30, 58, 138, 0.82) 100%),
-        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&q=75') center/cover no-repeat;
+        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1000&q=75') center/cover no-repeat;
       box-shadow: var(--shadow-lg);
       display: grid;
       grid-template-columns: 1.35fr 0.95fr;
       align-items: center;
-      gap: 1.75rem;
+      gap: 1.5rem;
       position: relative;
       overflow: hidden;
     }
@@ -309,8 +336,8 @@
     .hero-banner::after {
       content: "";
       position: absolute;
-      width: 320px;
-      height: 320px;
+      width: 280px;
+      height: 280px;
       right: -60px;
       top: -90px;
       background: radial-gradient(circle, rgba(251, 146, 60, 0.24) 0%, transparent 70%);
@@ -321,41 +348,41 @@
     .hero-kicker {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       background: rgba(255, 255, 255, 0.14);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.26);
-      padding: 0.3rem 0.85rem;
+      padding: 0.26rem 0.75rem;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.6rem;
       color: #fef08a;
     }
     .hero-banner h1 {
-      margin: 0 0 0.55rem;
-      font-size: clamp(1.55rem, 2.9vw, 2.2rem);
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.32rem, 2.8vw, 2.15rem);
       font-weight: 800;
-      line-height: 1.18;
+      line-height: 1.2;
       letter-spacing: -0.02em;
     }
     .hero-banner p {
-      margin: 0 0 1.15rem;
-      font-size: 0.93rem;
+      margin: 0 0 1rem;
+      font-size: 0.88rem;
       color: rgba(241, 245, 249, 0.93);
-      line-height: 1.58;
+      line-height: 1.52;
       max-width: 600px;
     }
-    .trust-badges { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .trust-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; }
     .trust-chip {
       background: rgba(15, 23, 42, 0.52);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 0.38rem 0.75rem;
-      border-radius: 10px;
-      font-size: 0.77rem;
+      padding: 0.34rem 0.68rem;
+      border-radius: 9px;
+      font-size: 0.74rem;
       font-weight: 600;
       color: #f8fafc;
     }
@@ -365,14 +392,14 @@
       z-index: 1;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.65rem;
+      gap: 0.55rem;
     }
     .hero-cat-card {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.24);
-      border-radius: 14px;
-      padding: 0.85rem 0.95rem;
+      border-radius: 12px;
+      padding: 0.75rem 0.85rem;
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: left;
@@ -380,56 +407,65 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.2rem;
+      gap: 0.18rem;
     }
     .hero-cat-card:hover {
       background: rgba(255, 255, 255, 0.22);
       border-color: rgba(255, 255, 255, 0.5);
       transform: translateY(-2px);
     }
-    .hero-cat-icon { font-size: 1.45rem; line-height: 1; margin-bottom: 0.15rem; }
-    .hero-cat-title { font-size: 0.84rem; font-weight: 700; color: #fff; }
-    .hero-cat-sub { font-size: 0.71rem; color: rgba(226, 232, 240, 0.88); font-weight: 500; }
+    .hero-cat-icon { font-size: 1.35rem; line-height: 1; margin-bottom: 0.1rem; }
+    .hero-cat-title { font-size: 0.82rem; font-weight: 700; color: #fff; }
+    .hero-cat-sub { font-size: 0.69rem; color: rgba(226, 232, 240, 0.88); font-weight: 500; }
 
     /* Shops Strip */
     .shops-strip {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 0.85rem 1.1rem;
-      margin-bottom: 1rem;
+      padding: 0.75rem 0.95rem;
+      margin-bottom: 0.85rem;
       box-shadow: var(--shadow-sm);
     }
-    .shops-strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; gap: 0.5rem; flex-wrap: wrap; }
-    .shops-list-pills { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.2rem; }
+    .shops-strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.55rem; gap: 0.5rem; flex-wrap: wrap; }
+    .shops-list-pills {
+      display: flex;
+      gap: 0.45rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 0.15rem;
+    }
+    .shops-list-pills::-webkit-scrollbar { display: none; }
     .shop-chip {
       background: #f8faf9;
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 0.45rem 0.85rem;
-      border-radius: 11px;
-      font-size: 0.8rem;
+      padding: 0.42rem 0.78rem;
+      border-radius: 10px;
+      font-size: 0.78rem;
       font-weight: 600;
       white-space: nowrap;
+      flex-shrink: 0;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
     }
     .shop-chip.active { background: #142419; color: #fff; border-color: #142419; }
-    .shop-chip .cat-mini { font-size: 0.68rem; padding: 0.12rem 0.45rem; border-radius: 999px; background: rgba(22, 163, 74, 0.14); color: var(--primary-dark); }
+    .shop-chip .cat-mini { font-size: 0.66rem; padding: 0.1rem 0.42rem; border-radius: 999px; background: rgba(22, 163, 74, 0.14); color: var(--primary-dark); }
     .shop-chip.active .cat-mini { background: rgba(255, 255, 255, 0.18); color: #dcfce7; }
 
     .selected-shop-banner {
       background: linear-gradient(135deg, #142419, #1e3a29);
       color: #fff;
       border-radius: var(--radius);
-      padding: 1.2rem 1.45rem;
-      margin-bottom: 1.15rem;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     /* Toolbar */
@@ -437,36 +473,38 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 0.85rem 1.1rem;
-      margin-bottom: 1.25rem;
+      padding: 0.75rem 0.95rem;
+      margin-bottom: 1.05rem;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.7rem;
     }
-    .filter-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .filter-pills { display: flex; gap: 0.38rem; flex-wrap: wrap; }
     .filter-pill {
       background: #f6faf7;
       color: var(--text-secondary);
       border: 1px solid var(--border);
-      padding: 0.36rem 0.8rem;
+      padding: 0.36rem 0.75rem;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .filter-pill.active { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
-    .search-box { position: relative; flex: 1; min-width: 220px; max-width: 320px; }
-    .search-box input { padding-left: 2.2rem; background: #f6faf7; }
-    .search-box svg { position: absolute; left: 0.72rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search-box { position: relative; flex: 1; min-width: 200px; max-width: 340px; }
+    .search-box input { padding-left: 2.15rem; background: #f6faf7; }
+    .search-box svg { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
 
     /* Badges */
     .badge {
       background: var(--primary-soft);
       color: var(--primary-dark);
-      padding: 0.2rem 0.58rem;
+      padding: 0.18rem 0.54rem;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
@@ -484,8 +522,8 @@
     .badge.status-shipped { background: #ffedd5; color: #c2410c; }
     .badge.status-cancelled, .badge.status-rejected, .badge.status-suspended { background: #fee2e2; color: #b91c1c; }
 
-    /* Product Cards */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(276px, 1fr)); gap: 1.25rem; }
+    /* Product Cards — Square 1:1 Image Ratio for Mobile & Desktop Consistency */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
     .card {
       background: var(--card-solid);
       border: 1px solid var(--border);
@@ -498,82 +536,113 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #a7f3d0; }
-    .card-img-wrap { position: relative; width: 100%; height: 200px; overflow: hidden; background: #eef6f0; cursor: pointer; }
-    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .card-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #eef6f0;
+      cursor: pointer;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.3s ease;
+    }
     .card:hover .card-img-wrap img { transform: scale(1.04); }
 
     .stock-tag {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 0.22rem 0.6rem;
+      top: 8px;
+      left: 8px;
+      padding: 0.2rem 0.55rem;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      background: rgba(255, 255, 255, 0.93);
+      background: rgba(255, 255, 255, 0.94);
       color: var(--primary-dark);
     }
     .stock-tag.low { color: var(--accent); }
-    .stock-tag.out { background: rgba(220, 38, 38, 0.93); color: #fff; }
+    .stock-tag.out { background: rgba(220, 38, 38, 0.94); color: #fff; }
 
     .ship-tag-overlay {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 0.22rem 0.58rem;
+      top: 8px;
+      right: 8px;
+      padding: 0.2rem 0.52rem;
       border-radius: 999px;
-      font-size: 0.69rem;
+      font-size: 0.67rem;
       font-weight: 700;
-      background: rgba(20, 36, 25, 0.84);
+      background: rgba(20, 36, 25, 0.85);
       color: #dcfce7;
     }
     .ship-tag-overlay.free { background: rgba(21, 128, 61, 0.94); color: #fff; }
 
     .area-tag-overlay {
       position: absolute;
-      bottom: 10px;
-      left: 10px;
-      padding: 0.18rem 0.55rem;
+      bottom: 8px;
+      left: 8px;
+      max-width: calc(100% - 62px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0.16rem 0.5rem;
       border-radius: 999px;
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       font-weight: 700;
-      background: rgba(254, 243, 199, 0.95);
+      background: rgba(254, 243, 199, 0.96);
       color: #92400e;
       border: 1px solid #fcd34d;
     }
 
     .photo-count-pill {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      padding: 0.18rem 0.52rem;
+      bottom: 8px;
+      right: 8px;
+      padding: 0.16rem 0.48rem;
       border-radius: 999px;
-      font-size: 0.69rem;
+      font-size: 0.66rem;
       font-weight: 700;
-      background: rgba(20, 36, 25, 0.78);
+      background: rgba(20, 36, 25, 0.8);
       color: #fff;
     }
 
-    .card-body { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; flex: 1; }
-    .shop-link-row { display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem; }
+    .card-body { padding: 0.85rem 0.95rem 0.95rem; display: flex; flex-direction: column; flex: 1; }
+    .shop-link-row { display: flex; justify-content: space-between; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; flex-wrap: wrap; }
     .shop-tag-btn {
       background: #f0fdf4;
       color: var(--primary-dark);
       border: 1px solid #bbf7d0;
-      padding: 0.16rem 0.52rem;
+      padding: 0.15rem 0.48rem;
       border-radius: 6px;
-      font-size: 0.71rem;
+      font-size: 0.69rem;
       font-weight: 700;
       cursor: pointer;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .card-title { font-weight: 700; font-size: 1.01rem; margin: 0 0 0.28rem; cursor: pointer; }
+    .card-title {
+      font-weight: 700;
+      font-size: 0.96rem;
+      margin: 0 0 0.25rem;
+      cursor: pointer;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     .card-title:hover { color: var(--primary); }
     .card-desc {
-      font-size: 0.81rem;
+      font-size: 0.78rem;
       color: var(--text-secondary);
-      margin: 0 0 0.5rem;
-      line-height: 1.4;
+      margin: 0 0 0.45rem;
+      line-height: 1.38;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -581,14 +650,14 @@
     }
 
     .card-shop-desc-box {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       color: var(--muted);
       background: #f8faf9;
       border-left: 2.5px solid #86efac;
-      padding: 0.34rem 0.52rem;
+      padding: 0.3rem 0.48rem;
       border-radius: 0 6px 6px 0;
-      margin-bottom: 0.65rem;
-      line-height: 1.35;
+      margin-bottom: 0.55rem;
+      line-height: 1.32;
       flex: 1;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -600,28 +669,29 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.77rem;
-      margin-bottom: 0.65rem;
-      padding: 0.36rem 0.58rem;
+      font-size: 0.74rem;
+      margin-bottom: 0.55rem;
+      padding: 0.32rem 0.5rem;
       background: #f8faf9;
-      border-radius: 8px;
+      border-radius: 7px;
       border: 1px solid #ebf2ed;
     }
     .rating-pill { font-weight: 700; }
     .star-icon { color: var(--star); }
     .sold-pill { font-weight: 600; color: var(--text-secondary); }
 
-    .card-footer-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.7rem; }
-    .price { font-size: 1.18rem; font-weight: 800; color: var(--primary-dark); }
+    .card-footer-meta { display: flex; justify-content: space-between; align-items: center; gap: 0.35rem; margin-bottom: 0.6rem; }
+    .price { font-size: 1.12rem; font-weight: 800; color: var(--primary-dark); }
 
     .card-action-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.45rem;
+      gap: 0.4rem;
     }
     .card-action-btns button {
-      padding: 0.52rem 0.5rem;
-      font-size: 0.8rem;
+      padding: 0.48rem 0.4rem;
+      font-size: 0.77rem;
+      white-space: nowrap;
     }
 
     /* Policy / Warning Boxes */
@@ -630,11 +700,11 @@
       border: 1px solid #fdba74;
       border-left: 4px solid var(--accent);
       color: #9a3412;
-      padding: 0.7rem 0.85rem;
+      padding: 0.68rem 0.82rem;
       border-radius: 9px;
-      font-size: 0.79rem;
+      font-size: 0.78rem;
       line-height: 1.45;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.75rem;
     }
     .policy-notice-box.strict-shipped {
       background: #fef2f2;
@@ -645,13 +715,13 @@
     }
 
     /* KPI Grid */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 0.9rem; margin: 1rem 0 1.2rem; }
-    .kpi-card { background: #f8fbf9; border: 1px solid var(--border); border-radius: 12px; padding: 0.95rem 1.05rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 0.8rem; margin: 0.9rem 0 1.1rem; }
+    .kpi-card { background: #f8fbf9; border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 0.95rem; }
     .kpi-card.highlight { background: linear-gradient(135deg, #eef2ff, #f5f3ff); border-color: #c7d2fe; }
-    .kpi-label { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
-    .kpi-value { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+    .kpi-label { font-size: 0.71rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 0.22rem; }
+    .kpi-value { font-size: 1.3rem; font-weight: 800; color: var(--text); }
     .kpi-card.highlight .kpi-value { color: var(--indigo); }
-    .kpi-sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.2rem; }
+    .kpi-sub { font-size: 0.73rem; color: var(--text-secondary); margin-top: 0.18rem; }
 
     .shipping-config-box {
       background: #f0fdf4;
@@ -660,8 +730,8 @@
       padding: 0.85rem 1rem;
     }
 
-    /* 2-Photo Slots (Optimized for Free Plan Storage & Egress) */
-    .photo-slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; margin-top: 0.5rem; max-width: 380px; }
+    /* 2-Photo Slots (1:1 Square Ratio) */
+    .photo-slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-top: 0.5rem; max-width: 340px; }
     .photo-slot {
       border: 2px dashed #bfd3c5;
       border-radius: 12px;
@@ -678,7 +748,7 @@
       cursor: pointer;
     }
     .photo-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .photo-slot .slot-label { font-size: 0.74rem; font-weight: 700; color: var(--muted); }
+    .photo-slot .slot-label { font-size: 0.73rem; font-weight: 700; color: var(--muted); }
     .photo-slot .remove-slot-btn {
       position: absolute;
       top: 5px;
@@ -687,7 +757,7 @@
       height: 24px;
       padding: 0;
       border-radius: 999px;
-      background: rgba(220, 38, 38, 0.9);
+      background: rgba(220, 38, 38, 0.92);
       color: #fff;
       font-size: 0.74rem;
       z-index: 2;
@@ -695,14 +765,14 @@
 
     /* Product Detail Modal */
     .product-modal-wide { max-width: 780px; }
-    .detail-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.35rem; margin-top: 0.85rem; }
+    .detail-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.25rem; margin-top: 0.8rem; }
     .gallery-main { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #f8fafc; }
     .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
-    .gallery-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.55rem; }
+    .gallery-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.45rem; margin-top: 0.5rem; }
     .gallery-thumb { aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; opacity: 0.72; }
     .gallery-thumb.active, .gallery-thumb:hover { border-color: var(--primary); opacity: 1; }
     .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .shop-about-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.8rem 0.95rem; margin: 0.75rem 0; }
+    .shop-about-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.75rem 0.9rem; margin: 0.7rem 0; }
 
     .star-picker { display: inline-flex; gap: 0.3rem; margin: 0.35rem 0 0.6rem; }
     .star-btn { background: #f8fafc; border: 1px solid var(--border); color: #cbd5e1; font-size: 1.2rem; padding: 0.22rem 0.52rem; border-radius: 8px; }
@@ -714,8 +784,8 @@
       background: var(--card-solid);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.3rem;
-      margin-bottom: 1.35rem;
+      padding: 1.15rem;
+      margin-bottom: 1.2rem;
       box-shadow: var(--shadow-sm);
     }
     .panel.highlight-order { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22); }
@@ -724,8 +794,8 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 0.35rem;
-      margin: 0.9rem 0;
-      padding: 0.75rem;
+      margin: 0.85rem 0;
+      padding: 0.7rem;
       background: #f6faf7;
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -763,9 +833,9 @@
     }
     input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14); }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 0.7rem; font-size: 0.85rem; }
-    th { background: #f4f9f5; color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 0.71rem; }
-    th, td { text-align: left; padding: 0.68rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.7rem; font-size: 0.84rem; }
+    th { background: #f4f9f5; color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
+    th, td { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
 
     .hidden { display: none !important; }
     .modal-backdrop {
@@ -773,10 +843,11 @@
       inset: 0;
       background: rgba(20, 36, 25, 0.58);
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: 0.85rem;
       z-index: 70;
     }
     .modal {
@@ -784,33 +855,141 @@
       border-radius: 16px;
       max-width: 550px;
       width: 100%;
-      padding: 1.4rem;
-      max-height: 92vh;
+      padding: 1.25rem;
+      max-height: 90dvh;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
     }
 
-    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
     .delivery-summary-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.8rem 0.95rem; margin-bottom: 0.8rem; font-size: 0.84rem; }
 
-    .toast-container { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 95; display: flex; flex-direction: column; gap: 0.55rem; max-width: 370px; width: calc(100vw - 2.4rem); }
-    .toast { background: #142419; color: #f0fdf4; padding: 0.8rem 0.95rem; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary-light); font-size: 0.83rem; display: flex; justify-content: space-between; gap: 0.7rem; }
+    .toast-container {
+      position: fixed;
+      bottom: calc(1rem + env(safe-area-inset-bottom));
+      right: 1rem;
+      z-index: 95;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 370px;
+      width: calc(100vw - 2rem);
+    }
+    .toast { background: #142419; color: #f0fdf4; padding: 0.75rem 0.9rem; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary-light); font-size: 0.82rem; display: flex; justify-content: space-between; gap: 0.7rem; }
     .toast.success { border-left-color: #22c55e; }
     .toast.warning { border-left-color: #f97316; }
     .toast.error { border-left-color: #ef4444; }
 
-    .empty-state { text-align: center; padding: 2.6rem 1rem; background: var(--card); border: 1px dashed #bfd3c5; border-radius: var(--radius); color: var(--muted); }
+    .empty-state { text-align: center; padding: 2.4rem 1rem; background: var(--card); border: 1px dashed #bfd3c5; border-radius: var(--radius); color: var(--muted); }
 
+    /* =========================================================
+       MOBILE PHONE (CP) RESPONSIVE OPTIMIZATIONS (ANDROID & IOS)
+       ========================================================= */
     @media (max-width: 860px) {
-      .hero-banner { grid-template-columns: 1fr; padding: 1.6rem; }
+      .hero-banner { grid-template-columns: 1fr; padding: 1.35rem; gap: 1rem; }
     }
 
-    @media (max-width: 720px) {
-      .detail-layout { grid-template-columns: 1fr; }
+    @media (max-width: 640px) {
+      /* Prevent iOS Safari input auto-zoom on focus */
+      input, textarea, select { font-size: 16px !important; }
+
+      header {
+        padding: calc(0.6rem + env(safe-area-inset-top)) 0.75rem 0.6rem;
+        gap: 0.5rem;
+      }
+
+      .brand { font-size: 1.05rem; gap: 0.45rem; }
+      .brand-icon { width: 32px; height: 32px; }
+      .brand span.sub { display: none; }
+
+      .nav-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 0.38rem;
+      }
+      .nav-actions button {
+        padding: 0.44rem 0.68rem;
+        font-size: 0.78rem;
+      }
+
+      .notif-dropdown {
+        position: fixed;
+        top: calc(64px + env(safe-area-inset-top));
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-width: none;
+      }
+
+      .container { margin: 0.75rem auto 2rem; padding: 0 0.7rem; }
+
+      .hero-banner {
+        border-radius: 15px;
+        padding: 1.1rem 1rem;
+        margin-bottom: 0.85rem;
+      }
+      .hero-banner h1 { font-size: 1.24rem; }
+      .hero-banner p { font-size: 0.82rem; margin-bottom: 0.75rem; }
+      .trust-chip { font-size: 0.7rem; padding: 0.28rem 0.55rem; }
+      .hero-cat-card { padding: 0.65rem 0.7rem; }
+      .hero-cat-icon { font-size: 1.2rem; }
+      .hero-cat-title { font-size: 0.78rem; }
+      .hero-cat-sub { font-size: 0.66rem; }
+
+      /* Horizontal Swipeable Category Bar on CP */
+      .catalog-toolbar { padding: 0.65rem 0.75rem; gap: 0.55rem; }
+      .filter-pills {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: 100%;
+        padding-bottom: 2px;
+      }
+      .filter-pills::-webkit-scrollbar { display: none; }
+      .search-box { max-width: 100%; min-width: 0; width: 100%; }
+
+      /* 2-Column Native App Product Grid on CP */
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+      }
+      .card { border-radius: 12px; }
+      .card-body { padding: 0.62rem 0.65rem 0.7rem; }
+      .shop-link-row { margin-bottom: 0.28rem; }
+      .shop-tag-btn { font-size: 0.64rem; padding: 0.12rem 0.4rem; }
+      .badge.cat-badge { font-size: 0.61rem; padding: 0.12rem 0.4rem; }
+      .card-title { font-size: 0.86rem; margin-bottom: 0.2rem; }
+      .card-desc { font-size: 0.72rem; margin-bottom: 0.38rem; -webkit-line-clamp: 1; }
+      .card-shop-desc-box { display: none; }
+      .metrics-row { padding: 0.24rem 0.38rem; font-size: 0.68rem; margin-bottom: 0.42rem; }
+      .card-footer-meta { margin-bottom: 0.45rem; }
+      .price { font-size: 0.98rem; }
+      .card-footer-meta button.sm { padding: 0.24rem 0.45rem; font-size: 0.68rem; }
+
+      .card-action-btns {
+        grid-template-columns: 1fr;
+        gap: 0.32rem;
+      }
+      .card-action-btns button {
+        padding: 0.44rem 0.35rem;
+        font-size: 0.74rem;
+      }
+
+      /* Modals & Tables on CP */
+      .modal-backdrop { padding: 0.5rem; align-items: flex-end; }
+      .modal {
+        border-radius: 18px 18px 14px 14px;
+        padding: 1rem 0.95rem calc(1rem + env(safe-area-inset-bottom));
+        max-height: 92dvh;
+      }
+      .detail-layout { grid-template-columns: 1fr; gap: 0.9rem; }
       .order-stepper { grid-template-columns: 1fr; gap: 0.4rem; }
       .step-item { flex-direction: row; text-align: left; gap: 0.55rem; }
       .step-dot { margin-bottom: 0; }
+      table { min-width: 580px; }
     }
   </style>
 </head>
@@ -819,7 +998,7 @@
 <header>
   <div class="brand" onclick="resetMarketplaceFilters(); switchView('shop')">
     <div class="brand-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     </div>
     <div>MarketHub <span class="sub">All-in-One Online Shop</span></div>
   </div>
@@ -831,15 +1010,16 @@
       <span id="role-badge" class="badge">Buyer</span>
     </div>
 
+    <button id="btn-install-pwa" class="install-pwa-btn sm hidden" onclick="promptInstallPwa()">📲 Install App</button>
     <button id="btn-shop" class="secondary active-nav" onclick="switchView('shop')">Marketplace</button>
-    <button id="btn-header-apply" class="shop-cta sm" onclick="handleStartSellingClick()">🏪 Apply to Open a Shop</button>
+    <button id="btn-header-apply" class="shop-cta sm" onclick="handleStartSellingClick()">🏪 Open a Shop</button>
     <button id="btn-seller" class="secondary hidden" onclick="switchView('seller')">🏪 My Shop</button>
     <button id="btn-orders" class="secondary hidden" onclick="switchView('orders')">Orders</button>
     <button id="btn-admin" class="secondary hidden" onclick="switchView('admin')">Platform Admin</button>
 
     <div id="notif-wrapper" class="notif-wrapper hidden">
       <button id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)" title="Notifications">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
@@ -862,7 +1042,7 @@
       🛒 Cart (<span id="cart-count">0</span>)
     </button>
 
-    <button id="btn-login" onclick="openAuthModal('signin')">Sign In / Register</button>
+    <button id="btn-login" onclick="openAuthModal('signin')">Sign In</button>
     <button id="btn-logout" class="danger hidden" onclick="logout()">Sign Out</button>
   </div>
 </header>
@@ -874,14 +1054,14 @@
   <section id="view-shop">
     <div class="hero-banner">
       <div class="hero-content">
-        <div class="hero-kicker">✨ All-in-One Online Shop • Fashion • Gadgets • Home • Food &amp; More</div>
+        <div class="hero-kicker">✨ All-in-One Online Shop • Fashion • Gadgets • Home • Food</div>
         <h1>Shop Everything You Love — Fast, Easy &amp; Delivered to Your Door</h1>
-        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place. Add to cart or Buy Now in seconds.</p>
+        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place.</p>
         <div class="trust-badges">
           <div class="trust-chip">⚡ Instant Buy Now &amp; Cart</div>
-          <div class="trust-chip">📍 Local Delivery Areas (e.g., Roxas Only)</div>
+          <div class="trust-chip">📍 Local Areas (e.g., Roxas Only)</div>
           <div class="trust-chip">🚚 Free Shipping &amp; Clear Rates</div>
-          <div class="trust-chip">🛡️ 100% Verified Trusted Shops</div>
+          <div class="trust-chip">🛡️ 100% Verified Shops</div>
         </div>
       </div>
 
@@ -894,7 +1074,7 @@
         <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Gadgets & Accessories')">
           <span class="hero-cat-icon">📱</span>
           <span class="hero-cat-title">Gadgets &amp; Tech</span>
-          <span class="hero-cat-sub">Phones, gear &amp; accessories</span>
+          <span class="hero-cat-sub">Phones &amp; accessories</span>
         </button>
         <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Home & Living')">
           <span class="hero-cat-icon">🏠</span>
@@ -904,7 +1084,7 @@
         <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Food & Beverages')">
           <span class="hero-cat-icon">🍱</span>
           <span class="hero-cat-title">Food &amp; Fresh Goods</span>
-          <span class="hero-cat-sub">Snacks, drinks &amp; produce</span>
+          <span class="hero-cat-sub">Snacks &amp; local produce</span>
         </button>
       </div>
     </div>
@@ -912,7 +1092,7 @@
     <!-- ACTIVE APPROVED SHOPS BAR -->
     <div class="shops-strip">
       <div class="shops-strip-header">
-        <strong style="font-size:0.84rem; color:var(--text-secondary);">🏪 Verified Active Shops (<span id="shops-count">0</span>)</strong>
+        <strong style="font-size:0.82rem; color:var(--text-secondary);">🏪 Verified Active Shops (<span id="shops-count">0</span>)</strong>
         <button id="btn-clear-shop-filter" class="secondary sm hidden" onclick="setShopFilter('all')">Show All Shops</button>
       </div>
       <div id="shops-list-pills" class="shops-list-pills"></div>
@@ -921,22 +1101,22 @@
     <!-- SELECTED SHOP BANNER -->
     <div id="selected-shop-banner" class="selected-shop-banner hidden">
       <div>
-        <div style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; margin-bottom:0.3rem;">
-          <h2 id="banner-shop-name" style="margin:0; font-size:1.3rem;">Shop Name</h2>
+        <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.3rem;">
+          <h2 id="banner-shop-name" style="margin:0; font-size:1.15rem;">Shop Name</h2>
           <span id="banner-shop-category" class="badge" style="background:rgba(255,255,255,0.18); color:#dcfce7;">Category</span>
           <span id="banner-shop-shipping" class="badge ship-free">🚚 Free Shipping</span>
           <span id="banner-shop-area" class="badge area-badge">📍 Roxas Only</span>
         </div>
-        <p id="banner-shop-desc" style="margin:0; font-size:0.86rem; color:#d1fae5;">Shop description</p>
+        <p id="banner-shop-desc" style="margin:0; font-size:0.82rem; color:#d1fae5;">Shop description</p>
       </div>
-      <div style="display:flex; gap:1.1rem; align-items:center; flex-wrap:wrap;">
+      <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
         <div style="text-align:center;">
-          <div id="banner-shop-products" style="font-size:1.15rem; font-weight:800;">0</div>
-          <div style="font-size:0.72rem; color:#a7f3d0;">Products</div>
+          <div id="banner-shop-products" style="font-size:1.05rem; font-weight:800;">0</div>
+          <div style="font-size:0.7rem; color:#a7f3d0;">Products</div>
         </div>
         <div style="text-align:center;">
-          <div id="banner-shop-sold" style="font-size:1.15rem; font-weight:800;">0</div>
-          <div style="font-size:0.72rem; color:#a7f3d0;">Total Sold</div>
+          <div id="banner-shop-sold" style="font-size:1.05rem; font-weight:800;">0</div>
+          <div style="font-size:0.7rem; color:#a7f3d0;">Total Sold</div>
         </div>
         <button class="secondary sm" onclick="setShopFilter('all')">← All Shops</button>
       </div>
@@ -945,27 +1125,27 @@
     <!-- CATEGORY & SEARCH TOOLBAR -->
     <div class="catalog-toolbar">
       <div class="filter-pills" id="category-pills">
-        <button class="filter-pill active" data-cat="all" onclick="setCategoryFilter('all')">All Categories</button>
-        <button class="filter-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing & Apparel</button>
+        <button class="filter-pill active" data-cat="all" onclick="setCategoryFilter('all')">All</button>
+        <button class="filter-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing</button>
         <button class="filter-pill" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">📱 Gadgets</button>
-        <button class="filter-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home & Living</button>
-        <button class="filter-pill" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">✨ Health & Beauty</button>
-        <button class="filter-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food & Drinks</button>
-        <button class="filter-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Fruits & Vegetables</button>
+        <button class="filter-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home</button>
+        <button class="filter-pill" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">✨ Beauty</button>
+        <button class="filter-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food</button>
+        <button class="filter-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Produce</button>
       </div>
 
-      <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; flex:1; justify-content:flex-end;">
-        <button id="filter-instock" class="filter-pill" onclick="toggleStockFilter()">In Stock Only</button>
+      <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap; flex:1; justify-content:flex-end;">
+        <button id="filter-instock" class="filter-pill" onclick="toggleStockFilter()">In Stock</button>
         <div class="search-box">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="search-input" placeholder="Search items, clothes, gadgets, shops..." oninput="resetPaginationAndRender()" />
+          <input type="text" id="search-input" placeholder="Search items, shops, areas..." oninput="resetPaginationAndRender()" />
         </div>
       </div>
     </div>
 
     <div id="product-grid" class="grid"></div>
-    <div id="load-more-wrap" class="hidden" style="text-align:center; margin-top:1.5rem;">
-      <button type="button" class="secondary" onclick="loadMoreProducts()" style="padding:0.65rem 1.4rem;">
+    <div id="load-more-wrap" class="hidden" style="text-align:center; margin-top:1.35rem;">
+      <button type="button" class="secondary" onclick="loadMoreProducts()" style="padding:0.65rem 1.35rem;">
         Load More Products (<span id="remaining-products-count">0</span> more)
       </button>
     </div>
@@ -973,11 +1153,11 @@
 
   <!-- VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS -->
   <section id="view-seller" class="hidden">
-    <div id="create-shop-panel" class="panel hidden" style="max-width:660px; margin:1rem auto;">
-      <div style="text-align:center; margin-bottom:1.2rem;">
-        <div style="font-size:2.3rem; margin-bottom:0.3rem;">🛡️🏪</div>
-        <h2 style="margin:0 0 0.35rem;">Apply to Open a Verified Seller Shop</h2>
-        <p style="margin:0; font-size:0.86rem; color:var(--muted);">To protect buyers from fake/troll stores, all shop applications require valid verification proof and Platform Admin approval before going live.</p>
+    <div id="create-shop-panel" class="panel hidden" style="max-width:660px; margin:0.5rem auto;">
+      <div style="text-align:center; margin-bottom:1.1rem;">
+        <div style="font-size:2.2rem; margin-bottom:0.25rem;">🛡️🏪</div>
+        <h2 style="margin:0 0 0.3rem; font-size:1.25rem;">Apply to Open a Verified Seller Shop</h2>
+        <p style="margin:0; font-size:0.84rem; color:var(--muted);">All shop applications require valid verification proof and Platform Admin approval before going live.</p>
       </div>
 
       <form onsubmit="submitShopApplication(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
@@ -1012,11 +1192,10 @@
         </div>
 
         <div>
-          <label class="field-label">Shop Description (Displayed below every product in your shop) *</label>
+          <label class="field-label">Shop Description *</label>
           <textarea id="new-shop-desc" rows="2" placeholder="Describe your shop, return policy, or delivery schedule..." required></textarea>
         </div>
 
-        <!-- SHIPPING FEE & DELIVERY LOCATION SETUP -->
         <div class="shipping-config-box">
           <label class="field-label" style="color:var(--primary-dark);">🚚 Shop Shipping Fee & Allowed Delivery Location *</label>
           <div class="form-grid">
@@ -1050,14 +1229,14 @@
         </div>
 
         <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:11px; padding:0.85rem 1rem;">
-          <label class="field-label" style="color:#92400e;">🪪 Seller Verification Proof (Upload Valid ID or Physical Store/Inventory Photo) *</label>
+          <label class="field-label" style="color:#92400e;">🪪 Seller Verification Proof (Valid ID or Physical Store/Inventory Photo) *</label>
           <input type="file" id="new-shop-id-file" accept="image/*" required />
-          <small style="display:block; margin-top:0.35rem; color:#92400e;">Automatically compressed for fast upload. Only visible to the Platform Admin.</small>
+          <small style="display:block; margin-top:0.35rem; color:#92400e;">Automatically compressed for mobile upload. Only visible to the Platform Admin.</small>
         </div>
 
         <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.82rem; color:var(--text-secondary); cursor:pointer;">
           <input type="checkbox" id="new-shop-agree" required style="width:auto; margin-top:2px;" />
-          <span>I confirm that my shop details are legitimate, I will fulfill customer orders honestly, and I agree to the <strong>10% platform commission</strong> on product sales.</span>
+          <span>I confirm that my shop details are legitimate and I agree to the <strong>10% platform commission</strong> on product sales.</span>
         </label>
 
         <button type="submit" id="btn-create-shop" class="shop-cta" style="padding:0.75rem; font-size:0.94rem;">
@@ -1066,10 +1245,10 @@
       </form>
     </div>
 
-    <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:1rem auto; text-align:center;">
-      <div id="gate-icon" style="font-size:2.6rem; margin-bottom:0.4rem;">⏳</div>
+    <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:0.5rem auto; text-align:center;">
+      <div id="gate-icon" style="font-size:2.5rem; margin-bottom:0.35rem;">⏳</div>
       <h2 id="gate-title" style="margin:0 0 0.4rem;">Shop Application Pending Approval</h2>
-      <p id="gate-message" style="margin:0 auto 1rem; max-width:500px; font-size:0.88rem; color:var(--text-secondary); line-height:1.5;"></p>
+      <p id="gate-message" style="margin:0 auto 1rem; max-width:500px; font-size:0.86rem; color:var(--text-secondary); line-height:1.5;"></p>
       <div id="gate-admin-note" class="error-box hidden" style="text-align:left;"></div>
 
       <form id="resubmit-shop-form" class="hidden" onsubmit="resubmitRejectedShop(event)" style="text-align:left; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:0.75rem;">
@@ -1093,7 +1272,7 @@
           <textarea id="resub-shop-desc" rows="2" required></textarea>
         </div>
         <div>
-          <label class="field-label">Upload Updated Valid ID / Store Proof (Optional if already clear)</label>
+          <label class="field-label">Upload Updated Valid ID / Store Proof (Optional)</label>
           <input type="file" id="resub-shop-id-file" accept="image/*" />
         </div>
         <button type="submit" class="shop-cta">Re-submit for Admin Review</button>
@@ -1104,18 +1283,18 @@
       <div class="panel" style="background:linear-gradient(135deg, #f0fdf4, #ffffff); border-color:#bbf7d0;">
         <div class="row-between">
           <div>
-            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-              <h2 id="my-shop-title" style="margin:0;">My Shop</h2>
-              <span class="badge status-approved">✓ Verified Shop</span>
+            <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
+              <h2 id="my-shop-title" style="margin:0; font-size:1.2rem;">My Shop</h2>
+              <span class="badge status-approved">✓ Verified</span>
               <span id="my-shop-cat-badge" class="badge seller">Category</span>
               <span id="my-shop-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
               <span id="my-shop-area-badge" class="badge area-badge">📍 Roxas Only</span>
             </div>
-            <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.86rem; color:var(--text-secondary);"></p>
+            <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.84rem; color:var(--text-secondary);"></p>
           </div>
-          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
             <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop, Shipping & Area</button>
-            <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Incoming Orders (<span id="seller-pending-count">0</span>)</button>
+            <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Orders (<span id="seller-pending-count">0</span>)</button>
           </div>
         </div>
 
@@ -1156,7 +1335,7 @@
               <input type="number" id="edit-shop-ship-fee" step="0.01" min="0" value="50" />
             </div>
             <div>
-              <label class="field-label">Shop Description (Shown below products)</label>
+              <label class="field-label">Shop Description</label>
               <input type="text" id="edit-shop-desc" required />
             </div>
           </div>
@@ -1181,10 +1360,10 @@
         </form>
       </div>
 
-      <!-- Add / Edit Product Form (2 Photos Max + Auto WebP Compression) -->
+      <!-- Add / Edit Product Form (2 Square Photos Max + Auto WebP Compression) -->
       <div class="panel">
         <div class="row-between" style="margin-bottom:0.75rem;">
-          <h3 style="margin:0;" id="product-form-heading">➕ Add Product to Your Shop (Up to 2 Photos)</h3>
+          <h3 style="margin:0; font-size:1.05rem;" id="product-form-heading">➕ Add Product (Up to 2 Photos)</h3>
           <button type="button" id="btn-cancel-edit-prod" class="secondary sm hidden" onclick="resetProductForm()">Cancel Edit</button>
         </div>
 
@@ -1224,8 +1403,8 @@
 
           <div style="margin-top:0.9rem;">
             <div class="row-between">
-              <label class="field-label" style="margin:0;">Product Photos (Max 2 views • Auto-compressed to WebP)</label>
-              <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.32rem 0.65rem; border:1px solid var(--border); border-radius:7px; font-size:0.76rem; font-weight:600;">
+              <label class="field-label" style="margin:0;">Product Photos (Max 2 • Square 1:1 Auto-WebP)</label>
+              <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; border:1px solid var(--border); border-radius:8px; font-size:0.76rem; font-weight:600;">
                 📁 Select Photos (Max 2)
                 <input type="file" id="multi-photo-input" accept="image/*" multiple class="hidden" onchange="handleMultiPhotoSelect(event)" />
               </label>
@@ -1242,8 +1421,8 @@
 
       <!-- Inventory Table -->
       <div class="panel">
-        <h3 style="margin-top:0;">📦 My Shop Inventory & Sales</h3>
-        <div style="overflow-x: auto;">
+        <h3 style="margin-top:0; font-size:1.05rem;">📦 My Shop Inventory & Sales</h3>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
           <table>
             <thead>
               <tr>
@@ -1265,15 +1444,15 @@
 
   <!-- VIEW 3: ORDERS -->
   <section id="view-orders" class="hidden">
-    <div class="row-between" style="margin-bottom: 0.85rem;">
+    <div class="row-between" style="margin-bottom: 0.8rem;">
       <div>
-        <h2 style="margin:0;">Orders & Live Tracking</h2>
-        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">⚠️ Policy: Cancellation is allowed only while <strong>Pending</strong>. Strictly <strong>No to Cancel after Shipping</strong>.</p>
+        <h2 style="margin:0; font-size:1.25rem;">Orders & Live Tracking</h2>
+        <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">⚠️ Policy: Cancellation is allowed only while <strong>Pending</strong>. Strictly <strong>No to Cancel after Shipping</strong>.</p>
       </div>
-      <button class="secondary sm" onclick="loadOrders()">↻ Refresh Orders</button>
+      <button class="secondary sm" onclick="loadOrders()">↻ Refresh</button>
     </div>
 
-    <div class="auth-tabs" style="max-width:460px; margin-bottom:1.15rem;">
+    <div class="auth-tabs" style="max-width:460px; margin-bottom:1rem;">
       <button type="button" id="orders-tab-purchases" class="auth-tab active" onclick="switchOrdersSubTab('purchases')">🛍️ My Purchases</button>
       <button type="button" id="orders-tab-sales" class="auth-tab" onclick="switchOrdersSubTab('sales')">🏪 Shop Sales (<span id="tab-sales-badge">0</span>)</button>
     </div>
@@ -1286,13 +1465,13 @@
     <div class="panel" style="border-color:#fde68a;">
       <div class="row-between">
         <div>
-          <h3 style="margin:0; color:#92400e;">🛡️ Shop Applications & Anti-Troll Verification Queue</h3>
-          <p style="margin:0.25rem 0 0; font-size:0.84rem; color:var(--muted);">Inspect seller ID/store proof before approving shops. Suspend or delete suspicious/troll shops anytime.</p>
+          <h3 style="margin:0; color:#92400e; font-size:1.05rem;">🛡️ Shop Applications & Anti-Troll Verification</h3>
+          <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">Inspect seller ID/store proof before approving shops.</p>
         </div>
         <span id="admin-pending-shops-badge" class="badge status-pending">0 Pending Review</span>
       </div>
 
-      <div style="overflow-x: auto;">
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table>
           <thead>
             <tr>
@@ -1312,10 +1491,10 @@
     <div class="panel" style="border-color:#c7d2fe;">
       <div class="row-between">
         <div>
-          <h3 style="margin:0; color:var(--indigo);">💰 Admin 10% Commission & Monthly Billing Monitor</h3>
-          <p style="margin:0.25rem 0 0; font-size:0.84rem; color:var(--muted);">10% commission is computed on product sales (shipping fees go 100% to sellers; cancelled orders excluded).</p>
+          <h3 style="margin:0; color:var(--indigo); font-size:1.05rem;">💰 Admin 10% Commission & Monthly Billing</h3>
+          <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">10% commission on product sales (shipping fees go 100% to sellers).</p>
         </div>
-        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
           <input type="month" id="admin-commission-month" onchange="onAdminMonthChange()" style="width:auto; font-weight:600;" />
           <button type="button" id="btn-admin-all-months" class="secondary sm" onclick="toggleAdminAllMonths()">Show All Months</button>
         </div>
@@ -1344,7 +1523,7 @@
         </div>
       </div>
 
-      <div style="overflow-x: auto;">
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table>
           <thead>
             <tr>
@@ -1352,7 +1531,7 @@
               <th>Valid Orders</th>
               <th>Product Sales</th>
               <th>Shipping Collected</th>
-              <th>10% Commission (Masisingil)</th>
+              <th>10% Commission</th>
               <th>Seller Net + Ship</th>
               <th>Billing Status</th>
               <th>Action</th>
@@ -1364,8 +1543,8 @@
     </div>
 
     <div class="panel">
-      <h3 style="margin-top:0;">📦 All Marketplace Products Moderation</h3>
-      <div style="overflow-x: auto;">
+      <h3 style="margin-top:0; font-size:1.05rem;">📦 All Marketplace Products Moderation</h3>
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table>
           <thead>
             <tr>
@@ -1385,11 +1564,30 @@
   </section>
 </div>
 
+<!-- IOS ADD TO HOME SCREEN GUIDE MODAL -->
+<div id="ios-install-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeIosInstallModal()">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0;">📲 Install MarketHub on iPhone / iPad</h3>
+      <button class="secondary sm" onclick="closeIosInstallModal()">✕</button>
+    </div>
+    <p style="font-size:0.86rem; color:var(--text-secondary); line-height:1.55; margin:0.75rem 0;">
+      Para maging full-screen mobile app sa iOS Safari:
+    </p>
+    <ol style="font-size:0.86rem; color:var(--text); line-height:1.65; padding-left:1.25rem; margin:0 0 1rem;">
+      <li>I-tap ang <strong>Share icon</strong> (box na may arrow pataas) sa ibaba ng Safari screen.</li>
+      <li>Mag-scroll pababa at pindutin ang <strong>"Add to Home Screen"</strong>.</li>
+      <li>I-tap ang <strong>"Add"</strong> sa kanang itaas.</li>
+    </ol>
+    <button type="button" class="success-btn" style="width:100%;" onclick="closeIosInstallModal()">Naintindihan</button>
+  </div>
+</div>
+
 <!-- PRODUCT DETAIL MODAL -->
 <div id="product-detail-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProductModal()">
   <div class="modal product-modal-wide">
     <div class="row-between">
-      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
         <span id="detail-shop-badge" class="shop-tag-btn">🏪 Shop Name</span>
         <span id="detail-cat-badge" class="badge cat-badge">Category</span>
         <span id="detail-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
@@ -1406,48 +1604,48 @@
 
       <div style="display:flex; flex-direction:column; justify-content:space-between;">
         <div>
-          <h2 id="detail-title" style="margin:0 0 0.45rem; font-size:1.35rem;">Product Title</h2>
+          <h2 id="detail-title" style="margin:0 0 0.45rem; font-size:1.25rem;">Product Title</h2>
 
-          <div class="metrics-row" style="margin-bottom:0.8rem;">
+          <div class="metrics-row" style="margin-bottom:0.75rem;">
             <span class="rating-pill"><span class="star-icon">★</span> <span id="detail-rating-avg">0.0</span> (<span id="detail-review-count">0</span>)</span>
             <span class="sold-pill">🛍️ <strong id="detail-sold-count">0</strong> sold</span>
-            <span style="font-size:0.76rem; color:var(--muted);" id="detail-stock-text">Stock: 0</span>
+            <span style="font-size:0.75rem; color:var(--muted);" id="detail-stock-text">Stock: 0</span>
           </div>
 
-          <div id="detail-price" class="price" style="font-size:1.55rem; margin-bottom:0.6rem;">₱0.00</div>
-          <p id="detail-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.5; margin:0 0 0.75rem;"></p>
+          <div id="detail-price" class="price" style="font-size:1.45rem; margin-bottom:0.55rem;">₱0.00</div>
+          <p id="detail-desc" style="font-size:0.86rem; color:var(--text-secondary); line-height:1.48; margin:0 0 0.7rem;"></p>
 
           <div class="shop-about-card">
             <div class="row-between" style="margin-bottom:0.3rem;">
-              <strong id="detail-shop-card-name" style="font-size:0.86rem; color:var(--primary-dark);">🏪 Shop Name</strong>
+              <strong id="detail-shop-card-name" style="font-size:0.84rem; color:var(--primary-dark);">🏪 Shop Name</strong>
               <button type="button" id="detail-visit-shop-btn" class="secondary sm">Visit Shop →</button>
             </div>
-            <p id="detail-shop-card-desc" style="margin:0 0 0.35rem; font-size:0.8rem; color:var(--text-secondary); line-height:1.45;"></p>
-            <div id="detail-shop-ship-note" style="font-size:0.76rem; font-weight:700; color:var(--primary-dark);"></div>
-            <div id="detail-shop-area-note" style="font-size:0.76rem; font-weight:700; color:#92400e; margin-top:0.2rem;"></div>
+            <p id="detail-shop-card-desc" style="margin:0 0 0.3rem; font-size:0.78rem; color:var(--text-secondary); line-height:1.42;"></p>
+            <div id="detail-shop-ship-note" style="font-size:0.74rem; font-weight:700; color:var(--primary-dark);"></div>
+            <div id="detail-shop-area-note" style="font-size:0.74rem; font-weight:700; color:#92400e; margin-top:0.2rem;"></div>
           </div>
 
-          <div class="policy-notice-box" style="margin-bottom:0.65rem; padding:0.55rem 0.75rem;">
+          <div class="policy-notice-box" style="margin-bottom:0.6rem; padding:0.52rem 0.7rem;">
             ⚠️ <strong>Strict Policy:</strong> <strong>NO TO CANCEL</strong> once order is already Shipped / Out for Delivery.
           </div>
         </div>
 
-        <div style="padding-top:0.8rem; border-top:1px solid var(--border); display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-          <input type="number" id="detail-qty" value="1" min="1" style="width:74px; text-align:center; font-weight:700;" />
-          <button id="detail-add-btn" class="secondary" style="flex:1; padding:0.7rem;">+ Add to Cart</button>
-          <button id="detail-buy-btn" class="shop-cta" style="flex:1; padding:0.7rem;">⚡ Buy Now</button>
+        <div style="padding-top:0.75rem; border-top:1px solid var(--border); display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
+          <input type="number" id="detail-qty" value="1" min="1" style="width:70px; text-align:center; font-weight:700;" />
+          <button id="detail-add-btn" class="secondary" style="flex:1; padding:0.65rem;">+ Add to Cart</button>
+          <button id="detail-buy-btn" class="shop-cta" style="flex:1; padding:0.65rem;">⚡ Buy Now</button>
         </div>
       </div>
     </div>
 
-    <hr style="border:0; border-top:1px solid var(--border); margin:1.3rem 0 1rem;" />
+    <hr style="border:0; border-top:1px solid var(--border); margin:1.2rem 0 0.9rem;" />
 
     <div>
-      <h3 style="margin:0 0 0.7rem; font-size:1.05rem;">⭐ Customer Ratings & Reviews</h3>
-      <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:#f8fbf9; border:1px solid var(--border); border-radius:12px; padding:0.9rem; margin-bottom:1rem;">
+      <h3 style="margin:0 0 0.65rem; font-size:1rem;">⭐ Customer Ratings & Reviews</h3>
+      <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:#f8fbf9; border:1px solid var(--border); border-radius:12px; padding:0.85rem; margin-bottom:0.9rem;">
         <div class="row-between">
-          <strong style="font-size:0.85rem;">Rate this product:</strong>
-          <span id="review-eligibility-note" style="font-size:0.75rem; color:var(--muted);"></span>
+          <strong style="font-size:0.84rem;">Rate this product:</strong>
+          <span id="review-eligibility-note" style="font-size:0.74rem; color:var(--muted);"></span>
         </div>
         <div class="star-picker" id="star-picker">
           <button type="button" class="star-btn selected" onclick="setReviewStar(1)">★</button>
@@ -1608,20 +1806,20 @@
     <div class="row-between">
       <div style="display:flex; align-items:center; gap:0.5rem;">
         <h3 style="margin:0;" id="cart-modal-title">🛒 Shopping Cart</h3>
-        <span id="express-buy-badge" class="badge seller hidden">⚡ Buy Now Checkout</span>
+        <span id="express-buy-badge" class="badge seller hidden">⚡ Buy Now</span>
       </div>
       <button class="secondary sm" onclick="closeCart()">✕</button>
     </div>
-    <div id="cart-items-container" style="margin: 1rem 0;"></div>
+    <div id="cart-items-container" style="margin: 0.9rem 0;"></div>
     <div id="checkout-section" class="hidden">
-      <hr style="border:0; border-top:1px solid var(--border); margin:1rem 0;" />
+      <hr style="border:0; border-top:1px solid var(--border); margin:0.9rem 0;" />
       <div class="row-between" style="margin-bottom:0.55rem;">
         <h4 style="margin:0;">Customer Info & Delivery Address *</h4>
         <button type="button" id="btn-toggle-checkout-edit" class="secondary sm" onclick="toggleCheckoutEdit()">Edit Details</button>
       </div>
 
       <div id="checkout-missing-alert" class="error-box hidden" style="margin-bottom:0.7rem; padding:0.65rem 0.85rem;">
-        ⚠️ <strong>Required:</strong> Please fill up your Complete Name, Contact Number, and Delivery Address before placing an order. Your details will be saved automatically after checkout.
+        ⚠️ <strong>Required:</strong> Please fill up your Complete Name, Contact Number, and Delivery Address before placing an order.
       </div>
 
       <div id="checkout-autofill-card" class="delivery-summary-card">
@@ -1651,14 +1849,13 @@
         </div>
       </div>
 
-      <!-- STRICT NO TO CANCEL AFTER SHIPPING NOTICE -->
       <div class="policy-notice-box">
         ⚠️ <strong>IMPORTANT ORDER POLICY — NO TO CANCEL AFTER SHIPPING:</strong><br/>
-        • Please double-check your delivery location (e.g., <strong>Roxas Only</strong>) and contact number.<br/>
-        • Cancellation is allowed <strong>only while Pending</strong>. Once your order is <strong>Shipped / Out for Delivery</strong>, <strong>NO CANCELLATION</strong> is strictly enforced.
+        • Double-check your delivery location (e.g., <strong>Roxas Only</strong>) and contact number.<br/>
+        • Cancellation is allowed <strong>only while Pending</strong>. Once <strong>Shipped</strong>, <strong>NO CANCELLATION</strong> applies.
       </div>
 
-      <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.81rem; color:var(--text-secondary); cursor:pointer; margin-bottom:0.85rem;">
+      <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.8rem; color:var(--text-secondary); cursor:pointer; margin-bottom:0.85rem;">
         <input type="checkbox" id="checkout-policy-agree" checked style="width:auto; margin-top:2px;" />
         <span>I confirm my delivery address is within the seller's delivery area and I agree to the <strong>No to Cancel after Shipping</strong> policy.</span>
       </label>
@@ -1681,6 +1878,8 @@
   const CACHE_ONE_YEAR = "31536000";
   const MAX_PRODUCT_PHOTOS = 2;
   const PRODUCTS_PAGE_SIZE = 24;
+
+  let deferredInstallPrompt = null;
 
   let currentUser = null;
   let currentRole = "guest";
@@ -1728,6 +1927,62 @@
   ];
 
   const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=75";
+
+  /* =========================================================
+     PWA REGISTRATION & ANDROID / IOS INSTALL PROMPT
+     ========================================================= */
+  function setupPwaInstallAndServiceWorker() {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+
+    const installBtn = document.getElementById("btn-install-pwa");
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      if (!isStandalone && installBtn) {
+        installBtn.classList.remove("hidden");
+      }
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      if (installBtn) installBtn.classList.add("hidden");
+      showToast("MarketHub installed as an app!", "success");
+    });
+
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (isIos && !isStandalone && installBtn) {
+      installBtn.classList.remove("hidden");
+    }
+  }
+
+  async function promptInstallPwa() {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      if (outcome === "accepted") {
+        deferredInstallPrompt = null;
+        document.getElementById("btn-install-pwa").classList.add("hidden");
+      }
+      return;
+    }
+
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (isIos) {
+      document.getElementById("ios-install-modal").classList.remove("hidden");
+    } else {
+      showToast("Sa browser menu (⋮), pindutin ang 'Add to Home screen' o 'Install app'.", "info");
+    }
+  }
+
+  function closeIosInstallModal() {
+    document.getElementById("ios-install-modal").classList.add("hidden");
+  }
 
   /* =========================================================
      SAFE PROFILE SYNC (NEVER OVERWRITES OR WIPES ADMIN ROLE)
@@ -1810,7 +2065,7 @@
   /* =========================================================
      SUPABASE STORAGE & BANDWIDTH OPTIMIZATION HELPERS
      ========================================================= */
-  async function compressImageToWebP(file, maxDimension = 720, quality = 0.74) {
+  async function compressImageToWebP(file, maxDimension = 800, quality = 0.76) {
     return new Promise((resolve) => {
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
@@ -1967,6 +2222,8 @@
      INITIALIZATION & DEDUPLICATED SESSION HANDLING
      ========================================================= */
   async function init() {
+    setupPwaInstallAndServiceWorker();
+
     document.addEventListener("click", () => {
       document.getElementById("notif-dropdown").classList.add("hidden");
     });
@@ -2040,7 +2297,6 @@
     const sellerBtn = document.getElementById("btn-seller");
 
     if (currentUser) {
-      // Use select("*") so missing optional columns (phone/address) never cause role lookup to fail
       const { data: profile, error: profileErr } = await db
         .from("profiles")
         .select("*")
@@ -2507,7 +2763,7 @@
   }
 
   /* =========================================================
-     2-PHOTO UPLOAD (AUTO WEBP COMPRESSION + ORPHAN CLEANUP)
+     2-PHOTO UPLOAD (SQUARE WEBP COMPRESSION + ORPHAN CLEANUP)
      ========================================================= */
   function renderPhotoSlots() {
     const grid = document.getElementById("photo-slots-grid");
@@ -2527,7 +2783,7 @@
         <div class="photo-slot" onclick="triggerSingleSlotUpload(${idx})">
           <div style="font-size:1.3rem;">📷</div>
           <div class="slot-label">${slotLabels[idx]}</div>
-          <div style="font-size:0.67rem; color:var(--muted);">Click to add</div>
+          <div style="font-size:0.67rem; color:var(--muted);">Tap to add</div>
         </div>
       `;
     }).join("");
@@ -2578,7 +2834,7 @@
   function resetProductForm() {
     document.getElementById("seller-product-form").reset();
     document.getElementById("edit-prod-id").value = "";
-    document.getElementById("product-form-heading").textContent = "➕ Add Product to Your Shop (Up to 2 Photos)";
+    document.getElementById("product-form-heading").textContent = "➕ Add Product (Up to 2 Photos)";
     document.getElementById("btn-save-product").textContent = "Publish Product";
     document.getElementById("btn-cancel-edit-prod").classList.add("hidden");
     if (myShop) document.getElementById("p-category").value = myShop.category;
@@ -2636,7 +2892,7 @@
       for (let i = 0; i < MAX_PRODUCT_PHOTOS; i++) {
         const slot = photoSlots[i];
         if (slot.file) {
-          const compressed = await compressImageToWebP(slot.file, 720, 0.74);
+          const compressed = await compressImageToWebP(slot.file, 800, 0.76);
           const filePath = `shop-${myShop.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}.${compressed.ext}`;
           const { error: uploadErr } = await db.storage.from(STORAGE_BUCKET).upload(filePath, compressed.blob, {
             cacheControl: CACHE_ONE_YEAR,
@@ -2702,7 +2958,7 @@
         <tr>
           <td>
             <div style="display:flex; align-items:center; gap:0.55rem;">
-              <img src="${escapeHtml(imgs[0])}" loading="lazy" decoding="async" style="width:42px; height:42px; border-radius:8px; object-fit:cover; border:1px solid var(--border);" />
+              <img src="${escapeHtml(imgs[0])}" loading="lazy" decoding="async" style="width:42px; height:42px; aspect-ratio:1/1; border-radius:8px; object-fit:cover; border:1px solid var(--border); flex-shrink:0;" />
               <div><strong>${escapeHtml(p.name)}</strong><br/><small style="color:var(--muted);">📷 ${imgs.length} photo(s)</small></div>
             </div>
           </td>
@@ -2762,7 +3018,7 @@
 
       const idLinkHtml = s.verification_url
         ? `<a href="${escapeHtml(s.verification_url)}" target="_blank" rel="noopener">
-             <img src="${escapeHtml(s.verification_url)}" loading="lazy" decoding="async" style="width:56px; height:42px; object-fit:cover; border-radius:6px; border:1px solid var(--border);" title="Click to view full ID/Store photo" />
+             <img src="${escapeHtml(s.verification_url)}" loading="lazy" decoding="async" style="width:52px; height:52px; aspect-ratio:1/1; object-fit:cover; border-radius:6px; border:1px solid var(--border);" title="Click to view full ID/Store photo" />
            </a>`
         : `<small style="color:var(--muted);">Legacy / None</small>`;
 
@@ -3188,13 +3444,13 @@
       const catLabel = p.category || (shop ? shop.category : "General Merchandise");
 
       let stockTagClass = "";
-      let stockTagText = `${stockNum} in stock`;
+      let stockTagText = `${stockNum} left`;
       if (stockNum <= 0) {
         stockTagClass = "out";
         stockTagText = "Sold Out";
       } else if (stockNum <= 5) {
         stockTagClass = "low";
-        stockTagText = `Only ${stockNum} left`;
+        stockTagText = `${stockNum} left`;
       }
 
       return `
@@ -3215,7 +3471,7 @@
             </div>
 
             <h3 class="card-title" onclick="openProductModal(${p.id})">${escapeHtml(p.name)}</h3>
-            <p class="card-desc">${escapeHtml(p.description || "Click to inspect views and details.")}</p>
+            <p class="card-desc">${escapeHtml(p.description || "Tap to inspect views and details.")}</p>
 
             <div class="card-shop-desc-box" title="${escapeHtml(shopDescText)}">
               <strong>🏪 ${escapeHtml(shopLabel)}:</strong> ${escapeHtml(shopDescText)}
@@ -3613,7 +3869,6 @@
       return showToast("Please check the confirmation box for the delivery area and No to Cancel after Shipping policy.", "warning");
     }
 
-    // Validate shop delivery location restriction (e.g., Roxas Only)
     const approvedShops = getApprovedShops();
     for (const item of cart) {
       const shopObj = approvedShops.find(s => String(s.id) === String(item.products?.shop_id));
