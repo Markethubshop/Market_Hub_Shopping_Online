@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreshHarvest & MarketHub — Multi-Shop E-Commerce</title>
+  <title>MarketHub — Multi-Shop E-Commerce</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -583,11 +583,12 @@
     .badge.status-confirmed { background: #dbeafe; color: #1d4ed8; }
     .badge.status-shipped { background: #ffedd5; color: #c2410c; }
     .badge.status-delivered { background: #d1fae5; color: #065f46; }
+    .badge.status-cancelled { background: #fee2e2; color: #b91c1c; }
 
     /* Product Cards */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
       gap: 1.3rem;
     }
 
@@ -704,9 +705,25 @@
 
     .card-desc {
       font-size: 0.82rem;
-      color: var(--muted);
-      margin: 0 0 0.75rem;
+      color: var(--text-secondary);
+      margin: 0 0 0.55rem;
       line-height: 1.42;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Shop Info Strip Below Product Description on Card */
+    .card-shop-desc-box {
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: #f8faf9;
+      border-left: 2.5px solid #86efac;
+      padding: 0.35rem 0.55rem;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 0.7rem;
+      line-height: 1.35;
       flex: 1;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -758,6 +775,52 @@
     }
 
     .stock { font-size: 0.76rem; color: var(--muted); font-weight: 500; }
+
+    /* Admin Commission KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.95rem;
+      margin: 1rem 0 1.25rem;
+    }
+
+    .kpi-card {
+      background: #f8fbf9;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+    }
+
+    .kpi-card.highlight {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border-color: #c7d2fe;
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .kpi-value {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-card.highlight .kpi-value {
+      color: var(--indigo);
+    }
+
+    .kpi-sub {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      margin-top: 0.2rem;
+    }
 
     /* 4-Photo Upload Slots Grid */
     .photo-slots-grid {
@@ -870,6 +933,15 @@
       object-fit: cover;
     }
 
+    /* About Shop Box inside Product Detail Modal */
+    .shop-about-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 11px;
+      padding: 0.85rem 1rem;
+      margin: 0.85rem 0;
+    }
+
     /* Interactive Star Picker */
     .star-picker {
       display: inline-flex;
@@ -957,6 +1029,17 @@
       box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2);
     }
     .step-item.current { color: var(--accent); font-weight: 700; }
+
+    .cancelled-banner {
+      background: var(--danger-soft);
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 0.65rem 0.9rem;
+      border-radius: 9px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      margin: 0.85rem 0;
+    }
 
     .error-box {
       background: var(--danger-soft);
@@ -1210,7 +1293,7 @@
       <div id="shops-list-pills" class="shops-list-pills"></div>
     </div>
 
-    <!-- SELECTED SHOP BANNER (Visible when filtering by a specific shop) -->
+    <!-- SELECTED SHOP BANNER -->
     <div id="selected-shop-banner" class="selected-shop-banner hidden">
       <div>
         <div style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; margin-bottom:0.3rem;">
@@ -1260,12 +1343,12 @@
        VIEW 2: MY SHOP / SELLER CENTER
        ========================================================= -->
   <section id="view-seller" class="hidden">
-    <!-- STEP A: CREATE SHOP ONBOARDING (Shown if user has no shop yet) -->
+    <!-- STEP A: CREATE SHOP ONBOARDING -->
     <div id="create-shop-panel" class="panel hidden" style="max-width:620px; margin:1rem auto;">
       <div style="text-align:center; margin-bottom:1.25rem;">
         <div style="font-size:2.4rem; margin-bottom:0.35rem;">🏪</div>
         <h2 style="margin:0 0 0.35rem;">Open Your Own Online Shop</h2>
-        <p style="margin:0; font-size:0.88rem; color:var(--muted);">Create your storefront to list products (up to 4 photos each), receive live order alerts, and track sales.</p>
+        <p style="margin:0; font-size:0.88rem; color:var(--muted);">Create your storefront to list products (up to 4 photos each), receive live order alerts, and track sales. (10% platform commission applies per completed order.)</p>
       </div>
 
       <form onsubmit="saveShopProfile(event)" style="display:flex; flex-direction:column; gap:0.9rem;">
@@ -1286,7 +1369,7 @@
           </select>
         </div>
         <div>
-          <label class="field-label">Shop Description</label>
+          <label class="field-label">Shop Description (Makikita ng mga buyers sa ibaba ng products mo)</label>
           <textarea id="new-shop-desc" rows="2" placeholder="Tell buyers what you sell (e.g., Quality shirts, dresses, and streetwear at affordable prices)"></textarea>
         </div>
         <button type="submit" id="btn-create-shop" class="shop-cta" style="padding:0.75rem; font-size:0.95rem;">
@@ -1295,9 +1378,8 @@
       </form>
     </div>
 
-    <!-- STEP B: ACTIVE SELLER DASHBOARD (Shown once user owns a shop) -->
+    <!-- STEP B: ACTIVE SELLER DASHBOARD -->
     <div id="seller-dashboard-panel" class="hidden">
-      <!-- Shop Header & Quick Stats -->
       <div class="panel" style="background:linear-gradient(135deg, #f0fdf4, #ffffff); border-color:#bbf7d0;">
         <div class="row-between">
           <div>
@@ -1308,12 +1390,11 @@
             <p id="my-shop-desc-text" style="margin:0.3rem 0 0; font-size:0.86rem; color:var(--text-secondary);"></p>
           </div>
           <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Shop Settings</button>
+            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop & Description</button>
             <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Incoming Shop Orders (<span id="seller-pending-count">0</span>)</button>
           </div>
         </div>
 
-        <!-- Collapsible Shop Settings Form -->
         <form id="edit-shop-box" class="hidden" onsubmit="saveShopProfile(event)" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
           <div class="form-grid">
             <div>
@@ -1333,7 +1414,7 @@
               </select>
             </div>
             <div>
-              <label class="field-label">Shop Description</label>
+              <label class="field-label">Shop Description (Shown below products)</label>
               <input type="text" id="edit-shop-desc" />
             </div>
           </div>
@@ -1434,12 +1515,11 @@
     <div class="row-between" style="margin-bottom: 0.85rem;">
       <div>
         <h2 style="margin:0;">Orders & Live Tracking</h2>
-        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">Manage your personal purchases and incoming orders for your shop.</p>
+        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">Manage your personal purchases (you can cancel while Pending) and incoming orders for your shop.</p>
       </div>
       <button class="secondary sm" onclick="loadOrders()">↻ Refresh Orders</button>
     </div>
 
-    <!-- Switch between Buyer Purchases & Seller Incoming Orders -->
     <div class="auth-tabs" style="max-width:460px; margin-bottom:1.15rem;">
       <button type="button" id="orders-tab-purchases" class="auth-tab active" onclick="switchOrdersSubTab('purchases')">🛍️ My Purchases</button>
       <button type="button" id="orders-tab-sales" class="auth-tab" onclick="switchOrdersSubTab('sales')">🏪 Shop Sales (<span id="tab-sales-badge">0</span>)</button>
@@ -1449,12 +1529,70 @@
   </section>
 
   <!-- =========================================================
-       VIEW 4: PLATFORM ADMIN OVERVIEW
+       VIEW 4: PLATFORM ADMIN — 10% COMMISSION MONITOR & MODERATION
        ========================================================= -->
   <section id="view-admin" class="hidden">
+    <!-- MONTHLY 10% COMMISSION BILLING MONITOR -->
+    <div class="panel" style="border-color:#c7d2fe;">
+      <div class="row-between">
+        <div>
+          <h3 style="margin:0; color:var(--indigo);">💰 Admin 10% Commission & Monthly Billing Monitor</h3>
+          <p style="margin:0.25rem 0 0; font-size:0.84rem; color:var(--muted);">Monitor total shop sales and the 10% platform commission collectible from each shop owner every month (Cancelled orders are excluded).</p>
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+          <input type="month" id="admin-commission-month" onchange="onAdminMonthChange()" style="width:auto; font-weight:600;" />
+          <button type="button" id="btn-admin-all-months" class="secondary sm" onclick="toggleAdminAllMonths()">Show All Months</button>
+        </div>
+      </div>
+
+      <!-- KPI SUMMARY CARDS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Gross Shop Sales</div>
+          <div class="kpi-value" id="kpi-gross-sales">₱0.00</div>
+          <div class="kpi-sub" id="kpi-orders-count">0 valid shop orders</div>
+        </div>
+        <div class="kpi-card highlight">
+          <div class="kpi-label">Admin 10% Commission (Masisingil)</div>
+          <div class="kpi-value" id="kpi-total-commission">₱0.00</div>
+          <div class="kpi-sub">10% rate across seller shops</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Uncollected vs. Collected</div>
+          <div class="kpi-value" id="kpi-uncollected" style="color:var(--accent);">₱0.00</div>
+          <div class="kpi-sub">Collected: <strong id="kpi-collected" style="color:var(--primary-dark);">₱0.00</strong></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Net Seller Payouts (90%)</div>
+          <div class="kpi-value" id="kpi-seller-net">₱0.00</div>
+          <div class="kpi-sub">Share retained by shop owners</div>
+        </div>
+      </div>
+
+      <!-- PER-SHOP MONTHLY COMMISSION BREAKDOWN TABLE -->
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Shop Name</th>
+              <th>Category</th>
+              <th>Valid Orders</th>
+              <th>Gross Sales</th>
+              <th>10% Commission (Masisingil)</th>
+              <th>Seller Net (90%)</th>
+              <th>Billing Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-commission-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GLOBAL PRODUCTS MODERATION TABLE -->
     <div class="panel">
-      <h3 style="margin-top:0;">🛡️ Platform Admin — All Registered Shops & Products</h3>
-      <p style="font-size:0.85rem; color:var(--muted);">Overview of all active shops and marketplace products across categories.</p>
+      <h3 style="margin-top:0;">🛡️ All Registered Shops & Products Moderation</h3>
+      <p style="font-size:0.84rem; color:var(--muted);">Overview of all active products across all shops on MarketHub.</p>
       <div style="overflow-x: auto;">
         <table>
           <thead>
@@ -1476,7 +1614,7 @@
 </div>
 
 <!-- =========================================================
-     PRODUCT DETAIL, 4-PHOTO GALLERY & REVIEWS MODAL
+     PRODUCT DETAIL, 4-PHOTO GALLERY, SHOP DESCRIPTION & REVIEWS MODAL
      ========================================================= -->
 <div id="product-detail-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProductModal()">
   <div class="modal product-modal-wide">
@@ -1497,7 +1635,7 @@
         <div id="detail-thumbs" class="gallery-thumbs"></div>
       </div>
 
-      <!-- Right: Product Info, Stats & Add to Cart -->
+      <!-- Right: Product Info, Shop Description & Add to Cart -->
       <div style="display:flex; flex-direction:column; justify-content:space-between;">
         <div>
           <h2 id="detail-title" style="margin:0 0 0.45rem; font-size:1.35rem;">Product Title</h2>
@@ -1508,8 +1646,17 @@
             <span class="stock" id="detail-stock-text">Stock: 0</span>
           </div>
 
-          <div id="detail-price" class="price" style="font-size:1.55rem; margin-bottom:0.75rem;">₱0.00</div>
-          <p id="detail-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.55; margin:0 0 1rem;"></p>
+          <div id="detail-price" class="price" style="font-size:1.55rem; margin-bottom:0.65rem;">₱0.00</div>
+          <p id="detail-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.55; margin:0 0 0.75rem;"></p>
+
+          <!-- SHOP OWNER DESCRIPTION BELOW PRODUCT -->
+          <div class="shop-about-card">
+            <div class="row-between" style="margin-bottom:0.3rem;">
+              <strong id="detail-shop-card-name" style="font-size:0.86rem; color:var(--primary-dark);">🏪 Shop Name</strong>
+              <button type="button" id="detail-visit-shop-btn" class="secondary sm">Visit Shop →</button>
+            </div>
+            <p id="detail-shop-card-desc" style="margin:0; font-size:0.8rem; color:var(--text-secondary); line-height:1.45;"></p>
+          </div>
         </div>
 
         <div style="padding-top:0.85rem; border-top:1px solid var(--border); display:flex; gap:0.6rem; align-items:center;">
@@ -1525,7 +1672,6 @@
     <div>
       <h3 style="margin:0 0 0.75rem; font-size:1.05rem;">⭐ Customer Ratings & Reviews</h3>
 
-      <!-- Write Review Form (Shown when logged in) -->
       <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:#f8fbf9; border:1px solid var(--border); border-radius:12px; padding:0.9rem; margin-bottom:1rem;">
         <div class="row-between">
           <strong style="font-size:0.85rem;">Rate this product:</strong>
@@ -1691,23 +1837,25 @@
 
   let currentUser = null;
   let currentRole = "guest"; // 'guest' | 'user' | 'admin'
-  let myShop = null; // Current user's own shop record if created
+  let myShop = null;
   let userProfileData = { full_name: "", phone: "", address: "" };
 
   let shops = [];
   let products = [];
-  let reviewsByProduct = new Map(); // productId -> array of review objects
+  let reviewsByProduct = new Map();
   let cart = [];
   let cachedOrders = [];
   let notifications = [];
 
-  // Filters
+  // Filters & Admin Monitor State
   let selectedCategory = "all";
   let selectedShopId = "all";
   let onlyInStock = false;
-  let ordersSubTab = "purchases"; // 'purchases' | 'sales'
+  let ordersSubTab = "purchases";
+  let adminSelectedMonth = getCurrentYearMonth();
+  let adminShowAllMonths = false;
 
-  // 4-Photo Slot Editor State: each item is { url: string | null, file: File | null, preview: string | null }
+  // 4-Photo Slot Editor State
   let photoSlots = [
     { url: null, file: null, preview: null },
     { url: null, file: null, preview: null },
@@ -1735,6 +1883,19 @@
   ];
 
   const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80";
+
+  function getCurrentYearMonth() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    return `${y}-${m}`;
+  }
+
+  function getOrderYearMonth(isoString) {
+    if (!isoString) return "";
+    const d = new Date(isoString);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  }
 
   function escapeHtml(str) {
     return String(str ?? "")
@@ -1808,6 +1969,9 @@
       document.getElementById("notif-dropdown").classList.add("hidden");
     });
 
+    const monthInput = document.getElementById("admin-commission-month");
+    if (monthInput) monthInput.value = adminSelectedMonth;
+
     renderPhotoSlots();
     await Promise.all([loadShops(), loadProducts(), loadAllReviews()]);
 
@@ -1843,7 +2007,10 @@
     document.getElementById("user-pill").classList.remove("hidden");
 
     const badge = document.getElementById("role-badge");
-    if (myShop) {
+    if (currentRole === "admin" && myShop) {
+      badge.textContent = `Admin • ${myShop.name}`;
+      badge.className = "badge admin";
+    } else if (myShop) {
       badge.textContent = `Seller • ${myShop.name}`;
       badge.className = "badge seller";
     } else if (currentRole === "admin") {
@@ -1873,7 +2040,6 @@
         address: (meta.address || profile?.address || cached.address || "").trim()
       };
 
-      // Check if this user already owns a shop
       await loadMyShop();
       applyOwnerHeaderDisplay();
 
@@ -1887,13 +2053,16 @@
 
       if (currentRole === "admin") {
         document.getElementById("btn-admin").classList.remove("hidden");
-        renderAdminTable();
       } else {
         document.getElementById("btn-admin").classList.add("hidden");
       }
 
       await loadCart();
       await syncOrdersAndNotifications(true);
+      if (currentRole === "admin") {
+        renderAdminCommissionMonitor();
+        renderAdminTable();
+      }
       startOrderSync();
     } else {
       currentRole = "guest";
@@ -1930,7 +2099,12 @@
     });
     if (view === "seller") renderSellerWorkspace();
     if (view === "orders") loadOrders();
-    if (view === "admin") renderAdminTable();
+    if (view === "admin") {
+      loadOrders().then(() => {
+        renderAdminCommissionMonitor();
+        renderAdminTable();
+      });
+    }
   }
 
   /* =========================================================
@@ -1960,7 +2134,6 @@
       .maybeSingle();
 
     if (error) {
-      console.warn("loadMyShop warning:", error.message);
       myShop = null;
       return;
     }
@@ -2059,7 +2232,7 @@
       if (error) return showToast("Update failed: " + error.message, "error");
       myShop = data;
       document.getElementById("edit-shop-box").classList.add("hidden");
-      showToast("Shop details updated!", "success");
+      showToast("Shop details & description updated!", "success");
     }
 
     document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
@@ -2108,11 +2281,7 @@
     if (!file) return;
     const idx = activeSlotIndexForSingleUpload;
     if (photoSlots[idx].preview) URL.revokeObjectURL(photoSlots[idx].preview);
-    photoSlots[idx] = {
-      url: null,
-      file,
-      preview: URL.createObjectURL(file)
-    };
+    photoSlots[idx] = { url: null, file, preview: URL.createObjectURL(file) };
     renderPhotoSlots();
   }
 
@@ -2123,15 +2292,10 @@
     let fileIdx = 0;
     for (let i = 0; i < 4 && fileIdx < files.length; i++) {
       if (!photoSlots[i].url && !photoSlots[i].file) {
-        photoSlots[i] = {
-          url: null,
-          file: files[fileIdx],
-          preview: URL.createObjectURL(files[fileIdx])
-        };
+        photoSlots[i] = { url: null, file: files[fileIdx], preview: URL.createObjectURL(files[fileIdx]) };
         fileIdx++;
       }
     }
-    // If all slots were already occupied, replace starting from slot 0
     if (fileIdx === 0) {
       files.forEach((f, i) => {
         if (photoSlots[i].preview) URL.revokeObjectURL(photoSlots[i].preview);
@@ -2306,6 +2470,183 @@
     if (currentRole === "admin") renderAdminTable();
   }
 
+  /* =========================================================
+     PLATFORM ADMIN — 10% COMMISSION MONITOR & BILLING
+     ========================================================= */
+  function onAdminMonthChange() {
+    adminSelectedMonth = document.getElementById("admin-commission-month").value || getCurrentYearMonth();
+    adminShowAllMonths = false;
+    document.getElementById("btn-admin-all-months").classList.remove("active-nav");
+    renderAdminCommissionMonitor();
+  }
+
+  function toggleAdminAllMonths() {
+    adminShowAllMonths = !adminShowAllMonths;
+    document.getElementById("btn-admin-all-months").classList.toggle("active-nav", adminShowAllMonths);
+    renderAdminCommissionMonitor();
+  }
+
+  function renderAdminCommissionMonitor() {
+    if (currentRole !== "admin") return;
+
+    // Filter valid (non-cancelled) orders belonging to seller shops
+    const validShopOrders = cachedOrders.filter(o => {
+      if (!o.shop_id) return false;
+      if (o.status === "Cancelled") return false;
+      if (!adminShowAllMonths && adminSelectedMonth) {
+        return getOrderYearMonth(o.created_at) === adminSelectedMonth;
+      }
+      return true;
+    });
+
+    let totalGross = 0;
+    let totalCommission = 0;
+    let totalCollected = 0;
+    let totalUncollected = 0;
+    let totalSellerNet = 0;
+
+    // Group by shop_id
+    const perShopMap = new Map();
+    shops.forEach(s => {
+      perShopMap.set(String(s.id), {
+        shop: s,
+        orderCount: 0,
+        gross: 0,
+        commission: 0,
+        collected: 0,
+        uncollected: 0,
+        sellerNet: 0,
+        unpaidOrderIds: [],
+        allOrderIds: []
+      });
+    });
+
+    for (const o of validShopOrders) {
+      const gross = Number(o.total_amount || 0);
+      const comm = o.commission_amount != null && Number(o.commission_amount) > 0
+        ? Number(o.commission_amount)
+        : Number((gross * 0.10).toFixed(2));
+      const net = o.seller_payout != null && Number(o.seller_payout) > 0
+        ? Number(o.seller_payout)
+        : Number((gross - comm).toFixed(2));
+
+      totalGross += gross;
+      totalCommission += comm;
+      totalSellerNet += net;
+
+      if (o.commission_paid) {
+        totalCollected += comm;
+      } else {
+        totalUncollected += comm;
+      }
+
+      const key = String(o.shop_id);
+      if (!perShopMap.has(key)) {
+        perShopMap.set(key, {
+          shop: { id: o.shop_id, name: `Shop #${o.shop_id}`, category: "General" },
+          orderCount: 0,
+          gross: 0,
+          commission: 0,
+          collected: 0,
+          uncollected: 0,
+          sellerNet: 0,
+          unpaidOrderIds: [],
+          allOrderIds: []
+        });
+      }
+
+      const entry = perShopMap.get(key);
+      entry.orderCount += 1;
+      entry.gross += gross;
+      entry.commission += comm;
+      entry.sellerNet += net;
+      entry.allOrderIds.push(o.id);
+
+      if (o.commission_paid) {
+        entry.collected += comm;
+      } else {
+        entry.uncollected += comm;
+        entry.unpaidOrderIds.push(o.id);
+      }
+    }
+
+    document.getElementById("kpi-gross-sales").textContent = `₱${totalGross.toFixed(2)}`;
+    document.getElementById("kpi-orders-count").textContent = `${validShopOrders.length} valid shop order(s)`;
+    document.getElementById("kpi-total-commission").textContent = `₱${totalCommission.toFixed(2)}`;
+    document.getElementById("kpi-uncollected").textContent = `₱${totalUncollected.toFixed(2)}`;
+    document.getElementById("kpi-collected").textContent = `₱${totalCollected.toFixed(2)}`;
+    document.getElementById("kpi-seller-net").textContent = `₱${totalSellerNet.toFixed(2)}`;
+
+    const tbody = document.getElementById("admin-commission-tbody");
+    const rows = Array.from(perShopMap.values());
+
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--muted); padding:1.4rem;">No registered seller shops yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map(r => {
+      let billingBadge = `<span class="badge cat-badge">No Sales</span>`;
+      let actionHtml = `<span style="font-size:0.76rem; color:var(--muted);">—</span>`;
+
+      if (r.orderCount > 0) {
+        if (r.uncollected <= 0) {
+          billingBadge = `<span class="badge status-delivered">✓ Paid / Collected</span>`;
+          actionHtml = `<button class="secondary sm" onclick="setShopCommissionPaid(${r.shop.id}, false)">Undo</button>`;
+        } else {
+          billingBadge = `<span class="badge status-pending">Unpaid: ₱${r.uncollected.toFixed(2)}</span>`;
+          actionHtml = `<button class="success-btn sm" onclick="setShopCommissionPaid(${r.shop.id}, true)">✓ Mark Collected</button>`;
+        }
+      }
+
+      return `
+        <tr>
+          <td>
+            <strong>🏪 ${escapeHtml(r.shop.name)}</strong><br/>
+            <small style="color:var(--muted);">${escapeHtml(r.shop.description || "")}</small>
+          </td>
+          <td><span class="badge cat-badge">${escapeHtml(r.shop.category || "General")}</span></td>
+          <td>${r.orderCount}</td>
+          <td>₱${r.gross.toFixed(2)}</td>
+          <td><strong style="color:var(--indigo); font-size:0.95rem;">₱${r.commission.toFixed(2)}</strong></td>
+          <td>₱${r.sellerNet.toFixed(2)}</td>
+          <td>${billingBadge}</td>
+          <td>${actionHtml}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  async function setShopCommissionPaid(shopId, markAsPaid) {
+    const targetOrders = cachedOrders.filter(o => {
+      if (String(o.shop_id) !== String(shopId)) return false;
+      if (o.status === "Cancelled") return false;
+      if (!adminShowAllMonths && adminSelectedMonth) {
+        return getOrderYearMonth(o.created_at) === adminSelectedMonth;
+      }
+      return true;
+    });
+
+    if (!targetOrders.length) return;
+    const orderIds = targetOrders.map(o => o.id);
+
+    const { error } = await db
+      .from("orders")
+      .update({ commission_paid: markAsPaid })
+      .in("id", orderIds);
+
+    if (error) return showToast("Failed to update billing status: " + error.message, "error");
+
+    showToast(
+      markAsPaid
+        ? "Monthly 10% commission marked as Collected!"
+        : "Commission status reverted to Unpaid.",
+      "success"
+    );
+    await loadOrders();
+    renderAdminCommissionMonitor();
+  }
+
   function renderAdminTable() {
     const tbody = document.getElementById("admin-products-tbody");
     tbody.innerHTML = products.map(p => {
@@ -2397,10 +2738,7 @@
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error) {
-      console.warn("Reviews table notice:", error.message);
-      return;
-    }
+    if (error) return;
 
     reviewsByProduct.clear();
     (data || []).forEach(r => {
@@ -2416,6 +2754,7 @@
     const filtered = products.filter(p => {
       const shop = shops.find(s => String(s.id) === String(p.shop_id));
       const shopName = shop ? shop.name.toLowerCase() : "freshharvest official";
+      const shopDesc = shop ? (shop.description || "").toLowerCase() : "";
       const cat = p.category || (shop ? shop.category : "Fruits & Vegetables");
 
       const matchesQuery =
@@ -2423,6 +2762,7 @@
         p.name.toLowerCase().includes(query) ||
         (p.description || "").toLowerCase().includes(query) ||
         shopName.includes(query) ||
+        shopDesc.includes(query) ||
         cat.toLowerCase().includes(query);
 
       const matchesCat = selectedCategory === "all" || cat === selectedCategory;
@@ -2445,6 +2785,9 @@
       const rating = getProductRatingStats(p.id);
       const shop = shops.find(s => String(s.id) === String(p.shop_id));
       const shopLabel = shop ? shop.name : "FreshHarvest Official";
+      const shopDescText = shop?.description
+        ? shop.description
+        : "Verified MarketHub store offering quality items & fast shipping.";
       const catLabel = p.category || (shop ? shop.category : "Fruits & Vegetables");
 
       let stockTagClass = "";
@@ -2475,6 +2818,11 @@
             <h3 class="card-title" onclick="openProductModal(${p.id})">${escapeHtml(p.name)}</h3>
             <p class="card-desc">${escapeHtml(p.description || "Click to inspect all views, ratings, and details.")}</p>
 
+            <!-- SHOP OWNER DESCRIPTION SA IBABA NG PRODUCT -->
+            <div class="card-shop-desc-box" title="${escapeHtml(shopDescText)}">
+              <strong>🏪 ${escapeHtml(shopLabel)}:</strong> ${escapeHtml(shopDescText)}
+            </div>
+
             <div class="metrics-row">
               <span class="rating-pill">
                 <span class="star-icon">★</span>
@@ -2498,7 +2846,7 @@
   }
 
   /* =========================================================
-     PRODUCT DETAIL MODAL (4-PHOTO GALLERY + REVIEWS)
+     PRODUCT DETAIL MODAL (4-PHOTO GALLERY + SHOP DESCRIPTION + REVIEWS)
      ========================================================= */
   function openProductModal(productId) {
     const p = products.find(item => item.id === productId);
@@ -2522,7 +2870,17 @@
     document.getElementById("detail-sold-count").textContent = Number(p.sold_count || 0);
     document.getElementById("detail-stock-text").textContent = `Available: ${stockNum}`;
     document.getElementById("detail-price").textContent = `₱${Number(p.price).toFixed(2)}`;
-    document.getElementById("detail-desc").textContent = p.description || "No additional description provided.";
+    document.getElementById("detail-desc").textContent = p.description || "No additional product description provided.";
+
+    // Populate Shop Owner Description Card below the product
+    document.getElementById("detail-shop-card-name").textContent = `🏪 ${shop ? shop.name : "FreshHarvest Official"}`;
+    document.getElementById("detail-shop-card-desc").textContent = shop?.description
+      ? shop.description
+      : "Official MarketHub Seller — Verified storefront with real-time order updates.";
+    document.getElementById("detail-visit-shop-btn").onclick = () => {
+      closeProductModal();
+      if (shop) setShopFilter(shop.id);
+    };
 
     const qtyInput = document.getElementById("detail-qty");
     qtyInput.value = 1;
@@ -2537,7 +2895,6 @@
       closeProductModal();
     };
 
-    // Render 4-Photo Gallery
     document.getElementById("detail-main-img").src = imgs[0];
     document.getElementById("detail-thumbs").innerHTML = imgs.map((url, idx) => `
       <div class="gallery-thumb ${idx === 0 ? "active" : ""}" onclick="selectGalleryImage(${idx}, '${escapeHtml(url)}')">
@@ -2545,12 +2902,12 @@
       </div>
     `).join("");
 
-    // Setup Review Form
     const reviewForm = document.getElementById("review-form");
     if (currentUser) {
       reviewForm.classList.remove("hidden");
       const hasPurchased = cachedOrders.some(o =>
         o.user_id === currentUser.id &&
+        o.status !== "Cancelled" &&
         (o.order_items || []).some(item => Number(item.product_id) === Number(productId))
       );
       document.getElementById("review-eligibility-note").textContent = hasPurchased
@@ -2796,7 +3153,7 @@
 
     try {
       const combinedAddress = `${address} | Contact: ${phone}`;
-      const { data, error } = await db.rpc("checkout_cart", {
+      const { error } = await db.rpc("checkout_cart", {
         p_customer_name: name,
         p_address: combinedAddress
       });
@@ -2817,7 +3174,7 @@
   }
 
   /* =========================================================
-     ORDERS (BUYER PURCHASES VS. SELLER SHOP SALES) & NOTIFICATIONS
+     ORDERS (BUYER PURCHASES + CANCEL ORDER + SELLER SALES)
      ========================================================= */
   function switchOrdersSubTab(tab) {
     ordersSubTab = tab;
@@ -2850,6 +3207,7 @@
     updateSellerOrderCounters();
     buildNotificationsFromOrders(cachedOrders);
     renderOrdersList();
+    if (currentRole === "admin") renderAdminCommissionMonitor();
   }
 
   function updateSellerOrderCounters() {
@@ -2861,6 +3219,7 @@
   }
 
   function getStatusBadgeClass(status) {
+    if (status === "Cancelled") return "status-cancelled";
     if (status === "Order Received") return "status-received";
     if (status === "Confirmed") return "status-confirmed";
     if (status === "Shipped") return "status-shipped";
@@ -2869,6 +3228,10 @@
   }
 
   function renderOrderStepper(currentStatus) {
+    if (currentStatus === "Cancelled") {
+      return `<div class="cancelled-banner">✕ This order was cancelled while Pending. Item stock has been restored and no commission is charged.</div>`;
+    }
+
     const idx = ORDER_STAGES.findIndex(s => s.key === currentStatus);
     const activeIndex = idx === -1 ? 0 : idx;
 
@@ -2912,11 +3275,22 @@
 
     list.innerHTML = filteredOrders.map(o => {
       const canManageOrder = isIncomingSaleForCurrentUser(o) || currentRole === "admin";
+      const isBuyerOrder = ordersSubTab === "purchases" && o.user_id === currentUser?.id;
+      const canBuyerCancel = isBuyerOrder && o.status === "Pending";
+
       const shop = shops.find(s => String(s.id) === String(o.shop_id));
       const shopName = shop ? shop.name : "FreshHarvest Official";
       const placedDate = o.created_at
         ? new Date(o.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
         : "";
+
+      const grossAmt = Number(o.total_amount || 0);
+      const commAmt = o.status === "Cancelled"
+        ? 0
+        : (o.commission_amount != null && Number(o.commission_amount) > 0
+            ? Number(o.commission_amount)
+            : (o.shop_id ? Number((grossAmt * 0.10).toFixed(2)) : 0));
+      const netAmt = o.status === "Cancelled" ? 0 : Number((grossAmt - commAmt).toFixed(2));
 
       return `
         <div class="panel" id="order-card-${o.id}">
@@ -2941,7 +3315,7 @@
             ${(o.order_items || []).map(i => `
               <li style="margin-bottom:0.35rem;">
                 ${escapeHtml(i.product_name)} (${i.quantity}×) — <strong>₱${Number(i.unit_price * i.quantity).toFixed(2)}</strong>
-                ${ordersSubTab === "purchases" && i.product_id ? `
+                ${isBuyerOrder && o.status !== "Cancelled" && i.product_id ? `
                   <button class="secondary sm" style="margin-left:0.5rem;" onclick="openProductModal(${i.product_id})">⭐ Rate Item</button>
                 ` : ""}
               </li>
@@ -2949,18 +3323,33 @@
           </ul>
 
           <div class="row-between" style="margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid var(--border);">
-            <strong style="font-size:1.05rem;">Order Total: ₱${Number(o.total_amount).toFixed(2)}</strong>
+            <div>
+              <strong style="font-size:1.05rem;">Order Total: ₱${grossAmt.toFixed(2)}</strong>
+              ${ordersSubTab === "sales" && o.shop_id && o.status !== "Cancelled" ? `
+                <div style="font-size:0.77rem; color:var(--muted); margin-top:0.2rem;">
+                  Platform Fee (10%): <span style="color:var(--accent); font-weight:600;">−₱${commAmt.toFixed(2)}</span> • Your Net Earnings: <strong style="color:var(--primary-dark);">₱${netAmt.toFixed(2)}</strong>
+                </div>
+              ` : ""}
+            </div>
+
+            <!-- BUYER CANCEL ORDER BUTTON (WHILE PENDING) -->
+            ${canBuyerCancel ? `
+              <button class="danger-outline sm" onclick="cancelOrderByBuyer(${o.id})">✕ Cancel Order</button>
+            ` : ""}
+
+            <!-- SELLER ORDER MANAGEMENT CONTROLS -->
             ${canManageOrder && ordersSubTab === "sales" ? `
               <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                 ${o.status === "Pending" ? `
                   <button class="success-btn sm" onclick="updateOrderStatus(${o.id}, 'Order Received', true)">✓ Acknowledge Order</button>
                 ` : ""}
-                <select onchange="updateOrderStatus(${o.id}, this.value)" style="width:auto; padding:0.4rem 0.65rem; font-size:0.84rem;">
+                <select onchange="updateOrderStatus(${o.id}, this.value)" style="width:auto; padding:0.4rem 0.65rem; font-size:0.84rem;" ${o.status === "Cancelled" ? "disabled" : ""}>
                   <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
                   <option value="Order Received" ${o.status === "Order Received" ? "selected" : ""}>Order Received</option>
                   <option value="Confirmed" ${o.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
                   <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped (Out for Delivery)</option>
                   <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
+                  ${o.status === "Cancelled" ? `<option value="Cancelled" selected>Cancelled</option>` : ""}
                 </select>
                 <button class="danger-outline sm" onclick="deleteOrder(${o.id})">🗑️ Delete</button>
               </div>
@@ -2969,6 +3358,18 @@
         </div>
       `;
     }).join("");
+  }
+
+  async function cancelOrderByBuyer(orderId) {
+    if (!confirm(`Cancel Order #${orderId}? You can only cancel before the seller processes your order.`)) return;
+
+    const { error } = await db.rpc("cancel_order", { p_order_id: orderId });
+    if (error) return showToast("Could not cancel order: " + error.message, "error");
+
+    knownOrderSnapshots.set(orderId, "Cancelled");
+    showToast(`Order #${orderId} cancelled. Stock has been restored.`, "info");
+    await loadProducts();
+    await loadOrders();
   }
 
   async function updateOrderStatus(orderId, status, fromAck = false) {
@@ -3080,7 +3481,6 @@
       const totalFormatted = `₱${Number(o.total_amount || 0).toFixed(2)}`;
       const isSellerOrder = isIncomingSaleForCurrentUser(o);
 
-      // 1. Seller Notification: Someone bought from my shop!
       if (isSellerOrder) {
         const notifId = `seller-order-${o.id}-${o.status}`;
         if (!delSet.has(notifId)) {
@@ -3093,13 +3493,14 @@
             time: formatRelativeTime(o.created_at),
             title: o.status === "Pending"
               ? `🛍️ New Shop Order #${o.id} from ${o.customer_name}!`
-              : `Shop Order #${o.id} — ${o.status}`,
+              : o.status === "Cancelled"
+                ? `✕ Order #${o.id} Cancelled by ${o.customer_name}`
+                : `Shop Order #${o.id} — ${o.status}`,
             desc: `${itemCount} item(s) • ${totalFormatted} • Deliver to: ${o.address}`
           });
         }
       }
 
-      // 2. Buyer Notification: My purchase status update!
       if (o.user_id === currentUser?.id) {
         const notifId = `buyer-order-${o.id}-${o.status}`;
         if (!delSet.has(notifId)) {
@@ -3201,9 +3602,16 @@
           showToast(`🛍️ New Order #${o.id} in your shop from ${o.customer_name} (₱${Number(o.total_amount).toFixed(2)})!`, "warning");
           await loadProducts();
           if (myShop) renderSellerProductsTable();
-        } else if (prevStatus !== undefined && prevStatus !== o.status && o.user_id === currentUser.id) {
-          playNotificationTone();
-          showToast(`Order #${o.id} status updated to: ${o.status}`, "success");
+        } else if (prevStatus !== undefined && prevStatus !== o.status) {
+          if (isIncomingSaleForCurrentUser(o) && o.status === "Cancelled") {
+            playNotificationTone();
+            showToast(`Order #${o.id} was cancelled by ${o.customer_name}.`, "warning");
+            await loadProducts();
+            if (myShop) renderSellerProductsTable();
+          } else if (o.user_id === currentUser.id) {
+            playNotificationTone();
+            showToast(`Order #${o.id} status updated to: ${o.status}`, "success");
+          }
         }
       }
     }
@@ -3216,6 +3624,9 @@
 
     if (!document.getElementById("view-orders").classList.contains("hidden")) {
       renderOrdersList();
+    }
+    if (currentRole === "admin" && !document.getElementById("view-admin").classList.contains("hidden")) {
+      renderAdminCommissionMonitor();
     }
   }
 
