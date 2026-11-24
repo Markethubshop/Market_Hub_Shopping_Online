@@ -1730,6 +1730,38 @@
   const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=75";
 
   /* =========================================================
+     SAFE PROFILE SYNC (NEVER OVERWRITES OR WIPES ADMIN ROLE)
+     ========================================================= */
+  async function syncProfileToDatabase(userId, fields) {
+    if (!userId) return;
+    try {
+      const { data: existing } = await db
+        .from("profiles")
+        .select("id")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (existing) {
+        if (fields.full_name) {
+          await db.from("profiles").update({ full_name: fields.full_name }).eq("id", userId);
+        }
+        if (fields.phone !== undefined || fields.address !== undefined) {
+          await db.from("profiles").update({
+            ...(fields.phone !== undefined ? { phone: fields.phone } : {}),
+            ...(fields.address !== undefined ? { address: fields.address } : {})
+          }).eq("id", userId);
+        }
+      } else {
+        await db.from("profiles").insert({
+          id: userId,
+          full_name: fields.full_name || "",
+          role: fields.role || "user"
+        });
+      }
+    } catch (_) {}
+  }
+
+  /* =========================================================
      LOCAL STORAGE FALLBACK FOR SHOP DELIVERY AREA
      ========================================================= */
   function getLocalShopAreaMap() {
@@ -2008,10 +2040,21 @@
     const sellerBtn = document.getElementById("btn-seller");
 
     if (currentUser) {
-      const { data: profile } = await db.from("profiles").select("role, full_name, phone, address").eq("id", currentUser.id).single();
-      currentRole = profile?.role || "user";
+      // Use select("*") so missing optional columns (phone/address) never cause role lookup to fail
+      const { data: profile, error: profileErr } = await db
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+      if (profileErr) {
+        console.warn("Profile read notice:", profileErr.message);
+      }
 
       const meta = currentUser.user_metadata || {};
+      const resolvedRole = (profile?.role || meta.role || "user").toString().trim().toLowerCase();
+      currentRole = resolvedRole;
+
       const cached = getCachedRegistrationByEmail(currentUser.email) || {};
 
       userProfileData = {
@@ -2021,15 +2064,10 @@
       };
 
       if (!profile) {
-        try {
-          await db.from("profiles").insert({
-            id: currentUser.id,
-            full_name: userProfileData.full_name || currentUser.email.split("@")[0],
-            phone: userProfileData.phone,
-            address: userProfileData.address,
-            role: "user"
-          });
-        } catch (_) {}
+        await syncProfileToDatabase(currentUser.id, {
+          full_name: userProfileData.full_name || currentUser.email.split("@")[0],
+          role: currentRole
+        });
       }
 
       if (!shopsLoaded) await loadShops();
@@ -2352,7 +2390,6 @@
         .select()
         .single();
 
-      // Graceful fallback if delivery_area column hasn't been added in Supabase yet
       if (error && error.message.toLowerCase().includes("delivery_area")) {
         const retry = await db.from("shops").insert(baseInsert).select().single();
         data = retry.data;
@@ -3596,20 +3633,12 @@
     orderBtn.textContent = "Saving Info & Placing Order...";
 
     try {
-      // Always persist customer info & delivery address so every user has saved info after checkout
       const updatedProfile = { full_name: name, phone, address };
       userProfileData = updatedProfile;
       setCachedRegistrationByEmail(currentUser.email, updatedProfile);
       applyOwnerHeaderDisplay();
       try { await db.auth.updateUser({ data: updatedProfile }); } catch (_) {}
-      try {
-        await db.from("profiles").upsert({
-          id: currentUser.id,
-          full_name: name,
-          phone,
-          address
-        });
-      } catch (_) {}
+      await syncProfileToDatabase(currentUser.id, updatedProfile);
 
       const combinedAddress = `${address} | Contact: ${phone}`;
       const { error } = await db.rpc("checkout_cart", { p_customer_name: name, p_address: combinedAddress });
@@ -4121,7 +4150,7 @@
       if (error) return showToast(error.message, "error");
       setCachedRegistrationByEmail(email, profilePayload);
       if (data?.user?.id) {
-        try { await db.from("profiles").upsert({ id: data.user.id, full_name: fullName, phone, address }); } catch (_) {}
+        await syncProfileToDatabase(data.user.id, { ...profilePayload, role: "user" });
       }
       document.getElementById("form-register").reset();
       closeAuthModal();
@@ -4180,14 +4209,7 @@
     userProfileData = updated;
     setCachedRegistrationByEmail(currentUser.email, updated);
     applyOwnerHeaderDisplay();
-    try {
-      await db.from("profiles").upsert({
-        id: currentUser.id,
-        full_name: updated.full_name,
-        phone: updated.phone,
-        address: updated.address
-      });
-    } catch (_) {}
+    await syncProfileToDatabase(currentUser.id, updated);
     closeProfileModal();
     showToast("Profile & delivery address saved!", "success");
   }
