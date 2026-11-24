@@ -476,6 +476,7 @@
     .badge.cat-badge { background: #f1f5f9; color: #334155; text-transform: none; font-weight: 600; }
     .badge.ship-free { background: #dcfce7; color: #15803d; text-transform: none; font-weight: 700; }
     .badge.ship-paid { background: #eff6ff; color: #1d4ed8; text-transform: none; font-weight: 700; }
+    .badge.area-badge { background: #fef3c7; color: #92400e; text-transform: none; font-weight: 700; }
     .badge.status-pending { background: #fef3c7; color: #b45309; }
     .badge.status-approved, .badge.status-delivered { background: #d1fae5; color: #065f46; }
     .badge.status-received { background: #dcfce7; color: #166534; }
@@ -484,7 +485,7 @@
     .badge.status-cancelled, .badge.status-rejected, .badge.status-suspended { background: #fee2e2; color: #b91c1c; }
 
     /* Product Cards */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 1.25rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(276px, 1fr)); gap: 1.25rem; }
     .card {
       background: var(--card-solid);
       border: 1px solid var(--border);
@@ -527,6 +528,19 @@
       color: #dcfce7;
     }
     .ship-tag-overlay.free { background: rgba(21, 128, 61, 0.94); color: #fff; }
+
+    .area-tag-overlay {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: rgba(254, 243, 199, 0.95);
+      color: #92400e;
+      border: 1px solid #fcd34d;
+    }
 
     .photo-count-pill {
       position: absolute;
@@ -599,6 +613,36 @@
 
     .card-footer-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.7rem; }
     .price { font-size: 1.18rem; font-weight: 800; color: var(--primary-dark); }
+
+    .card-action-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+    }
+    .card-action-btns button {
+      padding: 0.52rem 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    /* Policy / Warning Boxes */
+    .policy-notice-box {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      border-left: 4px solid var(--accent);
+      color: #9a3412;
+      padding: 0.7rem 0.85rem;
+      border-radius: 9px;
+      font-size: 0.79rem;
+      line-height: 1.45;
+      margin-bottom: 0.8rem;
+    }
+    .policy-notice-box.strict-shipped {
+      background: #fef2f2;
+      border-color: #fecaca;
+      border-left-color: var(--danger);
+      color: #991b1b;
+      font-weight: 600;
+    }
 
     /* KPI Grid */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 0.9rem; margin: 1rem 0 1.2rem; }
@@ -814,7 +858,7 @@
       </div>
     </div>
 
-    <button id="btn-cart" class="hidden" onclick="openCart()">
+    <button id="btn-cart" class="hidden" onclick="openCart(false)">
       🛒 Cart (<span id="cart-count">0</span>)
     </button>
 
@@ -832,11 +876,11 @@
       <div class="hero-content">
         <div class="hero-kicker">✨ All-in-One Online Shop • Fashion • Gadgets • Home • Food &amp; More</div>
         <h1>Shop Everything You Love — Fast, Easy &amp; Delivered to Your Door</h1>
-        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place. Compare product photos, enjoy Free Shipping deals, and checkout in seconds.</p>
+        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place. Add to cart or Buy Now in seconds.</p>
         <div class="trust-badges">
-          <div class="trust-chip">⚡ 1-Click Easy Checkout</div>
+          <div class="trust-chip">⚡ Instant Buy Now &amp; Cart</div>
+          <div class="trust-chip">📍 Local Delivery Areas (e.g., Roxas Only)</div>
           <div class="trust-chip">🚚 Free Shipping &amp; Clear Rates</div>
-          <div class="trust-chip">📸 Clear Product Views</div>
           <div class="trust-chip">🛡️ 100% Verified Trusted Shops</div>
         </div>
       </div>
@@ -881,6 +925,7 @@
           <h2 id="banner-shop-name" style="margin:0; font-size:1.3rem;">Shop Name</h2>
           <span id="banner-shop-category" class="badge" style="background:rgba(255,255,255,0.18); color:#dcfce7;">Category</span>
           <span id="banner-shop-shipping" class="badge ship-free">🚚 Free Shipping</span>
+          <span id="banner-shop-area" class="badge area-badge">📍 Roxas Only</span>
         </div>
         <p id="banner-shop-desc" style="margin:0; font-size:0.86rem; color:#d1fae5;">Shop description</p>
       </div>
@@ -962,7 +1007,7 @@
           </div>
           <div>
             <label class="field-label">Pickup / Store Address *</label>
-            <input type="text" id="new-shop-address" placeholder="Barangay, Town/City, Province" required />
+            <input type="text" id="new-shop-address" placeholder="Barangay, Roxas, Oriental Mindoro" required />
           </div>
         </div>
 
@@ -971,20 +1016,37 @@
           <textarea id="new-shop-desc" rows="2" placeholder="Describe your shop, return policy, or delivery schedule..." required></textarea>
         </div>
 
+        <!-- SHIPPING FEE & DELIVERY LOCATION SETUP -->
         <div class="shipping-config-box">
-          <label class="field-label" style="color:var(--primary-dark);">🚚 Shop Shipping Fee Setting *</label>
+          <label class="field-label" style="color:var(--primary-dark);">🚚 Shop Shipping Fee & Allowed Delivery Location *</label>
           <div class="form-grid">
             <div>
+              <label class="field-label">Shipping Fee Option</label>
               <select id="new-shop-ship-mode" onchange="toggleNewShopShippingInput()">
                 <option value="paid">Customized Shipping Fee (Seller sets amount)</option>
                 <option value="free">Free Shipping (₱0.00 for buyers)</option>
               </select>
             </div>
             <div id="new-shop-ship-amount-wrap">
+              <label class="field-label">Shipping Fee Amount (₱)</label>
               <input type="number" id="new-shop-ship-fee" step="0.01" min="0" value="50" placeholder="Enter shipping fee (₱)" required />
             </div>
           </div>
-          <small style="display:block; margin-top:0.35rem; color:var(--text-secondary);">You can change this anytime between Free Shipping and a custom fee in your Shop Settings.</small>
+
+          <div class="form-grid" style="margin-top:0.65rem;">
+            <div>
+              <label class="field-label">Delivery Location Coverage</label>
+              <select id="new-shop-area-mode" onchange="toggleNewShopAreaInput()">
+                <option value="specific">Specific Area / Municipality Only (e.g., Roxas Only)</option>
+                <option value="all">All Areas / Province-Wide</option>
+              </select>
+            </div>
+            <div id="new-shop-area-text-wrap">
+              <label class="field-label">Allowed Delivery Area *</label>
+              <input type="text" id="new-shop-area-text" value="Roxas Only" placeholder="e.g., Roxas Only" required />
+            </div>
+          </div>
+          <small style="display:block; margin-top:0.35rem; color:var(--text-secondary);">Buyers outside your set delivery location (e.g., outside Roxas) will be blocked from checking out.</small>
         </div>
 
         <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:11px; padding:0.85rem 1rem;">
@@ -1047,11 +1109,12 @@
               <span class="badge status-approved">✓ Verified Shop</span>
               <span id="my-shop-cat-badge" class="badge seller">Category</span>
               <span id="my-shop-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
+              <span id="my-shop-area-badge" class="badge area-badge">📍 Roxas Only</span>
             </div>
             <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.86rem; color:var(--text-secondary);"></p>
           </div>
           <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop & Shipping Fee</button>
+            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop, Shipping & Area</button>
             <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Incoming Orders (<span id="seller-pending-count">0</span>)</button>
           </div>
         </div>
@@ -1098,8 +1161,22 @@
             </div>
           </div>
 
+          <div class="form-grid" style="margin-top:0.75rem;">
+            <div>
+              <label class="field-label">Delivery Location Coverage</label>
+              <select id="edit-shop-area-mode" onchange="toggleEditShopAreaInput()">
+                <option value="specific">Specific Area Only (e.g., Roxas Only)</option>
+                <option value="all">All Areas / Province-Wide</option>
+              </select>
+            </div>
+            <div id="edit-shop-area-text-wrap">
+              <label class="field-label">Allowed Delivery Location</label>
+              <input type="text" id="edit-shop-area-text" placeholder="e.g., Roxas Only" />
+            </div>
+          </div>
+
           <div style="margin-top:0.8rem;">
-            <button type="submit" class="sm">Save Shop & Shipping Settings</button>
+            <button type="submit" class="sm">Save Shop, Shipping & Delivery Area</button>
           </div>
         </form>
       </div>
@@ -1191,7 +1268,7 @@
     <div class="row-between" style="margin-bottom: 0.85rem;">
       <div>
         <h2 style="margin:0;">Orders & Live Tracking</h2>
-        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">Cancel your own order while Pending, or manage incoming orders for your shop.</p>
+        <p style="margin:0.2rem 0 0; font-size:0.85rem; color:var(--muted);">⚠️ Policy: Cancellation is allowed only while <strong>Pending</strong>. Strictly <strong>No to Cancel after Shipping</strong>.</p>
       </div>
       <button class="secondary sm" onclick="loadOrders()">↻ Refresh Orders</button>
     </div>
@@ -1221,7 +1298,7 @@
             <tr>
               <th>Shop & Description</th>
               <th>Contact & Pickup Address</th>
-              <th>Shipping Setup</th>
+              <th>Shipping & Delivery Area</th>
               <th>ID / Store Proof</th>
               <th>Status</th>
               <th>Admin Action</th>
@@ -1316,6 +1393,7 @@
         <span id="detail-shop-badge" class="shop-tag-btn">🏪 Shop Name</span>
         <span id="detail-cat-badge" class="badge cat-badge">Category</span>
         <span id="detail-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
+        <span id="detail-area-badge" class="badge area-badge">📍 Roxas Only</span>
       </div>
       <button class="secondary sm" onclick="closeProductModal()">✕</button>
     </div>
@@ -1346,12 +1424,18 @@
             </div>
             <p id="detail-shop-card-desc" style="margin:0 0 0.35rem; font-size:0.8rem; color:var(--text-secondary); line-height:1.45;"></p>
             <div id="detail-shop-ship-note" style="font-size:0.76rem; font-weight:700; color:var(--primary-dark);"></div>
+            <div id="detail-shop-area-note" style="font-size:0.76rem; font-weight:700; color:#92400e; margin-top:0.2rem;"></div>
+          </div>
+
+          <div class="policy-notice-box" style="margin-bottom:0.65rem; padding:0.55rem 0.75rem;">
+            ⚠️ <strong>Strict Policy:</strong> <strong>NO TO CANCEL</strong> once order is already Shipped / Out for Delivery.
           </div>
         </div>
 
-        <div style="padding-top:0.8rem; border-top:1px solid var(--border); display:flex; gap:0.6rem; align-items:center;">
-          <input type="number" id="detail-qty" value="1" min="1" style="width:80px; text-align:center; font-weight:700;" />
-          <button id="detail-add-btn" class="success-btn" style="flex:1; padding:0.7rem;">+ Add to Cart</button>
+        <div style="padding-top:0.8rem; border-top:1px solid var(--border); display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+          <input type="number" id="detail-qty" value="1" min="1" style="width:74px; text-align:center; font-weight:700;" />
+          <button id="detail-add-btn" class="secondary" style="flex:1; padding:0.7rem;">+ Add to Cart</button>
+          <button id="detail-buy-btn" class="shop-cta" style="flex:1; padding:0.7rem;">⚡ Buy Now</button>
         </div>
       </div>
     </div>
@@ -1447,8 +1531,8 @@
         <input type="tel" id="reg-phone" placeholder="e.g., 0917 123 4567" required />
       </div>
       <div>
-        <label class="field-label">Complete Delivery Address *</label>
-        <textarea id="reg-address" rows="2" placeholder="House/Street, Barangay, Town/City, Province" required></textarea>
+        <label class="field-label">Complete Delivery Address (Include Barangay & Municipality, e.g., Roxas) *</label>
+        <textarea id="reg-address" rows="2" placeholder="House/Street, Barangay, Roxas, Oriental Mindoro" required></textarea>
       </div>
       <div class="form-grid" style="gap:0.75rem;">
         <div>
@@ -1493,21 +1577,21 @@
 <div id="profile-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">👤 Account & Delivery Profile</h3>
+      <h3 style="margin:0;">👤 Account & Saved Delivery Profile</h3>
       <button class="secondary sm" onclick="closeProfileModal()">✕</button>
     </div>
     <form onsubmit="saveUserProfile(event)" style="display:flex; flex-direction:column; gap:0.8rem; margin-top:0.85rem;">
       <div>
-        <label class="field-label">Complete Name</label>
+        <label class="field-label">Complete Name *</label>
         <input type="text" id="prof-name" required />
       </div>
       <div>
-        <label class="field-label">Contact Number</label>
+        <label class="field-label">Contact Number *</label>
         <input type="tel" id="prof-phone" required />
       </div>
       <div>
-        <label class="field-label">Complete Delivery Address</label>
-        <textarea id="prof-address" rows="2" required></textarea>
+        <label class="field-label">Complete Delivery Address *</label>
+        <textarea id="prof-address" rows="2" placeholder="House/Street, Barangay, Roxas, Oriental Mindoro" required></textarea>
       </div>
       <div>
         <label class="field-label">Account Email</label>
@@ -1518,49 +1602,68 @@
   </div>
 </div>
 
-<!-- CART & MULTI-SHOP CHECKOUT MODAL -->
+<!-- CART & EXPRESS BUY NOW CHECKOUT MODAL -->
 <div id="cart-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeCart()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">🛒 Shopping Cart</h3>
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <h3 style="margin:0;" id="cart-modal-title">🛒 Shopping Cart</h3>
+        <span id="express-buy-badge" class="badge seller hidden">⚡ Buy Now Checkout</span>
+      </div>
       <button class="secondary sm" onclick="closeCart()">✕</button>
     </div>
     <div id="cart-items-container" style="margin: 1rem 0;"></div>
     <div id="checkout-section" class="hidden">
       <hr style="border:0; border-top:1px solid var(--border); margin:1rem 0;" />
       <div class="row-between" style="margin-bottom:0.55rem;">
-        <h4 style="margin:0;">Delivery Information</h4>
+        <h4 style="margin:0;">Customer Info & Delivery Address *</h4>
         <button type="button" id="btn-toggle-checkout-edit" class="secondary sm" onclick="toggleCheckoutEdit()">Edit Details</button>
+      </div>
+
+      <div id="checkout-missing-alert" class="error-box hidden" style="margin-bottom:0.7rem; padding:0.65rem 0.85rem;">
+        ⚠️ <strong>Required:</strong> Please fill up your Complete Name, Contact Number, and Delivery Address before placing an order. Your details will be saved automatically after checkout.
       </div>
 
       <div id="checkout-autofill-card" class="delivery-summary-card">
         <div class="row-between">
-          <strong style="color:var(--primary-dark);">✓ Ready for Checkout</strong>
+          <strong style="color:var(--primary-dark);">✓ Saved Customer Info & Address</strong>
           <span class="badge">Auto-Filled</span>
         </div>
         <div style="margin-top:0.4rem; font-size:0.83rem; color:var(--text-secondary);">
           <div><strong>Recipient:</strong> <span id="display-checkout-name">—</span></div>
           <div><strong>Contact No.:</strong> <span id="display-checkout-phone">—</span></div>
-          <div><strong>Address:</strong> <span id="display-checkout-address">—</span></div>
+          <div><strong>Delivery Address:</strong> <span id="display-checkout-address">—</span></div>
         </div>
       </div>
 
       <div id="checkout-edit-fields" class="hidden" style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:0.8rem;">
         <div>
-          <label class="field-label">Recipient Full Name</label>
-          <input type="text" id="checkout-name" oninput="syncCheckoutPreview()" />
+          <label class="field-label">Recipient Full Name *</label>
+          <input type="text" id="checkout-name" placeholder="e.g., Juan Dela Cruz" oninput="syncCheckoutPreview()" />
         </div>
         <div>
-          <label class="field-label">Contact Number</label>
-          <input type="tel" id="checkout-phone" oninput="syncCheckoutPreview()" />
+          <label class="field-label">Contact Number *</label>
+          <input type="tel" id="checkout-phone" placeholder="e.g., 0917 123 4567" oninput="syncCheckoutPreview()" />
         </div>
         <div>
-          <label class="field-label">Complete Delivery Address</label>
-          <textarea id="checkout-address" rows="2" oninput="syncCheckoutPreview()"></textarea>
+          <label class="field-label">Complete Delivery Address (Barangay, Municipality, Province) *</label>
+          <textarea id="checkout-address" rows="2" placeholder="e.g., Brgy. Bagumbayan, Roxas, Oriental Mindoro" oninput="syncCheckoutPreview()"></textarea>
         </div>
       </div>
 
-      <button id="btn-place-order" onclick="checkout()" class="success-btn" style="width:100%; padding:0.72rem; font-size:0.95rem;">
+      <!-- STRICT NO TO CANCEL AFTER SHIPPING NOTICE -->
+      <div class="policy-notice-box">
+        ⚠️ <strong>IMPORTANT ORDER POLICY — NO TO CANCEL AFTER SHIPPING:</strong><br/>
+        • Please double-check your delivery location (e.g., <strong>Roxas Only</strong>) and contact number.<br/>
+        • Cancellation is allowed <strong>only while Pending</strong>. Once your order is <strong>Shipped / Out for Delivery</strong>, <strong>NO CANCELLATION</strong> is strictly enforced.
+      </div>
+
+      <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.81rem; color:var(--text-secondary); cursor:pointer; margin-bottom:0.85rem;">
+        <input type="checkbox" id="checkout-policy-agree" checked style="width:auto; margin-top:2px;" />
+        <span>I confirm my delivery address is within the seller's delivery area and I agree to the <strong>No to Cancel after Shipping</strong> policy.</span>
+      </label>
+
+      <button id="btn-place-order" onclick="checkout()" class="success-btn" style="width:100%; padding:0.75rem; font-size:0.95rem;">
         Place Order Now
       </button>
     </div>
@@ -1575,9 +1678,9 @@
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const STORAGE_BUCKET = "product-images";
-  const CACHE_ONE_YEAR = "31536000"; // 1-year browser cache to cut repeat Supabase Egress to 0
-  const MAX_PRODUCT_PHOTOS = 2;      // Max 2 photos per product
-  const PRODUCTS_PAGE_SIZE = 24;     // Lazy pagination to avoid loading 150 images at once
+  const CACHE_ONE_YEAR = "31536000";
+  const MAX_PRODUCT_PHOTOS = 2;
+  const PRODUCTS_PAGE_SIZE = 24;
 
   let currentUser = null;
   let currentRole = "guest";
@@ -1625,6 +1728,52 @@
   ];
 
   const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=75";
+
+  /* =========================================================
+     LOCAL STORAGE FALLBACK FOR SHOP DELIVERY AREA
+     ========================================================= */
+  function getLocalShopAreaMap() {
+    try { return JSON.parse(localStorage.getItem("markethub_shop_delivery_areas") || "{}"); }
+    catch { return {}; }
+  }
+
+  function saveLocalShopArea(shopId, areaText) {
+    if (!shopId) return;
+    try {
+      const map = getLocalShopAreaMap();
+      map[String(shopId)] = areaText;
+      localStorage.setItem("markethub_shop_delivery_areas", JSON.stringify(map));
+    } catch (_) {}
+  }
+
+  function getShopDeliveryArea(shop) {
+    if (!shop) return { isRestricted: false, label: "All Areas", raw: "All Areas" };
+    const localMap = getLocalShopAreaMap();
+    const raw = (shop.delivery_area || localMap[String(shop.id)] || "All Areas").trim();
+    const lower = raw.toLowerCase();
+    const isRestricted = Boolean(raw) && lower !== "all" && lower !== "all areas" && lower !== "province-wide";
+    return {
+      isRestricted,
+      label: isRestricted ? `📍 ${raw}` : "📍 All Areas",
+      raw: isRestricted ? raw : "All Areas"
+    };
+  }
+
+  function doesAddressMatchDeliveryArea(address, areaRaw) {
+    if (!areaRaw) return true;
+    const lowerArea = areaRaw.toLowerCase().trim();
+    if (lowerArea === "all" || lowerArea === "all areas" || lowerArea === "province-wide") return true;
+
+    const cleanedKeywords = lowerArea
+      .replace(/\b(only|area|areas|delivery|municipality|town|city|brgy|barangay)\b/g, " ")
+      .split(/[,/|-]+|\s+/)
+      .map(w => w.trim())
+      .filter(w => w.length >= 3);
+
+    if (!cleanedKeywords.length) return true;
+    const lowerAddr = (address || "").toLowerCase();
+    return cleanedKeywords.some(kw => lowerAddr.includes(kw));
+  }
 
   /* =========================================================
      SUPABASE STORAGE & BANDWIDTH OPTIMIZATION HELPERS
@@ -1971,12 +2120,12 @@
   }
 
   /* =========================================================
-     SHOPS, ANTI-TROLL VERIFICATION & CUSTOM SHIPPING FEE
+     SHOPS, DELIVERY AREA (E.G. ROXAS ONLY) & SHIPPING FEE
      ========================================================= */
   async function loadShops() {
     const { data, error } = await db
       .from("shops")
-      .select("id, owner_id, name, category, contact_phone, shop_address, description, free_shipping, shipping_fee, verification_url, status, admin_note")
+      .select("*")
       .order("id", { ascending: false });
     if (error) {
       shops = [];
@@ -2014,10 +2163,11 @@
 
     const shopBtns = approvedShops.map(s => {
       const ship = getShopShippingInfo(s);
+      const area = getShopDeliveryArea(s);
       return `
         <button class="shop-chip ${String(selectedShopId) === String(s.id) ? "active" : ""}" onclick="setShopFilter(${s.id})">
           🏪 ${escapeHtml(s.name)}
-          <span class="cat-mini">${ship.isFree ? "Free Ship" : `₱${ship.fee.toFixed(0)} Ship`}</span>
+          <span class="cat-mini">${ship.isFree ? "Free Ship" : `₱${ship.fee.toFixed(0)}`} • ${escapeHtml(area.raw)}</span>
         </button>
       `;
     }).join("");
@@ -2033,10 +2183,24 @@
     input.required = mode === "paid";
   }
 
+  function toggleNewShopAreaInput() {
+    const mode = document.getElementById("new-shop-area-mode").value;
+    const wrap = document.getElementById("new-shop-area-text-wrap");
+    const input = document.getElementById("new-shop-area-text");
+    wrap.classList.toggle("hidden", mode === "all");
+    input.required = mode === "specific";
+  }
+
   function toggleEditShopShippingInput() {
     const mode = document.getElementById("edit-shop-ship-mode").value;
     const wrap = document.getElementById("edit-shop-ship-amount-wrap");
     wrap.classList.toggle("hidden", mode === "free");
+  }
+
+  function toggleEditShopAreaInput() {
+    const mode = document.getElementById("edit-shop-area-mode").value;
+    const wrap = document.getElementById("edit-shop-area-text-wrap");
+    wrap.classList.toggle("hidden", mode === "all");
   }
 
   function renderSellerWorkspace() {
@@ -2098,6 +2262,7 @@
     dashPanel.classList.remove("hidden");
 
     const ship = getShopShippingInfo(myShop);
+    const area = getShopDeliveryArea(myShop);
     document.getElementById("my-shop-title").textContent = `🏪 ${myShop.name}`;
     document.getElementById("my-shop-cat-badge").textContent = myShop.category;
 
@@ -2105,6 +2270,7 @@
     shipBadge.textContent = ship.label;
     shipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
 
+    document.getElementById("my-shop-area-badge").textContent = area.label;
     document.getElementById("my-shop-desc-text").textContent = myShop.description || "";
 
     document.getElementById("edit-shop-name").value = myShop.name;
@@ -2114,6 +2280,10 @@
     document.getElementById("edit-shop-ship-mode").value = ship.isFree ? "free" : "paid";
     document.getElementById("edit-shop-ship-fee").value = ship.isFree ? 0 : ship.fee;
     toggleEditShopShippingInput();
+
+    document.getElementById("edit-shop-area-mode").value = area.isRestricted ? "specific" : "all";
+    document.getElementById("edit-shop-area-text").value = area.isRestricted ? area.raw : "Roxas Only";
+    toggleEditShopAreaInput();
 
     if (!document.getElementById("edit-prod-id").value) {
       document.getElementById("p-category").value = myShop.category;
@@ -2150,6 +2320,11 @@
     const isFree = shipMode === "free";
     const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("new-shop-ship-fee").value) || 0);
 
+    const areaMode = document.getElementById("new-shop-area-mode").value;
+    const deliveryArea = areaMode === "specific"
+      ? (document.getElementById("new-shop-area-text").value.trim() || "Roxas Only")
+      : "All Areas";
+
     const btn = document.getElementById("btn-create-shop");
     btn.disabled = true;
     btn.textContent = "Compressing & Submitting...";
@@ -2158,26 +2333,36 @@
       const verificationUrl = await uploadVerificationImage(idFile);
       const initialStatus = currentRole === "admin" ? "approved" : "pending";
 
-      const { data, error } = await db
+      const baseInsert = {
+        owner_id: currentUser.id,
+        name: document.getElementById("new-shop-name").value.trim(),
+        category: document.getElementById("new-shop-category").value,
+        contact_phone: document.getElementById("new-shop-phone").value.trim(),
+        shop_address: document.getElementById("new-shop-address").value.trim(),
+        description: document.getElementById("new-shop-desc").value.trim(),
+        free_shipping: isFree,
+        shipping_fee: shipFee,
+        verification_url: verificationUrl,
+        status: initialStatus
+      };
+
+      let { data, error } = await db
         .from("shops")
-        .insert({
-          owner_id: currentUser.id,
-          name: document.getElementById("new-shop-name").value.trim(),
-          category: document.getElementById("new-shop-category").value,
-          contact_phone: document.getElementById("new-shop-phone").value.trim(),
-          shop_address: document.getElementById("new-shop-address").value.trim(),
-          description: document.getElementById("new-shop-desc").value.trim(),
-          free_shipping: isFree,
-          shipping_fee: shipFee,
-          verification_url: verificationUrl,
-          status: initialStatus
-        })
+        .insert({ ...baseInsert, delivery_area: deliveryArea })
         .select()
         .single();
 
+      // Graceful fallback if delivery_area column hasn't been added in Supabase yet
+      if (error && error.message.toLowerCase().includes("delivery_area")) {
+        const retry = await db.from("shops").insert(baseInsert).select().single();
+        data = retry.data;
+        error = retry.error;
+      }
+
       if (error) return showToast("Application failed: " + error.message, "error");
 
-      myShop = data;
+      saveLocalShopArea(data.id, deliveryArea);
+      myShop = { ...data, delivery_area: deliveryArea };
       document.getElementById("btn-header-apply").classList.add("hidden");
       const sellerBtn = document.getElementById("btn-seller");
       sellerBtn.classList.remove("hidden");
@@ -2244,29 +2429,44 @@
     const isFree = shipMode === "free";
     const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("edit-shop-ship-fee").value) || 0);
 
-    const { data, error } = await db
+    const areaMode = document.getElementById("edit-shop-area-mode").value;
+    const deliveryArea = areaMode === "specific"
+      ? (document.getElementById("edit-shop-area-text").value.trim() || "Roxas Only")
+      : "All Areas";
+
+    const baseUpdate = {
+      name: document.getElementById("edit-shop-name").value.trim(),
+      category: document.getElementById("edit-shop-category").value,
+      contact_phone: document.getElementById("edit-shop-phone").value.trim(),
+      description: document.getElementById("edit-shop-desc").value.trim(),
+      free_shipping: isFree,
+      shipping_fee: shipFee
+    };
+
+    let { data, error } = await db
       .from("shops")
-      .update({
-        name: document.getElementById("edit-shop-name").value.trim(),
-        category: document.getElementById("edit-shop-category").value,
-        contact_phone: document.getElementById("edit-shop-phone").value.trim(),
-        description: document.getElementById("edit-shop-desc").value.trim(),
-        free_shipping: isFree,
-        shipping_fee: shipFee
-      })
+      .update({ ...baseUpdate, delivery_area: deliveryArea })
       .eq("id", myShop.id)
       .select()
       .single();
 
+    if (error && error.message.toLowerCase().includes("delivery_area")) {
+      const retry = await db.from("shops").update(baseUpdate).eq("id", myShop.id).select().single();
+      data = retry.data;
+      error = retry.error;
+    }
+
     if (error) return showToast("Update failed: " + error.message, "error");
-    myShop = data;
+
+    saveLocalShopArea(myShop.id, deliveryArea);
+    myShop = { ...data, delivery_area: deliveryArea };
     document.getElementById("edit-shop-box").classList.add("hidden");
     document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
     applyOwnerHeaderDisplay();
     await loadShops();
     renderSellerWorkspace();
     renderProducts();
-    showToast("Shop description & shipping fee updated!", "success");
+    showToast(`Shop settings updated (${deliveryArea})!`, "success");
   }
 
   /* =========================================================
@@ -2429,7 +2629,6 @@
         const { error } = await db.from("products").update(payload).eq("id", editId);
         if (error) return showToast("Update error: " + error.message, "error");
 
-        // Delete any old replaced/removed images from Supabase Storage so space isn't wasted
         const replacedUrls = originalEditPhotoUrls.filter(oldUrl => !uploadedUrls.includes(oldUrl));
         if (replacedUrls.length) await deleteStorageImagesByUrls(replacedUrls);
 
@@ -2519,6 +2718,7 @@
     tbody.innerHTML = shops.map(s => {
       const st = s.status || "pending";
       const ship = getShopShippingInfo(s);
+      const area = getShopDeliveryArea(s);
       const badgeClass =
         st === "approved" ? "status-approved" :
         st === "pending" ? "status-pending" : "status-suspended";
@@ -2556,7 +2756,10 @@
             <div style="font-size:0.8rem;"><strong>📞</strong> ${escapeHtml(s.contact_phone || "—")}</div>
             <div style="font-size:0.77rem; color:var(--muted);">📍 ${escapeHtml(s.shop_address || "—")}</div>
           </td>
-          <td><span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span></td>
+          <td>
+            <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span><br/>
+            <span class="badge area-badge" style="margin-top:0.25rem; display:inline-block;">${escapeHtml(area.label)}</span>
+          </td>
           <td>${idLinkHtml}</td>
           <td><span class="badge ${badgeClass}">${escapeHtml(st)}</span></td>
           <td>
@@ -2842,11 +3045,13 @@
         const shopProds = products.filter(p => String(p.shop_id) === String(shop.id));
         const totalSold = shopProds.reduce((sum, p) => sum + Number(p.sold_count || 0), 0);
         const ship = getShopShippingInfo(shop);
+        const area = getShopDeliveryArea(shop);
         document.getElementById("banner-shop-name").textContent = `🏪 ${shop.name}`;
         document.getElementById("banner-shop-category").textContent = shop.category;
         const shipBadge = document.getElementById("banner-shop-shipping");
         shipBadge.textContent = ship.label;
         shipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
+        document.getElementById("banner-shop-area").textContent = area.label;
         document.getElementById("banner-shop-desc").textContent = shop.description || "Verified MarketHub Seller Storefront";
         document.getElementById("banner-shop-products").textContent = shopProds.length;
         document.getElementById("banner-shop-sold").textContent = totalSold;
@@ -2896,6 +3101,7 @@
       const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
       const shopName = shop ? shop.name.toLowerCase() : "markethub official";
       const shopDesc = shop ? (shop.description || "").toLowerCase() : "";
+      const areaText = getShopDeliveryArea(shop).raw.toLowerCase();
       const cat = p.category || (shop ? shop.category : "General Merchandise");
 
       const matchesQuery =
@@ -2904,6 +3110,7 @@
         (p.description || "").toLowerCase().includes(query) ||
         shopName.includes(query) ||
         shopDesc.includes(query) ||
+        areaText.includes(query) ||
         cat.toLowerCase().includes(query);
 
       const matchesCat = selectedCategory === "all" || cat === selectedCategory;
@@ -2939,6 +3146,7 @@
       const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
       const shopLabel = shop ? shop.name : "MarketHub Official";
       const ship = getShopShippingInfo(shop);
+      const area = getShopDeliveryArea(shop);
       const shopDescText = shop?.description || "Admin-verified MarketHub storefront.";
       const catLabel = p.category || (shop ? shop.category : "General Merchandise");
 
@@ -2958,7 +3166,8 @@
             <img src="${escapeHtml(imgs[0])}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async" />
             <span class="stock-tag ${stockTagClass}">${stockTagText}</span>
             <span class="ship-tag-overlay ${ship.isFree ? "free" : ""}">${ship.isFree ? "Free Ship" : `Ship ₱${ship.fee.toFixed(0)}`}</span>
-            ${imgs.length > 1 ? `<span class="photo-count-pill">📷 ${imgs.length} views</span>` : ""}
+            <span class="area-tag-overlay">${escapeHtml(area.label)}</span>
+            ${imgs.length > 1 ? `<span class="photo-count-pill">📷 ${imgs.length}</span>` : ""}
           </div>
           <div class="card-body">
             <div class="shop-link-row">
@@ -2969,7 +3178,7 @@
             </div>
 
             <h3 class="card-title" onclick="openProductModal(${p.id})">${escapeHtml(p.name)}</h3>
-            <p class="card-desc">${escapeHtml(p.description || "Click to inspect all views and details.")}</p>
+            <p class="card-desc">${escapeHtml(p.description || "Click to inspect views and details.")}</p>
 
             <div class="card-shop-desc-box" title="${escapeHtml(shopDescText)}">
               <strong>🏪 ${escapeHtml(shopLabel)}:</strong> ${escapeHtml(shopDescText)}
@@ -2982,12 +3191,17 @@
 
             <div class="card-footer-meta">
               <div class="price">₱${Number(p.price).toFixed(2)}</div>
-              <button class="secondary sm" onclick="openProductModal(${p.id})">View Details</button>
+              <button class="secondary sm" onclick="openProductModal(${p.id})">Details</button>
             </div>
 
-            <button onclick="addToCart(${p.id}, 1)" ${stockNum <= 0 ? "disabled" : ""} style="width:100%;">
-              ${stockNum <= 0 ? "Out of Stock" : "+ Add to Cart"}
-            </button>
+            <div class="card-action-btns">
+              <button class="secondary" onclick="addToCart(${p.id}, 1)" ${stockNum <= 0 ? "disabled" : ""}>
+                ${stockNum <= 0 ? "Sold Out" : "+ Add to Cart"}
+              </button>
+              <button class="shop-cta" onclick="buyNow(${p.id}, 1)" ${stockNum <= 0 ? "disabled" : ""}>
+                ${stockNum <= 0 ? "Unavailable" : "⚡ Buy Now"}
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -3005,6 +3219,7 @@
     const imgs = getProductImages(p);
     const shop = getApprovedShops().find(s => String(s.id) === String(p.shop_id));
     const ship = getShopShippingInfo(shop);
+    const area = getShopDeliveryArea(shop);
     const rating = getProductRatingStats(p.id);
     const stockNum = Number(p.stock || 0);
 
@@ -3015,6 +3230,8 @@
     const detailShipBadge = document.getElementById("detail-ship-badge");
     detailShipBadge.textContent = ship.label;
     detailShipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
+
+    document.getElementById("detail-area-badge").textContent = area.label;
 
     document.getElementById("detail-title").textContent = p.name;
     document.getElementById("detail-rating-avg").textContent = rating.count > 0 ? rating.avg : "0.0";
@@ -3029,6 +3246,9 @@
     document.getElementById("detail-shop-ship-note").textContent = ship.isFree
       ? "✓ This shop offers FREE SHIPPING on orders."
       : `Delivery Rate: ₱${ship.fee.toFixed(2)} flat shipping fee per shop order.`;
+    document.getElementById("detail-shop-area-note").textContent = area.isRestricted
+      ? `📍 Delivery Coverage: ${area.raw} (Orders outside this area are not accepted)`
+      : "📍 Delivery Coverage: All Areas";
     document.getElementById("detail-visit-shop-btn").onclick = () => { closeProductModal(); if (shop) setShopFilter(shop.id); };
 
     const qtyInput = document.getElementById("detail-qty");
@@ -3036,12 +3256,22 @@
     qtyInput.max = Math.max(1, stockNum);
 
     const addBtn = document.getElementById("detail-add-btn");
+    const buyBtn = document.getElementById("detail-buy-btn");
     addBtn.disabled = stockNum <= 0;
+    buyBtn.disabled = stockNum <= 0;
     addBtn.textContent = stockNum <= 0 ? "Sold Out" : "+ Add to Cart";
+    buyBtn.textContent = stockNum <= 0 ? "Unavailable" : "⚡ Buy Now";
+
     addBtn.onclick = () => {
       const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
       addToCart(p.id, qty);
       closeProductModal();
+    };
+
+    buyBtn.onclick = () => {
+      const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+      closeProductModal();
+      buyNow(p.id, qty);
     };
 
     document.getElementById("detail-main-img").src = imgs[0];
@@ -3127,7 +3357,7 @@
   }
 
   /* =========================================================
-     CART & CHECKOUT
+     CART, BUY NOW & CHECKOUT (WITH DELIVERY AREA & PROFILE SAVE)
      ========================================================= */
   async function loadCart() {
     if (!currentUser) return;
@@ -3145,28 +3375,60 @@
     document.getElementById("cart-count").textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
   }
 
-  async function addToCart(productId, addQty = 1) {
+  async function addToCart(productId, addQty = 1, silent = false) {
     if (!currentUser) {
       openAuthModal("signin");
-      return;
+      showToast("Please sign in first to add items or buy.", "info");
+      return false;
     }
     const prod = products.find(p => p.id === productId);
     if (prod && myShop && String(prod.shop_id) === String(myShop.id)) {
-      return showToast("You cannot buy your own shop's product.", "warning");
+      showToast("You cannot buy your own shop's product.", "warning");
+      return false;
     }
     const existing = cart.find(item => item.product_id === productId);
     const nextQty = (existing ? existing.quantity : 0) + addQty;
-    if (prod && nextQty > prod.stock) return showToast(`Only ${prod.stock} available.`, "warning");
+    if (prod && nextQty > prod.stock) {
+      showToast(`Only ${prod.stock} available in stock.`, "warning");
+      return false;
+    }
 
     if (existing) {
       const { error } = await db.from("cart_items").update({ quantity: nextQty }).eq("id", existing.id);
-      if (error) return showToast(error.message, "error");
+      if (error) { showToast(error.message, "error"); return false; }
     } else {
       const { error } = await db.from("cart_items").insert({ user_id: currentUser.id, product_id: productId, quantity: addQty });
-      if (error) return showToast(error.message, "error");
+      if (error) { showToast(error.message, "error"); return false; }
     }
     await loadCart();
-    showToast(`Added "${prod ? prod.name : "Item"}" to cart!`, "success");
+    if (!silent) showToast(`Added "${prod ? prod.name : "Item"}" to cart!`, "success");
+    return true;
+  }
+
+  async function buyNow(productId, qty = 1) {
+    if (!currentUser) {
+      openAuthModal("signin");
+      showToast("Please sign in first to Buy Now.", "info");
+      return;
+    }
+    const prod = products.find(p => p.id === productId);
+    if (!prod) return;
+    if (myShop && String(prod.shop_id) === String(myShop.id)) {
+      return showToast("You cannot buy your own shop's product.", "warning");
+    }
+    if (Number(prod.stock) <= 0) {
+      return showToast("Sorry, this product is sold out.", "warning");
+    }
+
+    const existing = cart.find(item => item.product_id === productId);
+    if (!existing) {
+      const ok = await addToCart(productId, qty, true);
+      if (!ok) return;
+    } else if (qty > 1 && existing.quantity + qty <= prod.stock) {
+      await addToCart(productId, qty, true);
+    }
+
+    openCart(true);
   }
 
   function populateCheckoutFromSavedProfile() {
@@ -3175,6 +3437,7 @@
     document.getElementById("checkout-address").value = userProfileData.address || "";
     const complete = Boolean(userProfileData.full_name && userProfileData.phone && userProfileData.address);
     isCheckoutEditing = !complete;
+    document.getElementById("checkout-missing-alert").classList.toggle("hidden", complete);
     updateCheckoutEditVisibility();
     syncCheckoutPreview();
   }
@@ -3192,12 +3455,21 @@
   }
 
   function syncCheckoutPreview() {
-    document.getElementById("display-checkout-name").textContent = document.getElementById("checkout-name").value.trim() || "Not set";
-    document.getElementById("display-checkout-phone").textContent = document.getElementById("checkout-phone").value.trim() || "Not set";
-    document.getElementById("display-checkout-address").textContent = document.getElementById("checkout-address").value.trim() || "Not set";
+    const n = document.getElementById("checkout-name").value.trim();
+    const p = document.getElementById("checkout-phone").value.trim();
+    const a = document.getElementById("checkout-address").value.trim();
+    document.getElementById("display-checkout-name").textContent = n || "Not set";
+    document.getElementById("display-checkout-phone").textContent = p || "Not set";
+    document.getElementById("display-checkout-address").textContent = a || "Not set";
+    if (n && p && a) {
+      document.getElementById("checkout-missing-alert").classList.add("hidden");
+    }
   }
 
-  function openCart() {
+  function openCart(isBuyNow = false) {
+    document.getElementById("cart-modal-title").textContent = isBuyNow ? "⚡ Express Checkout" : "🛒 Shopping Cart";
+    document.getElementById("express-buy-badge").classList.toggle("hidden", !isBuyNow);
+    document.getElementById("checkout-policy-agree").checked = true;
     populateCheckoutFromSavedProfile();
     renderCartModal();
     document.getElementById("cart-modal").classList.remove("hidden");
@@ -3234,6 +3506,7 @@
 
     const groupsHtml = Array.from(groups.values()).map(g => {
       const ship = getShopShippingInfo(g.shop);
+      const area = getShopDeliveryArea(g.shop);
       totalItemsCost += g.itemsSubtotal;
       totalShippingCost += ship.fee;
 
@@ -3241,7 +3514,10 @@
         <div style="border:1px solid var(--border); border-radius:11px; padding:0.75rem; margin-bottom:0.75rem; background:#fbfdfb;">
           <div class="row-between" style="margin-bottom:0.45rem; padding-bottom:0.35rem; border-bottom:1px dashed var(--border);">
             <strong style="font-size:0.82rem; color:var(--primary-dark);">🏪 ${escapeHtml(g.shop ? g.shop.name : "MarketHub Official")}</strong>
-            <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span>
+            <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+              <span class="badge area-badge">${escapeHtml(area.label)}</span>
+              <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span>
+            </div>
           </div>
           ${g.items.map(item => `
             <div class="row-between" style="padding:0.4rem 0;">
@@ -3287,32 +3563,59 @@
     const name = document.getElementById("checkout-name").value.trim();
     const phone = document.getElementById("checkout-phone").value.trim();
     const address = document.getElementById("checkout-address").value.trim();
+    const policyAgreed = document.getElementById("checkout-policy-agree").checked;
 
     if (!name || !phone || !address) {
       isCheckoutEditing = true;
+      document.getElementById("checkout-missing-alert").classList.remove("hidden");
       updateCheckoutEditVisibility();
-      return showToast("Please provide your name, contact number, and delivery address.", "warning");
+      return showToast("Required: Please fill up your Full Name, Contact Number, and Delivery Address.", "warning");
+    }
+
+    if (!policyAgreed) {
+      return showToast("Please check the confirmation box for the delivery area and No to Cancel after Shipping policy.", "warning");
+    }
+
+    // Validate shop delivery location restriction (e.g., Roxas Only)
+    const approvedShops = getApprovedShops();
+    for (const item of cart) {
+      const shopObj = approvedShops.find(s => String(s.id) === String(item.products?.shop_id));
+      const area = getShopDeliveryArea(shopObj);
+      if (area.isRestricted && !doesAddressMatchDeliveryArea(address, area.raw)) {
+        isCheckoutEditing = true;
+        updateCheckoutEditVisibility();
+        return showToast(
+          `⚠️ "${shopObj ? shopObj.name : "Shop"}" delivers to ${area.raw}. Please enter a valid ${area.raw} address.`,
+          "error"
+        );
+      }
     }
 
     const orderBtn = document.getElementById("btn-place-order");
     orderBtn.disabled = true;
-    orderBtn.textContent = "Placing Order...";
+    orderBtn.textContent = "Saving Info & Placing Order...";
 
     try {
-      if (!userProfileData.phone || !userProfileData.address) {
-        const updated = { full_name: name, phone, address };
-        userProfileData = updated;
-        setCachedRegistrationByEmail(currentUser.email, updated);
-        applyOwnerHeaderDisplay();
-        try { await db.auth.updateUser({ data: updated }); } catch (_) {}
-        try { await db.from("profiles").update(updated).eq("id", currentUser.id); } catch (_) {}
-      }
+      // Always persist customer info & delivery address so every user has saved info after checkout
+      const updatedProfile = { full_name: name, phone, address };
+      userProfileData = updatedProfile;
+      setCachedRegistrationByEmail(currentUser.email, updatedProfile);
+      applyOwnerHeaderDisplay();
+      try { await db.auth.updateUser({ data: updatedProfile }); } catch (_) {}
+      try {
+        await db.from("profiles").upsert({
+          id: currentUser.id,
+          full_name: name,
+          phone,
+          address
+        });
+      } catch (_) {}
 
       const combinedAddress = `${address} | Contact: ${phone}`;
       const { error } = await db.rpc("checkout_cart", { p_customer_name: name, p_address: combinedAddress });
       if (error) return showToast("Checkout failed: " + error.message, "error");
 
-      showToast("Order placed! Each shop seller has been notified.", "success");
+      showToast("Order placed & your delivery info is saved! Reminder: No to Cancel after shipping.", "success");
       closeCart();
       await loadCart();
       await loadProducts();
@@ -3326,7 +3629,7 @@
   }
 
   /* =========================================================
-     ORDERS & CANCEL ORDER
+     ORDERS & STRICT "NO TO CANCEL AFTER SHIPPING" ENFORCEMENT
      ========================================================= */
   function switchOrdersSubTab(tab) {
     ordersSubTab = tab;
@@ -3408,6 +3711,7 @@
       const canManageOrder = isIncomingSaleForCurrentUser(o) || currentRole === "admin";
       const isBuyerOrder = ordersSubTab === "purchases" && o.user_id === currentUser?.id;
       const canBuyerCancel = isBuyerOrder && o.status === "Pending";
+      const isShippedOrDelivered = o.status === "Shipped" || o.status === "Delivered";
 
       const shop = shops.find(s => String(s.id) === String(o.shop_id));
       const shopName = shop ? shop.name : "MarketHub Official";
@@ -3418,6 +3722,23 @@
       const prodSubtotal = o.subtotal_amount != null && Number(o.subtotal_amount) > 0 ? Number(o.subtotal_amount) : Math.max(0, grossAmt - shipFee);
       const commAmt = o.status === "Cancelled" ? 0 : (o.commission_amount != null && Number(o.commission_amount) > 0 ? Number(o.commission_amount) : (o.shop_id ? Number((prodSubtotal * 0.10).toFixed(2)) : 0));
       const sellerNet = o.status === "Cancelled" ? 0 : Number(((prodSubtotal - commAmt) + shipFee).toFixed(2));
+
+      let policyNoticeHtml = "";
+      if (o.status !== "Cancelled") {
+        if (isShippedOrDelivered) {
+          policyNoticeHtml = `
+            <div class="policy-notice-box strict-shipped" style="margin:0.65rem 0 0; padding:0.55rem 0.8rem;">
+              🚫 <strong>NO TO CANCEL AFTER SHIPPING:</strong> This order is already <strong>${escapeHtml(o.status)}</strong> and can no longer be cancelled.
+            </div>
+          `;
+        } else if (isBuyerOrder) {
+          policyNoticeHtml = `
+            <div class="policy-notice-box" style="margin:0.65rem 0 0; padding:0.55rem 0.8rem;">
+              ⚠️ <strong>Policy Notice:</strong> Cancellation is allowed <strong>only while Pending</strong>. Once shipped by the seller, <strong>No to Cancel</strong> applies.
+            </div>
+          `;
+        }
+      }
 
       return `
         <div class="panel" id="order-card-${o.id}">
@@ -3435,6 +3756,7 @@
           <p style="font-size:0.86rem; color:var(--text-secondary); margin:0.65rem 0 0;"><strong>Delivery Details:</strong> ${escapeHtml(o.address)}</p>
 
           ${renderOrderStepper(o.status)}
+          ${policyNoticeHtml}
 
           <ul style="margin:0.6rem 0; padding-left:1.25rem; font-size:0.88rem; color:var(--text-secondary);">
             ${(o.order_items || []).map(i => `
@@ -3458,6 +3780,10 @@
 
             ${canBuyerCancel ? `<button class="danger-outline sm" onclick="cancelOrderByBuyer(${o.id})">✕ Cancel Order</button>` : ""}
 
+            ${isBuyerOrder && !canBuyerCancel && o.status !== "Cancelled" ? `
+              <span class="badge status-cancelled" style="text-transform:none;">🚫 No to Cancel (${escapeHtml(o.status)})</span>
+            ` : ""}
+
             ${canManageOrder && ordersSubTab === "sales" ? `
               <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                 ${o.status === "Pending" ? `<button class="success-btn sm" onclick="updateOrderStatus(${o.id}, 'Order Received', true)">✓ Acknowledge Order</button>` : ""}
@@ -3465,7 +3791,7 @@
                   <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
                   <option value="Order Received" ${o.status === "Order Received" ? "selected" : ""}>Order Received</option>
                   <option value="Confirmed" ${o.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
-                  <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped</option>
+                  <option value="Shipped" ${o.status === "Shipped" ? "selected" : ""}>Shipped (No Cancel)</option>
                   <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
                   ${o.status === "Cancelled" ? `<option value="Cancelled" selected>Cancelled</option>` : ""}
                 </select>
@@ -3479,7 +3805,11 @@
   }
 
   async function cancelOrderByBuyer(orderId) {
-    if (!confirm(`Cancel Order #${orderId}? You can only cancel before the seller processes it.`)) return;
+    const order = cachedOrders.find(o => o.id === orderId);
+    if (order && order.status !== "Pending") {
+      return showToast("No to Cancel: Order has already been processed or shipped.", "error");
+    }
+    if (!confirm(`Cancel Order #${orderId}? Reminder: Cancellation is only allowed while Pending (No to Cancel after shipping).`)) return;
     const { error } = await db.rpc("cancel_order", { p_order_id: orderId });
     if (error) return showToast("Cancel failed: " + error.message, "error");
     knownOrderSnapshots.set(orderId, "Cancelled");
@@ -3554,7 +3884,7 @@
             isPending: false,
             unread: !readSet.has(notifId),
             time: o.created_at ? new Date(o.created_at).toLocaleDateString() : "Now",
-            title: `Order #${o.id}: ${o.status}`,
+            title: o.status === "Shipped" ? `🚚 Order #${o.id}: Shipped (No to Cancel)` : `Order #${o.id}: ${o.status}`,
             desc: `Total ${totalFormatted}`
           });
         }
@@ -3621,7 +3951,8 @@
           await loadProducts();
         } else if (prev !== undefined && prev !== o.status && o.user_id === currentUser.id) {
           playNotificationTone();
-          showToast(`Order #${o.id} is now: ${o.status}`, "success");
+          const extra = o.status === "Shipped" ? " (No to Cancel after shipping)" : "";
+          showToast(`Order #${o.id} is now: ${o.status}${extra}`, "success");
         }
       }
     }
@@ -3641,7 +3972,6 @@
       .channel("marketplace-live-orders")
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => syncOrdersAndNotifications(false))
       .subscribe();
-    // 60-second fallback polling, paused when browser tab is hidden to save Supabase egress
     pollIntervalId = setInterval(() => {
       if (!document.hidden) syncOrdersAndNotifications(false);
     }, 60000);
@@ -3850,9 +4180,16 @@
     userProfileData = updated;
     setCachedRegistrationByEmail(currentUser.email, updated);
     applyOwnerHeaderDisplay();
-    try { await db.from("profiles").update(updated).eq("id", currentUser.id); } catch (_) {}
+    try {
+      await db.from("profiles").upsert({
+        id: currentUser.id,
+        full_name: updated.full_name,
+        phone: updated.phone,
+        address: updated.address
+      });
+    } catch (_) {}
     closeProfileModal();
-    showToast("Profile updated!", "success");
+    showToast("Profile & delivery address saved!", "success");
   }
 
   init();
