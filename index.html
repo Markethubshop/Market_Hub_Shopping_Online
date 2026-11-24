@@ -132,7 +132,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.38rem;
+      gap: 0.42rem;
       transition: all 0.18s ease;
     }
 
@@ -149,6 +149,55 @@
     button.danger-outline:hover:not(:disabled) { background: var(--danger-soft); }
     button.sm { padding: 0.34rem 0.65rem; font-size: 0.76rem; border-radius: 7px; }
     button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* Google OAuth Button */
+    button.google-btn {
+      width: 100%;
+      background: #ffffff;
+      color: #1f2937;
+      border: 1px solid #cbd5e1;
+      padding: 0.62rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    button.google-btn:hover:not(:disabled) {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 0.85rem 0;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-divider:not(:empty)::before { margin-right: 0.65rem; }
+    .auth-divider:not(:empty)::after { margin-left: 0.65rem; }
+
+    .text-link-btn {
+      background: transparent;
+      color: var(--primary-dark);
+      padding: 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+    .text-link-btn:hover:not(:disabled) {
+      background: transparent;
+      color: var(--accent);
+      transform: none;
+    }
 
     .auth-tabs {
       display: grid;
@@ -454,7 +503,6 @@
       overflow: hidden;
     }
 
-    /* Shop Owner Description Below Product */
     .card-shop-desc-box {
       font-size: 0.74rem;
       color: var(--muted);
@@ -498,7 +546,6 @@
     .kpi-card.highlight .kpi-value { color: var(--indigo); }
     .kpi-sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.2rem; }
 
-    /* Shipping Mode Selector Box */
     .shipping-config-box {
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
@@ -1265,7 +1312,9 @@
   </div>
 </div>
 
-<!-- AUTH MODAL -->
+<!-- =========================================================
+     AUTH MODAL (GOOGLE GMAIL OAUTH + EMAIL SIGN IN + FORGOT PASSWORD)
+     ========================================================= -->
 <div id="auth-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeAuthModal()">
   <div class="modal">
     <div class="row-between">
@@ -1273,23 +1322,57 @@
       <button class="secondary sm" onclick="closeAuthModal()">✕</button>
     </div>
 
-    <div class="auth-tabs">
+    <div id="auth-tabs-bar" class="auth-tabs">
       <button type="button" id="tab-signin" class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
       <button type="button" id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
     </div>
 
+    <!-- ONE-CLICK GOOGLE / GMAIL SIGN IN -->
+    <div id="google-oauth-box">
+      <button type="button" id="btn-google-signin" class="google-btn" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google (Gmail)
+      </button>
+      <div class="auth-divider">or continue with email & password</div>
+    </div>
+
+    <!-- SIGN IN FORM -->
     <form id="form-signin" onsubmit="signIn(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
       <div>
         <label class="field-label">Email Address</label>
-        <input type="email" id="login-email" placeholder="you@example.com" required />
+        <input type="email" id="login-email" placeholder="you@gmail.com" required />
       </div>
       <div>
-        <label class="field-label">Password</label>
+        <div class="row-between" style="margin-bottom:0.28rem;">
+          <label class="field-label" style="margin:0;">Password</label>
+          <button type="button" class="text-link-btn" onclick="switchAuthTab('forgot')">Forgot Password?</button>
+        </div>
         <input type="password" id="login-password" placeholder="Enter your password" required />
       </div>
       <button type="submit" id="btn-submit-signin">Sign In</button>
     </form>
 
+    <!-- FORGOT PASSWORD FORM -->
+    <form id="form-forgot" class="hidden" onsubmit="sendPasswordReset(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:0.75rem 0.9rem; font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">
+        Enter the Gmail / email address registered to your account or shop. We will send a secure password reset link to your inbox.
+      </div>
+      <div>
+        <label class="field-label">Registered Email Address *</label>
+        <input type="email" id="forgot-email" placeholder="you@gmail.com" required />
+      </div>
+      <button type="submit" id="btn-submit-forgot" class="success-btn">Send Password Reset Link</button>
+      <div style="text-align:center;">
+        <button type="button" class="text-link-btn" onclick="switchAuthTab('signin')">← Back to Sign In</button>
+      </div>
+    </form>
+
+    <!-- REGISTER FORM -->
     <form id="form-register" class="hidden" onsubmit="signUp(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
       <div>
         <label class="field-label">Complete Name *</label>
@@ -1306,7 +1389,7 @@
       <div class="form-grid" style="gap:0.75rem;">
         <div>
           <label class="field-label">Email Address *</label>
-          <input type="email" id="reg-email" placeholder="you@example.com" required />
+          <input type="email" id="reg-email" placeholder="you@gmail.com" required />
         </div>
         <div>
           <label class="field-label">Password *</label>
@@ -1314,6 +1397,32 @@
         </div>
       </div>
       <button type="submit" id="btn-submit-register" class="success-btn">Complete Registration</button>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     SET NEW PASSWORD MODAL (OPENS AUTOMATICALLY FROM EMAIL RESET LINK)
+     ========================================================= -->
+<div id="recovery-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0;">🔐 Set Your New Password</h3>
+      <button class="secondary sm" onclick="closeRecoveryModal()">✕</button>
+    </div>
+    <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 0.9rem;">
+      Your reset link is verified. Enter a new password below to regain access to your account and shop.
+    </p>
+    <form onsubmit="completePasswordReset(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+      <div>
+        <label class="field-label">New Password (Min. 6 characters) *</label>
+        <input type="password" id="recovery-new-password" minlength="6" placeholder="Enter new password" required />
+      </div>
+      <div>
+        <label class="field-label">Confirm New Password *</label>
+        <input type="password" id="recovery-confirm-password" minlength="6" placeholder="Re-type new password" required />
+      </div>
+      <button type="submit" id="btn-save-new-password" class="success-btn">Update Password & Sign In</button>
     </form>
   </div>
 </div>
@@ -1448,6 +1557,10 @@
 
   const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80";
 
+  function getAppRedirectUrl() {
+    return window.location.origin + window.location.pathname;
+  }
+
   function getCurrentYearMonth() {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
@@ -1474,7 +1587,7 @@
     toast.className = `toast ${type}`;
     toast.innerHTML = `<span>${escapeHtml(message)}</span><button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#bbf7d0;">✕</button>`;
     container.appendChild(toast);
-    setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
+    setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5500);
   }
 
   function playNotificationTone() {
@@ -1534,7 +1647,7 @@
   }
 
   /* =========================================================
-     INITIALIZATION & SESSION
+     INITIALIZATION & SESSION (INCLUDING PASSWORD RECOVERY & GOOGLE OAUTH)
      ========================================================= */
   async function init() {
     document.addEventListener("click", () => {
@@ -1544,6 +1657,9 @@
     const monthInput = document.getElementById("admin-commission-month");
     if (monthInput) monthInput.value = adminSelectedMonth;
 
+    // Detect if user arrived via Password Reset email link
+    const isRecoveryRedirect = window.location.hash.includes("type=recovery");
+
     renderPhotoSlots();
     await Promise.all([loadShops(), loadProducts(), loadAllReviews()]);
 
@@ -1551,8 +1667,15 @@
     if (error) showError(error.message);
     await handleSession(session);
 
-    db.auth.onAuthStateChange(async (_event, session) => {
+    if (isRecoveryRedirect && session) {
+      openRecoveryModal();
+    }
+
+    db.auth.onAuthStateChange(async (event, session) => {
       await handleSession(session);
+      if (event === "PASSWORD_RECOVERY") {
+        openRecoveryModal();
+      }
     });
   }
 
@@ -1601,10 +1724,23 @@
       const cached = getCachedRegistrationByEmail(currentUser.email) || {};
 
       userProfileData = {
-        full_name: (meta.full_name || profile?.full_name || cached.full_name || "").trim(),
+        full_name: (meta.full_name || meta.name || profile?.full_name || cached.full_name || "").trim(),
         phone: (meta.phone || profile?.phone || cached.phone || "").trim(),
         address: (meta.address || profile?.address || cached.address || "").trim()
       };
+
+      // Auto-create profiles row for first-time Google OAuth users without touching existing roles
+      if (!profile) {
+        try {
+          await db.from("profiles").insert({
+            id: currentUser.id,
+            full_name: userProfileData.full_name || currentUser.email.split("@")[0],
+            phone: userProfileData.phone,
+            address: userProfileData.address,
+            role: "user"
+          });
+        } catch (_) {}
+      }
 
       await loadShops();
       await loadMyShop();
@@ -1653,8 +1789,8 @@
 
   function handleStartSellingClick() {
     if (!currentUser) {
-      openAuthModal("register");
-      showToast("Create an account first, then submit your verified shop application!", "info");
+      openAuthModal("signin");
+      showToast("Sign in with Google (Gmail) or create an account first to open your shop!", "info");
       return;
     }
     switchView("seller");
@@ -1756,7 +1892,6 @@
 
     const status = myShop.status || "pending";
 
-    // BLOCK UNAPPROVED / REJECTED / SUSPENDED SHOPS FROM POSTING
     if (status !== "approved") {
       createPanel.classList.add("hidden");
       dashPanel.classList.add("hidden");
@@ -1795,7 +1930,6 @@
       return;
     }
 
-    // APPROVED SHOP WORKSPACE
     createPanel.classList.add("hidden");
     gatePanel.classList.add("hidden");
     dashPanel.classList.remove("hidden");
@@ -2537,7 +2671,6 @@
     const approvedShops = getApprovedShops();
 
     const filtered = products.filter(p => {
-      // Hide unapproved/suspended shop products from public marketplace
       if (p.shop_id != null && !approvedShops.some(s => String(s.id) === String(p.shop_id))) {
         return false;
       }
@@ -2608,7 +2741,6 @@
             <h3 class="card-title" onclick="openProductModal(${p.id})">${escapeHtml(p.name)}</h3>
             <p class="card-desc">${escapeHtml(p.description || "Click to inspect all views and details.")}</p>
 
-            <!-- SHOP DESCRIPTION BELOW PRODUCT -->
             <div class="card-shop-desc-box" title="${escapeHtml(shopDescText)}">
               <strong>🏪 ${escapeHtml(shopLabel)}:</strong> ${escapeHtml(shopDescText)}
             </div>
@@ -2785,7 +2917,7 @@
 
   async function addToCart(productId, addQty = 1) {
     if (!currentUser) {
-      openAuthModal("register");
+      openAuthModal("signin");
       return;
     }
     const prod = products.find(p => p.id === productId);
@@ -2855,7 +2987,6 @@
       return;
     }
 
-    // Group cart items by shop to show each shop's shipping fee accurately
     const groups = new Map();
     cart.forEach(item => {
       const shopKey = String(item.products.shop_id ?? "official");
@@ -2938,6 +3069,16 @@
     orderBtn.textContent = "Placing Order...";
 
     try {
+      // Save delivery info for Google OAuth / new accounts if previously empty
+      if (!userProfileData.phone || !userProfileData.address) {
+        const updated = { full_name: name, phone, address };
+        userProfileData = updated;
+        setCachedRegistrationByEmail(currentUser.email, updated);
+        applyOwnerHeaderDisplay();
+        try { await db.auth.updateUser({ data: updated }); } catch (_) {}
+        try { await db.from("profiles").update(updated).eq("id", currentUser.id); } catch (_) {}
+      }
+
       const combinedAddress = `${address} | Contact: ${phone}`;
       const { error } = await db.rpc("checkout_cart", { p_customer_name: name, p_address: combinedAddress });
       if (error) return showToast("Checkout failed: " + error.message, "error");
@@ -3272,19 +3413,127 @@
   }
 
   /* =========================================================
-     AUTH & PROFILE MODALS
+     AUTH (GOOGLE GMAIL OAUTH + FORGOT/RESET PASSWORD + PROFILE)
      ========================================================= */
   function switchAuthTab(mode) {
     const isSignIn = mode === "signin";
+    const isRegister = mode === "register";
+    const isForgot = mode === "forgot";
+
+    document.getElementById("auth-tabs-bar").classList.toggle("hidden", isForgot);
+    document.getElementById("google-oauth-box").classList.toggle("hidden", isForgot);
+
     document.getElementById("tab-signin").classList.toggle("active", isSignIn);
-    document.getElementById("tab-register").classList.toggle("active", !isSignIn);
+    document.getElementById("tab-register").classList.toggle("active", isRegister);
+
     document.getElementById("form-signin").classList.toggle("hidden", !isSignIn);
-    document.getElementById("form-register").classList.toggle("hidden", isSignIn);
-    document.getElementById("auth-modal-title").textContent = isSignIn ? "Sign In to MarketHub" : "Create Account";
+    document.getElementById("form-register").classList.toggle("hidden", !isRegister);
+    document.getElementById("form-forgot").classList.toggle("hidden", !isForgot);
+
+    if (isForgot) {
+      const typedLoginEmail = document.getElementById("login-email").value.trim();
+      if (typedLoginEmail) document.getElementById("forgot-email").value = typedLoginEmail;
+      document.getElementById("auth-modal-title").textContent = "Reset Your Password";
+    } else {
+      document.getElementById("auth-modal-title").textContent = isSignIn
+        ? "Sign In to MarketHub"
+        : "Create Account";
+    }
   }
 
-  function openAuthModal(tab = "signin") { switchAuthTab(tab); document.getElementById("auth-modal").classList.remove("hidden"); }
-  function closeAuthModal() { document.getElementById("auth-modal").classList.add("hidden"); }
+  function openAuthModal(tab = "signin") {
+    switchAuthTab(tab);
+    document.getElementById("auth-modal").classList.remove("hidden");
+  }
+
+  function closeAuthModal() {
+    document.getElementById("auth-modal").classList.add("hidden");
+  }
+
+  async function signInWithGoogle() {
+    const btn = document.getElementById("btn-google-signin");
+    btn.disabled = true;
+    try {
+      const { error } = await db.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: getAppRedirectUrl(),
+          queryParams: { prompt: "select_account" }
+        }
+      });
+      if (error) {
+        showToast("Google Sign-In error: " + error.message, "error");
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function sendPasswordReset(e) {
+    e.preventDefault();
+    const email = document.getElementById("forgot-email").value.trim();
+    if (!email) return;
+
+    const btn = document.getElementById("btn-submit-forgot");
+    btn.disabled = true;
+    btn.textContent = "Sending Reset Link...";
+
+    try {
+      const { error } = await db.auth.resetPasswordForEmail(email, {
+        redirectTo: getAppRedirectUrl()
+      });
+
+      if (error) {
+        return showToast("Reset failed: " + error.message, "error");
+      }
+
+      showToast(`Password reset link sent to ${email}! Check your Gmail inbox or Spam folder.`, "success");
+      switchAuthTab("signin");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Send Password Reset Link";
+    }
+  }
+
+  function openRecoveryModal() {
+    closeAuthModal();
+    document.getElementById("recovery-new-password").value = "";
+    document.getElementById("recovery-confirm-password").value = "";
+    document.getElementById("recovery-modal").classList.remove("hidden");
+  }
+
+  function closeRecoveryModal() {
+    document.getElementById("recovery-modal").classList.add("hidden");
+    if (window.location.hash.includes("type=recovery")) {
+      history.replaceState(null, "", window.location.pathname);
+    }
+  }
+
+  async function completePasswordReset(e) {
+    e.preventDefault();
+    const p1 = document.getElementById("recovery-new-password").value;
+    const p2 = document.getElementById("recovery-confirm-password").value;
+
+    if (p1 !== p2) {
+      return showToast("Passwords do not match. Please re-type carefully.", "warning");
+    }
+
+    const btn = document.getElementById("btn-save-new-password");
+    btn.disabled = true;
+    btn.textContent = "Updating Password...";
+
+    try {
+      const { error } = await db.auth.updateUser({ password: p1 });
+      if (error) {
+        return showToast("Could not update password: " + error.message, "error");
+      }
+      closeRecoveryModal();
+      showToast("Password updated! You are now signed in to your account & shop.", "success");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Update Password & Sign In";
+    }
+  }
 
   async function signUp(e) {
     e.preventDefault();
