@@ -140,7 +140,7 @@
     button.secondary { background: #fff; color: var(--text-secondary); border: 1px solid var(--border); }
     button.secondary:hover:not(:disabled) { background: #f4f9f5; border-color: #bfd3c5; }
     button.secondary.active-nav { background: var(--primary-soft); color: var(--primary-dark); border-color: #86efac; }
-    button.shop-cta { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; }
+    button.shop-cta { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; box-shadow: 0 3px 10px rgba(234, 88, 12, 0.25); }
     button.shop-cta:hover:not(:disabled) { background: linear-gradient(135deg, #c2410c, #9a3412); }
     button.success-btn { background: var(--primary-light); }
     button.danger { background: var(--danger); }
@@ -289,44 +289,109 @@
 
     .container { max-width: 1200px; margin: 1.4rem auto 3rem; padding: 0 1.25rem; }
 
-    /* Hero */
+    /* Hero — All-Product Online Shop */
     .hero-banner {
-      border-radius: 18px;
-      padding: 2rem;
-      margin-bottom: 1.3rem;
+      border-radius: 20px;
+      padding: 2.1rem 2.2rem;
+      margin-bottom: 1.35rem;
       color: #fff;
       background:
-        linear-gradient(108deg, rgba(13, 42, 24, 0.93) 0%, rgba(20, 83, 45, 0.85) 55%, rgba(154, 52, 18, 0.75) 100%),
-        url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
-      box-shadow: var(--shadow-md);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+        linear-gradient(115deg, rgba(15, 23, 42, 0.92) 0%, rgba(20, 83, 45, 0.86) 52%, rgba(30, 58, 138, 0.82) 100%),
+        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      box-shadow: var(--shadow-lg);
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
       align-items: center;
-      gap: 1.25rem;
+      gap: 1.75rem;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-content { max-width: 670px; }
+
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -60px;
+      top: -90px;
+      background: radial-gradient(circle, rgba(251, 146, 60, 0.24) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
     .hero-kicker {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      padding: 0.28rem 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      padding: 0.3rem 0.85rem;
       border-radius: 999px;
-      font-size: 0.73rem;
-      font-weight: 600;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.7rem;
+      color: #fef08a;
     }
-    .hero-banner h1 { margin: 0 0 0.45rem; font-size: clamp(1.4rem, 2.7vw, 2rem); font-weight: 800; line-height: 1.2; }
-    .hero-banner p { margin: 0 0 1rem; font-size: 0.9rem; color: rgba(240, 253, 244, 0.92); line-height: 1.5; }
+    .hero-banner h1 {
+      margin: 0 0 0.55rem;
+      font-size: clamp(1.55rem, 2.9vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+    .hero-banner p {
+      margin: 0 0 1.15rem;
+      font-size: 0.93rem;
+      color: rgba(241, 245, 249, 0.93);
+      line-height: 1.58;
+      max-width: 600px;
+    }
     .trust-badges { display: flex; flex-wrap: wrap; gap: 0.55rem; }
     .trust-chip {
-      background: rgba(13, 42, 24, 0.58);
+      background: rgba(15, 23, 42, 0.52);
+      backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 0.35rem 0.7rem;
+      padding: 0.38rem 0.75rem;
       border-radius: 10px;
-      font-size: 0.76rem;
+      font-size: 0.77rem;
+      font-weight: 600;
+      color: #f8fafc;
     }
+
+    /* Hero Right: Interactive All-Category Showcase */
+    .hero-showcase {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+    }
+    .hero-cat-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 14px;
+      padding: 0.85rem 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+    .hero-cat-card:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+    .hero-cat-icon { font-size: 1.45rem; line-height: 1; margin-bottom: 0.15rem; }
+    .hero-cat-title { font-size: 0.84rem; font-weight: 700; color: #fff; }
+    .hero-cat-sub { font-size: 0.71rem; color: rgba(226, 232, 240, 0.88); font-weight: 500; }
 
     /* Shops Strip */
     .shops-strip {
@@ -695,6 +760,10 @@
 
     .empty-state { text-align: center; padding: 2.6rem 1rem; background: var(--card); border: 1px dashed #bfd3c5; border-radius: var(--radius); color: var(--muted); }
 
+    @media (max-width: 860px) {
+      .hero-banner { grid-template-columns: 1fr; padding: 1.6rem; }
+    }
+
     @media (max-width: 720px) {
       .detail-layout { grid-template-columns: 1fr; }
       .photo-slots-grid { grid-template-columns: repeat(2, 1fr); }
@@ -711,7 +780,7 @@
     <div class="brand-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     </div>
-    <div>MarketHub <span class="sub">Verified Multi-Shop</span></div>
+    <div>MarketHub <span class="sub">All-in-One Online Shop</span></div>
   </div>
 
   <div class="nav-actions">
@@ -722,6 +791,7 @@
     </div>
 
     <button id="btn-shop" class="secondary active-nav" onclick="switchView('shop')">Marketplace</button>
+    <button id="btn-header-apply" class="shop-cta sm" onclick="handleStartSellingClick()">🏪 Apply to Open a Shop</button>
     <button id="btn-seller" class="secondary hidden" onclick="switchView('seller')">🏪 My Shop</button>
     <button id="btn-orders" class="secondary hidden" onclick="switchView('orders')">Orders</button>
     <button id="btn-admin" class="secondary hidden" onclick="switchView('admin')">Platform Admin</button>
@@ -765,19 +835,37 @@
   <section id="view-shop">
     <div class="hero-banner">
       <div class="hero-content">
-        <div class="hero-kicker">Verified Sellers Only • Free & Custom Shop Shipping</div>
-        <h1>Shop From Admin-Verified Stores or Apply to Open Your Own Shop</h1>
-        <p>Every shop is screened with ID/store proof before going live. Enjoy Free Shipping promos or clear seller-set shipping rates across fresh produce, apparel, and local goods.</p>
+        <div class="hero-kicker">✨ All-in-One Online Shop • Fashion • Gadgets • Home • Food &amp; More</div>
+        <h1>Shop Everything You Love — Fast, Easy &amp; Delivered to Your Door</h1>
+        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place. Compare 4-angle photos, enjoy Free Shipping deals, and checkout in seconds.</p>
         <div class="trust-badges">
-          <div class="trust-chip">🛡️ Admin-Verified Shops</div>
-          <div class="trust-chip">🚚 Free or Custom Shipping per Shop</div>
+          <div class="trust-chip">⚡ 1-Click Easy Checkout</div>
+          <div class="trust-chip">🚚 Free Shipping &amp; Clear Rates</div>
           <div class="trust-chip">📸 4-Angle Product Views</div>
-          <div class="trust-chip">🔔 Instant Order Tracking</div>
+          <div class="trust-chip">🛡️ 100% Verified Trusted Shops</div>
         </div>
       </div>
-      <div>
-        <button class="shop-cta" onclick="handleStartSellingClick()" style="padding:0.75rem 1.25rem; font-size:0.92rem;">
-          🏪 Apply to Open a Shop
+
+      <div class="hero-showcase">
+        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Clothing & Apparel')">
+          <span class="hero-cat-icon">👕</span>
+          <span class="hero-cat-title">Fashion &amp; Apparel</span>
+          <span class="hero-cat-sub">Trendy clothes &amp; wear</span>
+        </button>
+        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Gadgets & Accessories')">
+          <span class="hero-cat-icon">📱</span>
+          <span class="hero-cat-title">Gadgets &amp; Tech</span>
+          <span class="hero-cat-sub">Phones, gear &amp; accessories</span>
+        </button>
+        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Home & Living')">
+          <span class="hero-cat-icon">🏠</span>
+          <span class="hero-cat-title">Home &amp; Beauty</span>
+          <span class="hero-cat-sub">Daily essentials &amp; care</span>
+        </button>
+        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Food & Beverages')">
+          <span class="hero-cat-icon">🍱</span>
+          <span class="hero-cat-title">Food &amp; Fresh Goods</span>
+          <span class="hero-cat-sub">Snacks, drinks &amp; produce</span>
         </button>
       </div>
     </div>
@@ -818,19 +906,19 @@
     <div class="catalog-toolbar">
       <div class="filter-pills" id="category-pills">
         <button class="filter-pill active" data-cat="all" onclick="setCategoryFilter('all')">All Categories</button>
-        <button class="filter-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Fruits & Vegetables</button>
         <button class="filter-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing & Apparel</button>
-        <button class="filter-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food & Drinks</button>
         <button class="filter-pill" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">📱 Gadgets</button>
         <button class="filter-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home & Living</button>
         <button class="filter-pill" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">✨ Health & Beauty</button>
+        <button class="filter-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food & Drinks</button>
+        <button class="filter-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Fruits & Vegetables</button>
       </div>
 
       <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; flex:1; justify-content:flex-end;">
         <button id="filter-instock" class="filter-pill" onclick="toggleStockFilter()">In Stock Only</button>
         <div class="search-box">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="search-input" placeholder="Search items, clothes, produce, shops..." oninput="renderProducts()" />
+          <input type="text" id="search-input" placeholder="Search items, clothes, gadgets, shops..." oninput="renderProducts()" />
         </div>
       </div>
     </div>
@@ -854,17 +942,17 @@
         <div class="form-grid">
           <div>
             <label class="field-label">Shop Name *</label>
-            <input type="text" id="new-shop-name" placeholder="e.g., Trendy Apparel PH or Gibo Farm" required />
+            <input type="text" id="new-shop-name" placeholder="e.g., Trendy Apparel PH or Gibo Store" required />
           </div>
           <div>
             <label class="field-label">Main Shop Category *</label>
             <select id="new-shop-category" required>
-              <option value="Fruits & Vegetables">Fruits & Vegetables</option>
               <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-              <option value="Food & Beverages">Food & Beverages</option>
               <option value="Gadgets & Accessories">Gadgets & Accessories</option>
               <option value="Home & Living">Home & Living</option>
               <option value="Health & Beauty">Health & Beauty</option>
+              <option value="Food & Beverages">Food & Beverages</option>
+              <option value="Fruits & Vegetables">Fruits & Vegetables</option>
               <option value="General Merchandise">General Merchandise</option>
             </select>
           </div>
@@ -985,12 +1073,12 @@
             <div>
               <label class="field-label">Shop Category</label>
               <select id="edit-shop-category">
-                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
                 <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-                <option value="Food & Beverages">Food & Beverages</option>
                 <option value="Gadgets & Accessories">Gadgets & Accessories</option>
                 <option value="Home & Living">Home & Living</option>
                 <option value="Health & Beauty">Health & Beauty</option>
+                <option value="Food & Beverages">Food & Beverages</option>
+                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
                 <option value="General Merchandise">General Merchandise</option>
               </select>
             </div>
@@ -1041,12 +1129,12 @@
             <div>
               <label class="field-label">Product Category *</label>
               <select id="p-category" required>
-                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
                 <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-                <option value="Food & Beverages">Food & Beverages</option>
                 <option value="Gadgets & Accessories">Gadgets & Accessories</option>
                 <option value="Home & Living">Home & Living</option>
                 <option value="Health & Beauty">Health & Beauty</option>
+                <option value="Food & Beverages">Food & Beverages</option>
+                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
                 <option value="General Merchandise">General Merchandise</option>
               </select>
             </div>
@@ -1555,7 +1643,7 @@
     { key: "Delivered", label: "Delivered" }
   ];
 
-  const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80";
+  const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=700&q=80";
 
   function getAppRedirectUrl() {
     return window.location.origin + window.location.pathname;
@@ -1716,6 +1804,9 @@
     stopOrderSync();
     knownOrderSnapshots.clear();
 
+    const headerApplyBtn = document.getElementById("btn-header-apply");
+    const sellerBtn = document.getElementById("btn-seller");
+
     if (currentUser) {
       const { data: profile } = await db.from("profiles").select("*").eq("id", currentUser.id).single();
       currentRole = profile?.role || "user";
@@ -1748,8 +1839,16 @@
 
       document.getElementById("btn-login").classList.add("hidden");
       document.getElementById("btn-logout").classList.remove("hidden");
-      document.getElementById("btn-seller").classList.remove("hidden");
-      document.getElementById("btn-seller").textContent = myShop ? `🏪 ${myShop.name}` : "🏪 Open a Shop";
+
+      if (myShop) {
+        headerApplyBtn.classList.add("hidden");
+        sellerBtn.classList.remove("hidden");
+        sellerBtn.textContent = `🏪 ${myShop.name}`;
+      } else {
+        headerApplyBtn.classList.remove("hidden");
+        sellerBtn.classList.add("hidden");
+      }
+
       document.getElementById("btn-orders").classList.remove("hidden");
       document.getElementById("btn-cart").classList.remove("hidden");
       document.getElementById("notif-wrapper").classList.remove("hidden");
@@ -1780,6 +1879,7 @@
       ["user-pill", "btn-logout", "btn-seller", "btn-orders", "btn-admin", "btn-cart", "notif-wrapper"].forEach(id => {
         document.getElementById(id).classList.add("hidden");
       });
+      headerApplyBtn.classList.remove("hidden");
       document.getElementById("btn-login").classList.remove("hidden");
       await loadShops();
       switchView("shop");
@@ -1794,6 +1894,12 @@
       return;
     }
     switchView("seller");
+  }
+
+  function quickBrowseCategory(cat) {
+    setCategoryFilter(cat);
+    const toolbar = document.querySelector(".catalog-toolbar");
+    if (toolbar) toolbar.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function switchView(view) {
@@ -2012,7 +2118,10 @@
       if (error) return showToast("Application failed: " + error.message, "error");
 
       myShop = data;
-      document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
+      document.getElementById("btn-header-apply").classList.add("hidden");
+      const sellerBtn = document.getElementById("btn-seller");
+      sellerBtn.classList.remove("hidden");
+      sellerBtn.textContent = `🏪 ${myShop.name}`;
       applyOwnerHeaderDisplay();
       await loadShops();
       renderSellerWorkspace();
@@ -2189,7 +2298,7 @@
 
     document.getElementById("edit-prod-id").value = p.id;
     document.getElementById("p-name").value = p.name;
-    document.getElementById("p-category").value = p.category || (myShop ? myShop.category : "Fruits & Vegetables");
+    document.getElementById("p-category").value = p.category || (myShop ? myShop.category : "Clothing & Apparel");
     document.getElementById("p-price").value = p.price;
     document.getElementById("p-stock").value = p.stock;
     document.getElementById("p-desc").value = p.description || "";
@@ -2572,9 +2681,9 @@
       const shop = shops.find(s => String(s.id) === String(p.shop_id));
       return `
         <tr>
-          <td><strong>${escapeHtml(shop ? shop.name : "FreshHarvest Official")}</strong></td>
+          <td><strong>${escapeHtml(shop ? shop.name : "MarketHub Official")}</strong></td>
           <td>${escapeHtml(p.name)}</td>
-          <td>${escapeHtml(p.category || "Fruits & Vegetables")}</td>
+          <td>${escapeHtml(p.category || "General Merchandise")}</td>
           <td>₱${Number(p.price).toFixed(2)}</td>
           <td>${p.stock}</td>
           <td>${Number(p.sold_count || 0)}</td>
@@ -2676,9 +2785,9 @@
       }
 
       const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
-      const shopName = shop ? shop.name.toLowerCase() : "freshharvest official";
+      const shopName = shop ? shop.name.toLowerCase() : "markethub official";
       const shopDesc = shop ? (shop.description || "").toLowerCase() : "";
-      const cat = p.category || (shop ? shop.category : "Fruits & Vegetables");
+      const cat = p.category || (shop ? shop.category : "General Merchandise");
 
       const matchesQuery =
         !query ||
@@ -2707,10 +2816,10 @@
       const imgs = getProductImages(p);
       const rating = getProductRatingStats(p.id);
       const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
-      const shopLabel = shop ? shop.name : "FreshHarvest Official";
+      const shopLabel = shop ? shop.name : "MarketHub Official";
       const ship = getShopShippingInfo(shop);
       const shopDescText = shop?.description || "Admin-verified MarketHub storefront.";
-      const catLabel = p.category || (shop ? shop.category : "Fruits & Vegetables");
+      const catLabel = p.category || (shop ? shop.category : "General Merchandise");
 
       let stockTagClass = "";
       let stockTagText = `${stockNum} in stock`;
@@ -2778,9 +2887,9 @@
     const rating = getProductRatingStats(p.id);
     const stockNum = Number(p.stock || 0);
 
-    document.getElementById("detail-shop-badge").textContent = `🏪 ${shop ? shop.name : "FreshHarvest Official"}`;
+    document.getElementById("detail-shop-badge").textContent = `🏪 ${shop ? shop.name : "MarketHub Official"}`;
     document.getElementById("detail-shop-badge").onclick = () => { closeProductModal(); if (shop) setShopFilter(shop.id); };
-    document.getElementById("detail-cat-badge").textContent = p.category || (shop ? shop.category : "Fruits & Vegetables");
+    document.getElementById("detail-cat-badge").textContent = p.category || (shop ? shop.category : "General Merchandise");
 
     const detailShipBadge = document.getElementById("detail-ship-badge");
     detailShipBadge.textContent = ship.label;
@@ -2794,7 +2903,7 @@
     document.getElementById("detail-price").textContent = `₱${Number(p.price).toFixed(2)}`;
     document.getElementById("detail-desc").textContent = p.description || "No additional product description provided.";
 
-    document.getElementById("detail-shop-card-name").textContent = `🏪 ${shop ? shop.name : "FreshHarvest Official"}`;
+    document.getElementById("detail-shop-card-name").textContent = `🏪 ${shop ? shop.name : "MarketHub Official"}`;
     document.getElementById("detail-shop-card-desc").textContent = shop?.description || "Verified MarketHub Seller.";
     document.getElementById("detail-shop-ship-note").textContent = ship.isFree
       ? "✓ This shop offers FREE SHIPPING on orders."
@@ -3010,7 +3119,7 @@
       return `
         <div style="border:1px solid var(--border); border-radius:11px; padding:0.75rem; margin-bottom:0.75rem; background:#fbfdfb;">
           <div class="row-between" style="margin-bottom:0.45rem; padding-bottom:0.35rem; border-bottom:1px dashed var(--border);">
-            <strong style="font-size:0.82rem; color:var(--primary-dark);">🏪 ${escapeHtml(g.shop ? g.shop.name : "FreshHarvest Official")}</strong>
+            <strong style="font-size:0.82rem; color:var(--primary-dark);">🏪 ${escapeHtml(g.shop ? g.shop.name : "MarketHub Official")}</strong>
             <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span>
           </div>
           ${g.items.map(item => `
@@ -3177,7 +3286,7 @@
       const canBuyerCancel = isBuyerOrder && o.status === "Pending";
 
       const shop = shops.find(s => String(s.id) === String(o.shop_id));
-      const shopName = shop ? shop.name : "FreshHarvest Official";
+      const shopName = shop ? shop.name : "MarketHub Official";
       const placedDate = o.created_at ? new Date(o.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : "";
 
       const shipFee = Number(o.shipping_fee || 0);
