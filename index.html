@@ -150,7 +150,6 @@
     button.sm { padding: 0.34rem 0.65rem; font-size: 0.76rem; border-radius: 7px; }
     button:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    /* Google OAuth Button */
     button.google-btn {
       width: 100%;
       background: #ffffff;
@@ -289,7 +288,7 @@
 
     .container { max-width: 1200px; margin: 1.4rem auto 3rem; padding: 0 1.25rem; }
 
-    /* Hero — All-Product Online Shop */
+    /* Hero */
     .hero-banner {
       border-radius: 20px;
       padding: 2.1rem 2.2rem;
@@ -297,7 +296,7 @@
       color: #fff;
       background:
         linear-gradient(115deg, rgba(15, 23, 42, 0.92) 0%, rgba(20, 83, 45, 0.86) 52%, rgba(30, 58, 138, 0.82) 100%),
-        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&q=75') center/cover no-repeat;
       box-shadow: var(--shadow-lg);
       display: grid;
       grid-template-columns: 1.35fr 0.95fr;
@@ -361,7 +360,6 @@
       color: #f8fafc;
     }
 
-    /* Hero Right: Interactive All-Category Showcase */
     .hero-showcase {
       position: relative;
       z-index: 1;
@@ -618,8 +616,8 @@
       padding: 0.85rem 1rem;
     }
 
-    /* 4-Photo Slots */
-    .photo-slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; margin-top: 0.5rem; }
+    /* 2-Photo Slots (Optimized for Free Plan Storage & Egress) */
+    .photo-slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; margin-top: 0.5rem; max-width: 380px; }
     .photo-slot {
       border: 2px dashed #bfd3c5;
       border-radius: 12px;
@@ -636,18 +634,18 @@
       cursor: pointer;
     }
     .photo-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .photo-slot .slot-label { font-size: 0.71rem; font-weight: 700; color: var(--muted); }
+    .photo-slot .slot-label { font-size: 0.74rem; font-weight: 700; color: var(--muted); }
     .photo-slot .remove-slot-btn {
       position: absolute;
       top: 5px;
       right: 5px;
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       padding: 0;
       border-radius: 999px;
       background: rgba(220, 38, 38, 0.9);
       color: #fff;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       z-index: 2;
     }
 
@@ -766,7 +764,6 @@
 
     @media (max-width: 720px) {
       .detail-layout { grid-template-columns: 1fr; }
-      .photo-slots-grid { grid-template-columns: repeat(2, 1fr); }
       .order-stepper { grid-template-columns: 1fr; gap: 0.4rem; }
       .step-item { flex-direction: row; text-align: left; gap: 0.55rem; }
       .step-dot { margin-bottom: 0; }
@@ -829,19 +826,17 @@
 <div class="container">
   <div id="status-error" class="error-box hidden"></div>
 
-  <!-- =========================================================
-       VIEW 1: VERIFIED MULTI-SHOP MARKETPLACE
-       ========================================================= -->
+  <!-- VIEW 1: VERIFIED MULTI-SHOP MARKETPLACE -->
   <section id="view-shop">
     <div class="hero-banner">
       <div class="hero-content">
         <div class="hero-kicker">✨ All-in-One Online Shop • Fashion • Gadgets • Home • Food &amp; More</div>
         <h1>Shop Everything You Love — Fast, Easy &amp; Delivered to Your Door</h1>
-        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place. Compare 4-angle photos, enjoy Free Shipping deals, and checkout in seconds.</p>
+        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place. Compare product photos, enjoy Free Shipping deals, and checkout in seconds.</p>
         <div class="trust-badges">
           <div class="trust-chip">⚡ 1-Click Easy Checkout</div>
           <div class="trust-chip">🚚 Free Shipping &amp; Clear Rates</div>
-          <div class="trust-chip">📸 4-Angle Product Views</div>
+          <div class="trust-chip">📸 Clear Product Views</div>
           <div class="trust-chip">🛡️ 100% Verified Trusted Shops</div>
         </div>
       </div>
@@ -918,19 +913,21 @@
         <button id="filter-instock" class="filter-pill" onclick="toggleStockFilter()">In Stock Only</button>
         <div class="search-box">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="search-input" placeholder="Search items, clothes, gadgets, shops..." oninput="renderProducts()" />
+          <input type="text" id="search-input" placeholder="Search items, clothes, gadgets, shops..." oninput="resetPaginationAndRender()" />
         </div>
       </div>
     </div>
 
     <div id="product-grid" class="grid"></div>
+    <div id="load-more-wrap" class="hidden" style="text-align:center; margin-top:1.5rem;">
+      <button type="button" class="secondary" onclick="loadMoreProducts()" style="padding:0.65rem 1.4rem;">
+        Load More Products (<span id="remaining-products-count">0</span> more)
+      </button>
+    </div>
   </section>
 
-  <!-- =========================================================
-       VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS
-       ========================================================= -->
+  <!-- VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS -->
   <section id="view-seller" class="hidden">
-    <!-- STEP A: SELLER APPLICATION & VERIFICATION FORM -->
     <div id="create-shop-panel" class="panel hidden" style="max-width:660px; margin:1rem auto;">
       <div style="text-align:center; margin-bottom:1.2rem;">
         <div style="font-size:2.3rem; margin-bottom:0.3rem;">🛡️🏪</div>
@@ -974,7 +971,6 @@
           <textarea id="new-shop-desc" rows="2" placeholder="Describe your shop, return policy, or delivery schedule..." required></textarea>
         </div>
 
-        <!-- CUSTOM SHIPPING FEE SETUP -->
         <div class="shipping-config-box">
           <label class="field-label" style="color:var(--primary-dark);">🚚 Shop Shipping Fee Setting *</label>
           <div class="form-grid">
@@ -991,11 +987,10 @@
           <small style="display:block; margin-top:0.35rem; color:var(--text-secondary);">You can change this anytime between Free Shipping and a custom fee in your Shop Settings.</small>
         </div>
 
-        <!-- MANDATORY VALID ID / STORE PROOF UPLOAD -->
         <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:11px; padding:0.85rem 1rem;">
           <label class="field-label" style="color:#92400e;">🪪 Seller Verification Proof (Upload Valid ID or Physical Store/Inventory Photo) *</label>
           <input type="file" id="new-shop-id-file" accept="image/*" required />
-          <small style="display:block; margin-top:0.35rem; color:#92400e;">Only visible to the Platform Admin for anti-scam verification.</small>
+          <small style="display:block; margin-top:0.35rem; color:#92400e;">Automatically compressed for fast upload. Only visible to the Platform Admin.</small>
         </div>
 
         <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.82rem; color:var(--text-secondary); cursor:pointer;">
@@ -1009,7 +1004,6 @@
       </form>
     </div>
 
-    <!-- STEP B: PENDING / REJECTED / SUSPENDED LOCK BANNER -->
     <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:1rem auto; text-align:center;">
       <div id="gate-icon" style="font-size:2.6rem; margin-bottom:0.4rem;">⏳</div>
       <h2 id="gate-title" style="margin:0 0 0.4rem;">Shop Application Pending Approval</h2>
@@ -1044,7 +1038,6 @@
       </form>
     </div>
 
-    <!-- STEP C: APPROVED ACTIVE SELLER DASHBOARD -->
     <div id="seller-dashboard-panel" class="hidden">
       <div class="panel" style="background:linear-gradient(135deg, #f0fdf4, #ffffff); border-color:#bbf7d0;">
         <div class="row-between">
@@ -1063,7 +1056,6 @@
           </div>
         </div>
 
-        <!-- EDIT SHOP & SHIPPING SETTINGS -->
         <form id="edit-shop-box" class="hidden" onsubmit="updateApprovedShopSettings(event)" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
           <div class="form-grid">
             <div>
@@ -1112,10 +1104,10 @@
         </form>
       </div>
 
-      <!-- Add / Edit Product Form -->
+      <!-- Add / Edit Product Form (2 Photos Max + Auto WebP Compression) -->
       <div class="panel">
         <div class="row-between" style="margin-bottom:0.75rem;">
-          <h3 style="margin:0;" id="product-form-heading">➕ Add Product to Your Shop (Up to 4 Photos)</h3>
+          <h3 style="margin:0;" id="product-form-heading">➕ Add Product to Your Shop (Up to 2 Photos)</h3>
           <button type="button" id="btn-cancel-edit-prod" class="secondary sm hidden" onclick="resetProductForm()">Cancel Edit</button>
         </div>
 
@@ -1155,9 +1147,9 @@
 
           <div style="margin-top:0.9rem;">
             <div class="row-between">
-              <label class="field-label" style="margin:0;">Product Photos (Up to 4 views)</label>
+              <label class="field-label" style="margin:0;">Product Photos (Max 2 views • Auto-compressed to WebP)</label>
               <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.32rem 0.65rem; border:1px solid var(--border); border-radius:7px; font-size:0.76rem; font-weight:600;">
-                📁 Select Multiple Photos (Max 4)
+                📁 Select Photos (Max 2)
                 <input type="file" id="multi-photo-input" accept="image/*" multiple class="hidden" onchange="handleMultiPhotoSelect(event)" />
               </label>
             </div>
@@ -1194,9 +1186,7 @@
     </div>
   </section>
 
-  <!-- =========================================================
-       VIEW 3: ORDERS (MY PURCHASES + INCOMING SHOP SALES)
-       ========================================================= -->
+  <!-- VIEW 3: ORDERS -->
   <section id="view-orders" class="hidden">
     <div class="row-between" style="margin-bottom: 0.85rem;">
       <div>
@@ -1214,11 +1204,8 @@
     <div id="orders-list"></div>
   </section>
 
-  <!-- =========================================================
-       VIEW 4: PLATFORM ADMIN — SHOP APPROVAL QUEUE & 10% COMMISSION
-       ========================================================= -->
+  <!-- VIEW 4: PLATFORM ADMIN -->
   <section id="view-admin" class="hidden">
-    <!-- 1. SHOP VERIFICATION & ANTI-TROLL MODERATION QUEUE -->
     <div class="panel" style="border-color:#fde68a;">
       <div class="row-between">
         <div>
@@ -1245,7 +1232,6 @@
       </div>
     </div>
 
-    <!-- 2. MONTHLY 10% COMMISSION MONITOR -->
     <div class="panel" style="border-color:#c7d2fe;">
       <div class="row-between">
         <div>
@@ -1300,7 +1286,6 @@
       </div>
     </div>
 
-    <!-- 3. GLOBAL PRODUCTS MODERATION -->
     <div class="panel">
       <h3 style="margin-top:0;">📦 All Marketplace Products Moderation</h3>
       <div style="overflow-x: auto;">
@@ -1323,9 +1308,7 @@
   </section>
 </div>
 
-<!-- =========================================================
-     PRODUCT DETAIL MODAL (4-PHOTO GALLERY, SHOP DESCRIPTION & SHIPPING)
-     ========================================================= -->
+<!-- PRODUCT DETAIL MODAL -->
 <div id="product-detail-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProductModal()">
   <div class="modal product-modal-wide">
     <div class="row-between">
@@ -1339,7 +1322,7 @@
 
     <div class="detail-layout">
       <div>
-        <div class="gallery-main"><img id="detail-main-img" src="" alt="Product View" /></div>
+        <div class="gallery-main"><img id="detail-main-img" src="" alt="Product View" loading="lazy" decoding="async" /></div>
         <div id="detail-thumbs" class="gallery-thumbs"></div>
       </div>
 
@@ -1356,7 +1339,6 @@
           <div id="detail-price" class="price" style="font-size:1.55rem; margin-bottom:0.6rem;">₱0.00</div>
           <p id="detail-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.5; margin:0 0 0.75rem;"></p>
 
-          <!-- SHOP OWNER DESCRIPTION & SHIPPING INFO BELOW PRODUCT -->
           <div class="shop-about-card">
             <div class="row-between" style="margin-bottom:0.3rem;">
               <strong id="detail-shop-card-name" style="font-size:0.86rem; color:var(--primary-dark);">🏪 Shop Name</strong>
@@ -1400,9 +1382,7 @@
   </div>
 </div>
 
-<!-- =========================================================
-     AUTH MODAL (GOOGLE GMAIL OAUTH + EMAIL SIGN IN + FORGOT PASSWORD)
-     ========================================================= -->
+<!-- AUTH MODAL -->
 <div id="auth-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeAuthModal()">
   <div class="modal">
     <div class="row-between">
@@ -1415,7 +1395,6 @@
       <button type="button" id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
     </div>
 
-    <!-- ONE-CLICK GOOGLE / GMAIL SIGN IN -->
     <div id="google-oauth-box">
       <button type="button" id="btn-google-signin" class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 48 48">
@@ -1429,7 +1408,6 @@
       <div class="auth-divider">or continue with email & password</div>
     </div>
 
-    <!-- SIGN IN FORM -->
     <form id="form-signin" onsubmit="signIn(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
       <div>
         <label class="field-label">Email Address</label>
@@ -1445,7 +1423,6 @@
       <button type="submit" id="btn-submit-signin">Sign In</button>
     </form>
 
-    <!-- FORGOT PASSWORD FORM -->
     <form id="form-forgot" class="hidden" onsubmit="sendPasswordReset(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
       <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:0.75rem 0.9rem; font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">
         Enter the Gmail / email address registered to your account or shop. We will send a secure password reset link to your inbox.
@@ -1460,7 +1437,6 @@
       </div>
     </form>
 
-    <!-- REGISTER FORM -->
     <form id="form-register" class="hidden" onsubmit="signUp(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
       <div>
         <label class="field-label">Complete Name *</label>
@@ -1489,9 +1465,7 @@
   </div>
 </div>
 
-<!-- =========================================================
-     SET NEW PASSWORD MODAL (OPENS AUTOMATICALLY FROM EMAIL RESET LINK)
-     ========================================================= -->
+<!-- SET NEW PASSWORD MODAL -->
 <div id="recovery-modal" class="modal-backdrop hidden">
   <div class="modal">
     <div class="row-between">
@@ -1600,12 +1574,19 @@
   const SUPABASE_ANON_KEY = "sb_publishable_Yvbk_uPNOu_ZNGOTNXpLIw_urRuUer2";
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  const STORAGE_BUCKET = "product-images";
+  const CACHE_ONE_YEAR = "31536000"; // 1-year browser cache to cut repeat Supabase Egress to 0
+  const MAX_PRODUCT_PHOTOS = 2;      // Max 2 photos per product
+  const PRODUCTS_PAGE_SIZE = 24;     // Lazy pagination to avoid loading 150 images at once
+
   let currentUser = null;
   let currentRole = "guest";
   let myShop = null;
   let userProfileData = { full_name: "", phone: "", address: "" };
+  let lastHandledSessionKey = "";
 
   let shops = [];
+  let shopsLoaded = false;
   let products = [];
   let reviewsByProduct = new Map();
   let cart = [];
@@ -1615,16 +1596,16 @@
   let selectedCategory = "all";
   let selectedShopId = "all";
   let onlyInStock = false;
+  let visibleProductLimit = PRODUCTS_PAGE_SIZE;
   let ordersSubTab = "purchases";
   let adminSelectedMonth = getCurrentYearMonth();
   let adminShowAllMonths = false;
 
   let photoSlots = [
     { url: null, file: null, preview: null },
-    { url: null, file: null, preview: null },
-    { url: null, file: null, preview: null },
     { url: null, file: null, preview: null }
   ];
+  let originalEditPhotoUrls = [];
   let activeSlotIndexForSingleUpload = 0;
 
   let activeDetailProductId = null;
@@ -1643,7 +1624,74 @@
     { key: "Delivered", label: "Delivered" }
   ];
 
-  const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=700&q=80";
+  const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=75";
+
+  /* =========================================================
+     SUPABASE STORAGE & BANDWIDTH OPTIMIZATION HELPERS
+     ========================================================= */
+  async function compressImageToWebP(file, maxDimension = 720, quality = 0.74) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        let { width, height } = img;
+        if (width > maxDimension || height > maxDimension) {
+          if (width >= height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve({ blob, ext: "webp", contentType: "image/webp" });
+            } else {
+              resolve({ blob: file, ext: "jpg", contentType: file.type || "image/jpeg" });
+            }
+          },
+          "image/webp",
+          quality
+        );
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve({ blob: file, ext: "jpg", contentType: file.type || "image/jpeg" });
+      };
+
+      img.src = objectUrl;
+    });
+  }
+
+  function extractStoragePathFromPublicUrl(url) {
+    if (!url || typeof url !== "string") return null;
+    const marker = `/storage/v1/object/public/${STORAGE_BUCKET}/`;
+    const idx = url.indexOf(marker);
+    if (idx === -1) return null;
+    return decodeURIComponent(url.slice(idx + marker.length).split("?")[0]);
+  }
+
+  async function deleteStorageImagesByUrls(urls) {
+    const paths = (urls || [])
+      .map(extractStoragePathFromPublicUrl)
+      .filter(Boolean);
+    if (!paths.length) return;
+    try {
+      await db.storage.from(STORAGE_BUCKET).remove(paths);
+    } catch (_) {}
+  }
 
   function getAppRedirectUrl() {
     return window.location.origin + window.location.pathname;
@@ -1735,7 +1783,7 @@
   }
 
   /* =========================================================
-     INITIALIZATION & SESSION (INCLUDING PASSWORD RECOVERY & GOOGLE OAUTH)
+     INITIALIZATION & DEDUPLICATED SESSION HANDLING
      ========================================================= */
   async function init() {
     document.addEventListener("click", () => {
@@ -1745,7 +1793,6 @@
     const monthInput = document.getElementById("admin-commission-month");
     if (monthInput) monthInput.value = adminSelectedMonth;
 
-    // Detect if user arrived via Password Reset email link
     const isRecoveryRedirect = window.location.hash.includes("type=recovery");
 
     renderPhotoSlots();
@@ -1800,6 +1847,10 @@
   }
 
   async function handleSession(session) {
+    const sessionKey = session?.user ? `${session.user.id}:${(session.access_token || "").slice(-10)}` : "guest";
+    if (sessionKey === lastHandledSessionKey) return;
+    lastHandledSessionKey = sessionKey;
+
     currentUser = session?.user || null;
     stopOrderSync();
     knownOrderSnapshots.clear();
@@ -1808,7 +1859,7 @@
     const sellerBtn = document.getElementById("btn-seller");
 
     if (currentUser) {
-      const { data: profile } = await db.from("profiles").select("*").eq("id", currentUser.id).single();
+      const { data: profile } = await db.from("profiles").select("role, full_name, phone, address").eq("id", currentUser.id).single();
       currentRole = profile?.role || "user";
 
       const meta = currentUser.user_metadata || {};
@@ -1820,7 +1871,6 @@
         address: (meta.address || profile?.address || cached.address || "").trim()
       };
 
-      // Auto-create profiles row for first-time Google OAuth users without touching existing roles
       if (!profile) {
         try {
           await db.from("profiles").insert({
@@ -1833,7 +1883,7 @@
         } catch (_) {}
       }
 
-      await loadShops();
+      if (!shopsLoaded) await loadShops();
       await loadMyShop();
       applyOwnerHeaderDisplay();
 
@@ -1859,8 +1909,7 @@
         document.getElementById("btn-admin").classList.add("hidden");
       }
 
-      await loadCart();
-      await syncOrdersAndNotifications(true);
+      await Promise.all([loadCart(), syncOrdersAndNotifications(true)]);
       if (currentRole === "admin") {
         renderAdminShopsModeration();
         renderAdminCommissionMonitor();
@@ -1881,7 +1930,7 @@
       });
       headerApplyBtn.classList.remove("hidden");
       document.getElementById("btn-login").classList.remove("hidden");
-      await loadShops();
+      if (!shopsLoaded) await loadShops();
       switchView("shop");
     }
     renderProducts();
@@ -1909,7 +1958,7 @@
       if (navBtn) navBtn.classList.toggle("active-nav", v === view);
     });
     if (view === "seller") {
-      loadMyShop().then(() => renderSellerWorkspace());
+      loadMyShop(true).then(() => renderSellerWorkspace());
     }
     if (view === "orders") loadOrders();
     if (view === "admin") {
@@ -1925,19 +1974,27 @@
      SHOPS, ANTI-TROLL VERIFICATION & CUSTOM SHIPPING FEE
      ========================================================= */
   async function loadShops() {
-    const { data, error } = await db.from("shops").select("*").order("id", { ascending: false });
+    const { data, error } = await db
+      .from("shops")
+      .select("id, owner_id, name, category, contact_phone, shop_address, description, free_shipping, shipping_fee, verification_url, status, admin_note")
+      .order("id", { ascending: false });
     if (error) {
       shops = [];
       renderShopsStrip();
       return;
     }
     shops = data || [];
+    shopsLoaded = true;
     renderShopsStrip();
   }
 
-  async function loadMyShop() {
+  async function loadMyShop(forceFresh = false) {
     if (!currentUser) {
       myShop = null;
+      return;
+    }
+    if (!forceFresh && shopsLoaded) {
+      myShop = shops.find(s => s.owner_id === currentUser.id) || null;
       return;
     }
     const { data } = await db.from("shops").select("*").eq("owner_id", currentUser.id).maybeSingle();
@@ -2070,12 +2127,15 @@
   }
 
   async function uploadVerificationImage(file) {
-    const rawExt = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const ext = rawExt.replace(/[^a-z0-9]/g, "") || "jpg";
-    const path = `verifications/${currentUser.id}-${Date.now()}.${ext}`;
-    const { error } = await db.storage.from("product-images").upload(path, file, { upsert: true });
+    const compressed = await compressImageToWebP(file, 900, 0.78);
+    const path = `verifications/${currentUser.id}-${Date.now()}.${compressed.ext}`;
+    const { error } = await db.storage.from(STORAGE_BUCKET).upload(path, compressed.blob, {
+      cacheControl: CACHE_ONE_YEAR,
+      contentType: compressed.contentType,
+      upsert: true
+    });
     if (error) throw new Error(error.message);
-    const { data } = db.storage.from("product-images").getPublicUrl(path);
+    const { data } = db.storage.from(STORAGE_BUCKET).getPublicUrl(path);
     return data.publicUrl;
   }
 
@@ -2092,7 +2152,7 @@
 
     const btn = document.getElementById("btn-create-shop");
     btn.disabled = true;
-    btn.textContent = "Uploading Verification & Submitting...";
+    btn.textContent = "Compressing & Submitting...";
 
     try {
       const verificationUrl = await uploadVerificationImage(idFile);
@@ -2146,7 +2206,11 @@
     try {
       let verificationUrl = myShop.verification_url;
       const newFile = document.getElementById("resub-shop-id-file").files?.[0];
-      if (newFile) verificationUrl = await uploadVerificationImage(newFile);
+      if (newFile) {
+        const oldUrl = myShop.verification_url;
+        verificationUrl = await uploadVerificationImage(newFile);
+        if (oldUrl) await deleteStorageImagesByUrls([oldUrl]);
+      }
 
       const { data, error } = await db
         .from("shops")
@@ -2206,11 +2270,11 @@
   }
 
   /* =========================================================
-     4-PHOTO UPLOAD & PRODUCT MANAGEMENT
+     2-PHOTO UPLOAD (AUTO WEBP COMPRESSION + ORPHAN CLEANUP)
      ========================================================= */
   function renderPhotoSlots() {
     const grid = document.getElementById("photo-slots-grid");
-    const slotLabels = ["Photo 1 (Main)", "Photo 2", "Photo 3", "Photo 4"];
+    const slotLabels = ["Photo 1 (Main)", "Photo 2 (Angle 2)"];
 
     grid.innerHTML = photoSlots.map((slot, idx) => {
       const imgSrc = slot.preview || slot.url;
@@ -2249,10 +2313,10 @@
   }
 
   function handleMultiPhotoSelect(e) {
-    const files = Array.from(e.target.files || []).slice(0, 4);
+    const files = Array.from(e.target.files || []).slice(0, MAX_PRODUCT_PHOTOS);
     if (!files.length) return;
     let fileIdx = 0;
-    for (let i = 0; i < 4 && fileIdx < files.length; i++) {
+    for (let i = 0; i < MAX_PRODUCT_PHOTOS && fileIdx < files.length; i++) {
       if (!photoSlots[i].url && !photoSlots[i].file) {
         photoSlots[i] = { url: null, file: files[fileIdx], preview: URL.createObjectURL(files[fileIdx]) };
         fileIdx++;
@@ -2277,7 +2341,7 @@
   function resetProductForm() {
     document.getElementById("seller-product-form").reset();
     document.getElementById("edit-prod-id").value = "";
-    document.getElementById("product-form-heading").textContent = "➕ Add Product to Your Shop (Up to 4 Photos)";
+    document.getElementById("product-form-heading").textContent = "➕ Add Product to Your Shop (Up to 2 Photos)";
     document.getElementById("btn-save-product").textContent = "Publish Product";
     document.getElementById("btn-cancel-edit-prod").classList.add("hidden");
     if (myShop) document.getElementById("p-category").value = myShop.category;
@@ -2285,10 +2349,9 @@
     photoSlots.forEach(s => { if (s.preview) URL.revokeObjectURL(s.preview); });
     photoSlots = [
       { url: null, file: null, preview: null },
-      { url: null, file: null, preview: null },
-      { url: null, file: null, preview: null },
       { url: null, file: null, preview: null }
     ];
+    originalEditPhotoUrls = [];
     renderPhotoSlots();
   }
 
@@ -2303,10 +2366,12 @@
     document.getElementById("p-stock").value = p.stock;
     document.getElementById("p-desc").value = p.description || "";
 
-    const existingImgs = getProductImages(p);
+    const existingImgs = getProductImages(p).filter(u => u && u !== DEFAULT_PLACEHOLDER_IMG);
+    originalEditPhotoUrls = [...existingImgs];
+
     photoSlots.forEach(s => { if (s.preview) URL.revokeObjectURL(s.preview); });
-    photoSlots = [0, 1, 2, 3].map(i => ({
-      url: existingImgs[i] && existingImgs[i] !== DEFAULT_PLACEHOLDER_IMG ? existingImgs[i] : null,
+    photoSlots = [0, 1].map(i => ({
+      url: existingImgs[i] || null,
       file: null,
       preview: null
     }));
@@ -2327,19 +2392,22 @@
     const saveBtn = document.getElementById("btn-save-product");
     const editId = document.getElementById("edit-prod-id").value;
     saveBtn.disabled = true;
-    saveBtn.textContent = "Saving...";
+    saveBtn.textContent = "Compressing & Saving...";
 
     try {
       const uploadedUrls = [];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < MAX_PRODUCT_PHOTOS; i++) {
         const slot = photoSlots[i];
         if (slot.file) {
-          const rawExt = slot.file.name.split(".").pop()?.toLowerCase() || "jpg";
-          const ext = rawExt.replace(/[^a-z0-9]/g, "") || "jpg";
-          const filePath = `shop-${myShop.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
-          const { error: uploadErr } = await db.storage.from("product-images").upload(filePath, slot.file, { upsert: false });
+          const compressed = await compressImageToWebP(slot.file, 720, 0.74);
+          const filePath = `shop-${myShop.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}.${compressed.ext}`;
+          const { error: uploadErr } = await db.storage.from(STORAGE_BUCKET).upload(filePath, compressed.blob, {
+            cacheControl: CACHE_ONE_YEAR,
+            contentType: compressed.contentType,
+            upsert: false
+          });
           if (uploadErr) return showToast(`Photo ${i + 1} upload failed: ${uploadErr.message}`, "error");
-          const { data: pubData } = db.storage.from("product-images").getPublicUrl(filePath);
+          const { data: pubData } = db.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
           uploadedUrls.push(pubData.publicUrl);
         } else if (slot.url) {
           uploadedUrls.push(slot.url);
@@ -2360,6 +2428,11 @@
       if (editId) {
         const { error } = await db.from("products").update(payload).eq("id", editId);
         if (error) return showToast("Update error: " + error.message, "error");
+
+        // Delete any old replaced/removed images from Supabase Storage so space isn't wasted
+        const replacedUrls = originalEditPhotoUrls.filter(oldUrl => !uploadedUrls.includes(oldUrl));
+        if (replacedUrls.length) await deleteStorageImagesByUrls(replacedUrls);
+
         showToast("Product updated!", "success");
       } else {
         const { error } = await db.from("products").insert(payload);
@@ -2393,7 +2466,7 @@
         <tr>
           <td>
             <div style="display:flex; align-items:center; gap:0.55rem;">
-              <img src="${escapeHtml(imgs[0])}" style="width:42px; height:42px; border-radius:8px; object-fit:cover; border:1px solid var(--border);" />
+              <img src="${escapeHtml(imgs[0])}" loading="lazy" decoding="async" style="width:42px; height:42px; border-radius:8px; object-fit:cover; border:1px solid var(--border);" />
               <div><strong>${escapeHtml(p.name)}</strong><br/><small style="color:var(--muted);">📷 ${imgs.length} photo(s)</small></div>
             </div>
           </td>
@@ -2415,9 +2488,14 @@
 
   async function deleteProduct(id) {
     if (!confirm("Delete this product permanently?")) return;
+    const target = products.find(p => p.id === id);
+    const urlsToDelete = target ? getProductImages(target) : [];
+
     const { error } = await db.from("products").delete().eq("id", id);
     if (error) return showToast("Error: " + error.message, "error");
-    showToast("Product deleted.", "info");
+
+    await deleteStorageImagesByUrls(urlsToDelete);
+    showToast("Product & images deleted.", "info");
     await loadProducts();
     renderSellerProductsTable();
     if (currentRole === "admin") renderAdminTable();
@@ -2447,7 +2525,7 @@
 
       const idLinkHtml = s.verification_url
         ? `<a href="${escapeHtml(s.verification_url)}" target="_blank" rel="noopener">
-             <img src="${escapeHtml(s.verification_url)}" style="width:56px; height:42px; object-fit:cover; border-radius:6px; border:1px solid var(--border);" title="Click to view full ID/Store photo" />
+             <img src="${escapeHtml(s.verification_url)}" loading="lazy" decoding="async" style="width:56px; height:42px; object-fit:cover; border-radius:6px; border:1px solid var(--border);" title="Click to view full ID/Store photo" />
            </a>`
         : `<small style="color:var(--muted);">Legacy / None</small>`;
 
@@ -2515,9 +2593,19 @@
 
   async function deleteShopByAdmin(shopId, shopName) {
     if (!confirm(`Delete shop "${shopName}" and all of its products permanently?`)) return;
+
+    const shopObj = shops.find(s => String(s.id) === String(shopId));
+    const shopProducts = products.filter(p => String(p.shop_id) === String(shopId));
+    const urlsToClean = [
+      shopObj?.verification_url,
+      ...shopProducts.flatMap(p => getProductImages(p))
+    ].filter(Boolean);
+
     const { error } = await db.from("shops").delete().eq("id", shopId);
     if (error) return showToast("Delete failed: " + error.message, "error");
-    showToast(`Shop "${shopName}" deleted.`, "info");
+
+    await deleteStorageImagesByUrls(urlsToClean);
+    showToast(`Shop "${shopName}" & files deleted.`, "info");
     await Promise.all([loadShops(), loadProducts()]);
     renderAdminShopsModeration();
     renderAdminCommissionMonitor();
@@ -2694,12 +2782,23 @@
   }
 
   /* =========================================================
-     MARKETPLACE CATALOG, FILTERS & 4-PHOTO PRODUCT MODAL
+     MARKETPLACE CATALOG, FILTERS & LAZY PAGINATION
      ========================================================= */
+  function resetPaginationAndRender() {
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
+    renderProducts();
+  }
+
+  function loadMoreProducts() {
+    visibleProductLimit += PRODUCTS_PAGE_SIZE;
+    renderProducts();
+  }
+
   function resetMarketplaceFilters() {
     selectedCategory = "all";
     selectedShopId = "all";
     onlyInStock = false;
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
     document.getElementById("search-input").value = "";
     updateFilterUI();
     renderProducts();
@@ -2707,18 +2806,21 @@
 
   function setCategoryFilter(cat) {
     selectedCategory = cat;
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
     updateFilterUI();
     renderProducts();
   }
 
   function setShopFilter(shopId) {
     selectedShopId = shopId;
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
     updateFilterUI();
     renderProducts();
   }
 
   function toggleStockFilter() {
     onlyInStock = !onlyInStock;
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
     updateFilterUI();
     renderProducts();
   }
@@ -2754,7 +2856,10 @@
   }
 
   async function loadProducts() {
-    const { data, error } = await db.from("products").select("*").order("id", { ascending: false });
+    const { data, error } = await db
+      .from("products")
+      .select("id, shop_id, name, category, price, stock, sold_count, description, images, image_url")
+      .order("id", { ascending: false });
     if (error) {
       showError(error.message);
       return;
@@ -2765,7 +2870,11 @@
   }
 
   async function loadAllReviews() {
-    const { data, error } = await db.from("product_reviews").select("*").order("created_at", { ascending: false });
+    const { data, error } = await db
+      .from("product_reviews")
+      .select("id, product_id, user_id, reviewer_name, rating, comment, created_at")
+      .order("created_at", { ascending: false })
+      .limit(300);
     if (error) return;
     reviewsByProduct.clear();
     (data || []).forEach(r => {
@@ -2805,12 +2914,24 @@
     });
 
     const grid = document.getElementById("product-grid");
+    const loadMoreWrap = document.getElementById("load-more-wrap");
+
     if (!filtered.length) {
       grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No verified items found in this shop or category.</div>`;
+      loadMoreWrap.classList.add("hidden");
       return;
     }
 
-    grid.innerHTML = filtered.map(p => {
+    const visibleItems = filtered.slice(0, visibleProductLimit);
+    const remaining = filtered.length - visibleItems.length;
+    if (remaining > 0) {
+      document.getElementById("remaining-products-count").textContent = remaining;
+      loadMoreWrap.classList.remove("hidden");
+    } else {
+      loadMoreWrap.classList.add("hidden");
+    }
+
+    grid.innerHTML = visibleItems.map(p => {
       const stockNum = Number(p.stock || 0);
       const soldNum = Number(p.sold_count || 0);
       const imgs = getProductImages(p);
@@ -2834,7 +2955,7 @@
       return `
         <div class="card">
           <div class="card-img-wrap" onclick="openProductModal(${p.id})">
-            <img src="${escapeHtml(imgs[0])}" alt="${escapeHtml(p.name)}" />
+            <img src="${escapeHtml(imgs[0])}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async" />
             <span class="stock-tag ${stockTagClass}">${stockTagText}</span>
             <span class="ship-tag-overlay ${ship.isFree ? "free" : ""}">${ship.isFree ? "Free Ship" : `Ship ₱${ship.fee.toFixed(0)}`}</span>
             ${imgs.length > 1 ? `<span class="photo-count-pill">📷 ${imgs.length} views</span>` : ""}
@@ -2926,7 +3047,7 @@
     document.getElementById("detail-main-img").src = imgs[0];
     document.getElementById("detail-thumbs").innerHTML = imgs.map((url, idx) => `
       <div class="gallery-thumb ${idx === 0 ? "active" : ""}" onclick="selectGalleryImage(${idx}, '${escapeHtml(url)}')">
-        <img src="${escapeHtml(url)}" alt="View ${idx + 1}" />
+        <img src="${escapeHtml(url)}" alt="View ${idx + 1}" loading="lazy" decoding="async" />
       </div>
     `).join("");
 
@@ -3006,7 +3127,7 @@
   }
 
   /* =========================================================
-     CART & CHECKOUT (WITH SHIPPING FEE BREAKDOWN PER SHOP)
+     CART & CHECKOUT
      ========================================================= */
   async function loadCart() {
     if (!currentUser) return;
@@ -3178,7 +3299,6 @@
     orderBtn.textContent = "Placing Order...";
 
     try {
-      // Save delivery info for Google OAuth / new accounts if previously empty
       if (!userProfileData.phone || !userProfileData.address) {
         const updated = { full_name: name, phone, address };
         userProfileData = updated;
@@ -3224,7 +3344,11 @@
   }
 
   async function loadOrders() {
-    const { data, error } = await db.from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
+    const { data, error } = await db
+      .from("orders")
+      .select("*, order_items(*)")
+      .order("created_at", { ascending: false })
+      .limit(200);
     if (error) return showError(error.message);
 
     cachedOrders = data || [];
@@ -3383,7 +3507,7 @@
   }
 
   /* =========================================================
-     NOTIFICATIONS & REALTIME SYNC
+     NOTIFICATIONS & OPTIMIZED REALTIME SYNC
      ========================================================= */
   function getNotifReadKey() { return currentUser ? `markethub_read_notifs_${currentUser.id}` : "markethub_read_notifs"; }
   function getNotifDeletedKey() { return currentUser ? `markethub_del_notifs_${currentUser.id}` : "markethub_del_notifs"; }
@@ -3480,7 +3604,11 @@
 
   async function syncOrdersAndNotifications(isInitialLoad = false) {
     if (!currentUser) return;
-    const { data, error } = await db.from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
+    const { data, error } = await db
+      .from("orders")
+      .select("*, order_items(*)")
+      .order("created_at", { ascending: false })
+      .limit(200);
     if (error) return;
     const latestOrders = data || [];
 
@@ -3513,7 +3641,10 @@
       .channel("marketplace-live-orders")
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => syncOrdersAndNotifications(false))
       .subscribe();
-    pollIntervalId = setInterval(() => syncOrdersAndNotifications(false), 10000);
+    // 60-second fallback polling, paused when browser tab is hidden to save Supabase egress
+    pollIntervalId = setInterval(() => {
+      if (!document.hidden) syncOrdersAndNotifications(false);
+    }, 60000);
   }
 
   function stopOrderSync() {
@@ -3688,7 +3819,12 @@
     }
   }
 
-  async function logout() { stopOrderSync(); await db.auth.signOut(); showToast("Signed out.", "info"); }
+  async function logout() {
+    stopOrderSync();
+    lastHandledSessionKey = "";
+    await db.auth.signOut();
+    showToast("Signed out.", "info");
+  }
 
   function openProfileModal() {
     if (!currentUser) return;
