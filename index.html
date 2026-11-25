@@ -2,84 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>MarketHub — Fresh Market &amp; Gadget Online Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MarketHub — Fresh Local Market &amp; Gadgets</title>
 
-  <!-- PWA & Mobile App Meta Tags -->
-  <meta name="theme-color" content="#15803d" />
+  <!-- PWA & Mobile App Manifest + Theme -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="MarketHub" />
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%2316a34a'/%3E%3Cpath d='M52 66h88l-8 78H60L52 66zm26 0V54a18 18 0 0 1 36 0v12' fill='none' stroke='%23ffffff' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      /* Fresh Grass Green & Emerald Online Store Palette */
       --primary: #16a34a;
       --primary-dark: #15803d;
       --primary-deep: #14532d;
-      --primary-light: #dcfce7;
+      --primary-light: #22c55e;
       --primary-soft: #f0fdf4;
-      --accent-emerald: #059669;
-      --accent-lime: #65a30d;
-      --green: #15803d;
-      --indigo: #0f766e;
-      --danger: #dc2626;
-      --bg: #eef7f0;
-      --surface: rgba(255, 255, 255, 0.94);
-      --text: #14281d;
-      --text-secondary: #3b5245;
+      --primary-tint: #dcfce7;
+      --accent-amber: #f59e0b;
+      --bg: #f1f7f3;
+      --card: #ffffff;
+      --text: #14261c;
+      --text-secondary: #3f5749;
       --muted: #647c6e;
-      --border: #cde4d4;
-      --shadow-sm: 0 2px 8px rgba(20, 83, 45, 0.06);
-      --shadow-md: 0 10px 26px rgba(20, 83, 45, 0.11);
+      --border: #d9e7de;
+      --danger: #dc2626;
+      --green: #059669;
+      --indigo: #0f766e;
+      --shadow-xs: 0 1px 2px rgba(20, 83, 45, 0.05);
+      --shadow-sm: 0 2px 6px rgba(20, 83, 45, 0.08);
+      --shadow-md: 0 8px 20px rgba(20, 83, 45, 0.14);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2316a34a' stroke-width='1.2' stroke-opacity='0.065' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='18' y='16' width='22' height='34' rx='4'/%3E%3Cline x1='26' y1='20' x2='32' y2='20'/%3E%3Ccircle cx='29' cy='45' r='1.3'/%3E%3Cpath d='M92 38c0-11 9-18 20-18 0 11-9 18-20 18z'/%3E%3Cpath d='M92 38l-5 5'/%3E%3Cpath d='M22 106a14 14 0 0 1 28 0v8'/%3E%3Crect x='19' y='106' width='6' height='11' rx='2'/%3E%3Crect x='47' y='106' width='6' height='11' rx='2'/%3E%3Cpath d='M96 98h24l-3 19H99z'/%3E%3Cpath d='M102 98v-4a6 6 0 0 1 12 0v4'/%3E%3Ccircle cx='138' cy='76' r='8'/%3E%3Cpath d='M138 64v4M138 84v4M126 76h4M146 76h4'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 160px 160px;
       color: var(--text);
-      min-height: 100vh;
-      /* Layered Grass-Green Glow + Custom Market & Gadget SVG Wallpaper Pattern */
-      background-color: #ecf7ef;
-      background-image:
-        radial-gradient(circle at 12% 18%, rgba(34, 197, 94, 0.16) 0%, transparent 42%),
-        radial-gradient(circle at 88% 25%, rgba(16, 185, 129, 0.14) 0%, transparent 45%),
-        radial-gradient(circle at 50% 88%, rgba(101, 163, 13, 0.12) 0%, transparent 50%),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%2316a34a' stroke-opacity='0.085' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Smartphone Gadget --%3E%3Crect x='22' y='18' width='22' height='36' rx='4'/%3E%3Cline x1='30' y1='49' x2='36' y2='49'/%3E%3C!-- Shopping Bag --%3E%3Cpath d='M110 26h26l-3 28h-20z'/%3E%3Cpath d='M117 26v-5a6 6 0 0 1 12 0v5'/%3E%3C!-- Headphones Gadget --%3E%3Cpath d='M24 128v-8a13 13 0 0 1 26 0v8'/%3E%3Crect x='20' y='126' width='6' height='12' rx='2'/%3E%3Crect x='48' y='126' width='6' height='12' rx='2'/%3E%3C!-- Market Cart --%3E%3Ccircle cx='118' cy='144' r='2.5'/%3E%3Ccircle cx='136' cy='144' r='2.5'/%3E%3Cpath d='M106 116h6l4 20h22l4-14h-24'/%3E%3C!-- Fresh Leaf & Sparkle --%3E%3Cpath d='M78 78c10-10 22-8 22-8s2 12-8 22c-7 7-16 4-16 4s-5-11 2-18z'/%3E%3Ccircle cx='156' cy='84' r='3'/%3E%3Ccircle cx='72' cy='158' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
-      background-attachment: fixed;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* =========================================================
-       FRESH GRASS GREEN TOP HEADER (GLASSMORPHIC & CRISP)
+       FRESH GRASS GREEN TOP NAVIGATION HEADER
        ========================================================= */
     .site-header {
-      background: linear-gradient(135deg, #14532d 0%, #15803d 52%, #16a34a 100%);
-      color: #fff;
+      background: linear-gradient(180deg, #15803d 0%, #16a34a 60%, #22c55e 100%);
+      color: #ffffff;
       position: sticky;
       top: 0;
-      z-index: 40;
-      box-shadow: 0 4px 18px rgba(20, 83, 45, 0.24);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      z-index: 60;
+      box-shadow: 0 3px 12px rgba(20, 83, 45, 0.2);
     }
 
     .header-inner {
       max-width: 1240px;
       margin: 0 auto;
-      padding: 0.45rem 1rem 0.78rem;
+      padding: 0 1rem;
     }
 
     .header-top-links {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0.42rem 0;
       font-size: 0.77rem;
-      padding-bottom: 0.45rem;
-      color: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
       gap: 0.5rem;
       flex-wrap: wrap;
     }
@@ -87,54 +82,58 @@
     .top-link-group {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.55rem;
       flex-wrap: wrap;
     }
 
     .top-link-btn {
       background: transparent;
+      color: #ffffff;
       border: none;
-      color: rgba(255, 255, 255, 0.95);
-      padding: 0.15rem 0.3rem;
+      padding: 0.18rem 0.35rem;
       font-size: 0.77rem;
       font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
+      border-radius: 4px;
+      transition: background 0.15s;
     }
-    .top-link-btn:hover { color: #bbf7d0; text-decoration: underline; }
-    .top-sep { opacity: 0.45; }
+
+    .top-link-btn:hover { background: rgba(255, 255, 255, 0.16); }
+    .top-sep { color: rgba(255, 255, 255, 0.38); font-size: 0.72rem; }
 
     .header-main-row {
       display: flex;
       align-items: center;
-      gap: 1.15rem;
+      gap: 1.25rem;
+      padding: 0.75rem 0 0.85rem;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 1.48rem;
+      gap: 0.52rem;
       font-weight: 800;
-      color: #fff;
+      font-size: 1.42rem;
       letter-spacing: -0.02em;
       cursor: pointer;
-      flex-shrink: 0;
-      text-decoration: none;
+      color: #ffffff;
+      white-space: nowrap;
+      user-select: none;
     }
 
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%);
+      width: 36px;
+      height: 36px;
+      background: #ffffff;
       color: var(--primary-dark);
-      display: flex;
+      border-radius: 9px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
     }
 
     .header-search-wrap {
@@ -142,303 +141,274 @@
       display: flex;
       flex-direction: column;
       gap: 0.32rem;
+      min-width: 0;
     }
 
     .header-search-box {
       display: flex;
-      background: #fff;
-      border-radius: 8px;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 6px;
       padding: 3px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 2px 8px rgba(15, 60, 30, 0.16);
     }
 
     .header-search-box input {
       border: none;
-      background: transparent;
-      padding: 0.5rem 0.85rem;
+      outline: none;
+      flex: 1;
+      padding: 0.5rem 0.75rem;
       font-size: 0.88rem;
       color: var(--text);
-      flex: 1;
-      outline: none;
+      background: transparent;
+      min-width: 0;
     }
 
     .header-search-btn {
-      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-      color: #fff;
+      background: var(--primary-dark);
+      color: #ffffff;
       border: none;
-      border-radius: 6px;
-      padding: 0.45rem 1.2rem;
+      border-radius: 4px;
+      padding: 0.48rem 1.15rem;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
-      transition: filter 0.15s;
+      transition: background 0.15s;
     }
-    .header-search-btn:hover { filter: brightness(1.08); }
+
+    .header-search-btn:hover { background: var(--primary-deep); }
 
     .header-quick-tags {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.75rem;
       font-size: 0.72rem;
-      color: rgba(255, 255, 255, 0.92);
+      color: rgba(255, 255, 255, 0.94);
       overflow-x: auto;
       white-space: nowrap;
       scrollbar-width: none;
     }
     .header-quick-tags::-webkit-scrollbar { display: none; }
-    .header-quick-tags span {
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.14);
-      padding: 0.12rem 0.5rem;
-      border-radius: 999px;
-      transition: background 0.15s;
-    }
-    .header-quick-tags span:hover { background: rgba(255, 255, 255, 0.28); }
+    .header-quick-tags span { cursor: pointer; opacity: 0.92; transition: opacity 0.15s; }
+    .header-quick-tags span:hover { opacity: 1; text-decoration: underline; }
 
     .header-right-icons {
       display: flex;
       align-items: center;
-      gap: 0.9rem;
+      gap: 0.55rem;
       flex-shrink: 0;
     }
 
     .header-cart-btn {
       position: relative;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 10px;
-      color: #fff;
-      padding: 0.45rem 0.6rem;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      padding: 0.4rem 0.5rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.15s;
+      border-radius: 6px;
     }
-    .header-cart-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .header-cart-btn:hover { background: rgba(255, 255, 255, 0.15); }
 
     .header-cart-badge {
       position: absolute;
-      top: -6px;
-      right: -6px;
-      background: #facc15;
-      color: #14532d;
-      font-size: 0.7rem;
+      top: -1px;
+      right: -3px;
+      background: #ffffff;
+      color: var(--primary-dark);
+      border: 2px solid var(--primary);
+      font-size: 0.68rem;
       font-weight: 800;
-      padding: 1px 6px;
+      min-width: 21px;
+      height: 19px;
+      padding: 0 5px;
       border-radius: 999px;
-      border: 2px solid #15803d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* User & Notifications in Header */
     .user-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      padding: 0.2rem 0.55rem;
+      gap: 0.38rem;
+      background: rgba(255, 255, 255, 0.16);
+      padding: 0.2rem 0.55rem 0.2rem 0.25rem;
       border-radius: 999px;
-      font-size: 0.76rem;
-      color: #fff;
       cursor: pointer;
-      backdrop-filter: blur(6px);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #ffffff;
     }
-    .user-pill:hover { background: rgba(255, 255, 255, 0.28); }
+    .user-pill:hover { background: rgba(255, 255, 255, 0.25); }
+
     .user-avatar-dot {
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #fff;
+      background: #ffffff;
       color: var(--primary-dark);
       font-weight: 800;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
 
+    /* Buttons */
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.52rem 0.95rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+    }
+    button:hover { background: var(--primary-dark); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    button.secondary { background: #ffffff; color: var(--text); border: 1px solid var(--border); }
+    button.secondary:hover { background: var(--primary-soft); border-color: #86efac; }
+    button.danger { background: var(--danger); color: #fff; }
+    button.danger:hover { background: #b91c1c; }
+    button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
+    button.danger-outline:hover { background: #fef2f2; }
+    button.success-btn { background: var(--green); color: #fff; }
+    button.success-btn:hover { background: #047857; }
+    button.shop-cta { background: var(--primary); color: #fff; }
+    button.shop-cta:hover { background: var(--primary-dark); }
+    button.add-cart-outline {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border: 1px solid var(--primary);
+    }
+    button.add-cart-outline:hover { background: var(--primary-tint); }
+    button.sm { padding: 0.34rem 0.65rem; font-size: 0.78rem; }
+
+    /* Badges */
+    .badge {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .badge.admin { background: #fef3c7; color: #92400e; }
+    .badge.seller { background: var(--primary-tint); color: var(--primary-deep); }
+    .badge.cat-badge { background: #f3f6f4; color: #3f5749; text-transform: none; font-weight: 600; }
+    .badge.ship-free { background: #dcfce7; color: #166534; text-transform: none; }
+    .badge.ship-paid { background: #e0f2fe; color: #075985; text-transform: none; }
+    .badge.area-badge { background: #fef9c3; color: #854d0e; text-transform: none; }
+
+    .badge.status-pending { background: #fef3c7; color: #b45309; }
+    .badge.status-received { background: #e0e7ff; color: #3730a3; }
+    .badge.status-confirmed { background: #dbeafe; color: #1d4ed8; }
+    .badge.status-shipped { background: #f3e8ff; color: #7e22ce; }
+    .badge.status-delivered, .badge.status-approved { background: #dcfce7; color: #15803d; }
+    .badge.status-cancelled, .badge.status-rejected, .badge.status-suspended { background: #fee2e2; color: #b91c1c; }
+
+    /* Notifications */
     .notif-wrapper { position: relative; display: inline-block; }
     .notif-btn {
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.32rem;
       background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.76rem;
-      cursor: pointer;
-      padding: 0.2rem 0.5rem;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.2rem 0.55rem;
+      font-size: 0.75rem;
+      border-radius: 4px;
     }
+    .notif-btn:hover { background: rgba(255, 255, 255, 0.25); }
     .notif-badge {
       background: #facc15;
       color: #14532d;
-      font-size: 0.66rem;
+      font-size: 0.65rem;
       font-weight: 800;
       padding: 1px 5px;
       border-radius: 999px;
+      line-height: 1.2;
     }
     .notif-dropdown {
       position: absolute;
       right: 0;
       top: calc(100% + 8px);
-      width: 345px;
+      width: 350px;
       max-width: 92vw;
-      background: #fff;
+      background: #ffffff;
       color: var(--text);
       border: 1px solid var(--border);
       border-radius: 10px;
-      box-shadow: 0 14px 34px rgba(20, 83, 45, 0.2);
-      z-index: 60;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.2);
+      z-index: 120;
       overflow: hidden;
     }
     .notif-header {
-      padding: 0.65rem 0.9rem;
-      background: var(--primary-soft);
+      padding: 0.72rem 0.9rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--primary-soft);
     }
     .notif-header h4 { margin: 0; font-size: 0.86rem; color: var(--primary-deep); }
-    .notif-list { max-height: 320px; overflow-y: auto; }
+    .notif-list { max-height: 360px; overflow-y: auto; }
     .notif-item {
-      padding: 0.7rem 0.9rem;
+      padding: 0.72rem 0.9rem;
       border-bottom: 1px solid #f1f5f9;
+      font-size: 0.81rem;
       cursor: pointer;
+      transition: background 0.12s;
     }
     .notif-item:hover { background: #f8fafc; }
     .notif-item.unread { background: #f0fdf4; border-left: 3px solid var(--primary); }
     .notif-item-top { display: flex; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.2rem; }
-    .notif-title { font-size: 0.8rem; font-weight: 700; color: var(--text); }
-    .notif-time { font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
-    .notif-desc { font-size: 0.76rem; color: var(--text-secondary); }
-    .notif-actions { display: flex; gap: 0.35rem; margin-top: 0.4rem; }
+    .notif-title { font-weight: 700; color: var(--text); }
+    .notif-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+    .notif-desc { color: var(--text-secondary); line-height: 1.35; }
+    .notif-actions { display: flex; gap: 0.4rem; margin-top: 0.45rem; }
 
-    /* =========================================================
-       GENERAL BUTTONS & INPUTS
-       ========================================================= */
-    button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0.5rem 0.95rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    button:hover:not(:disabled) { background: var(--primary-dark); }
-    button:disabled { opacity: 0.55; cursor: not-allowed; }
-    button.secondary { background: #fff; color: var(--text-secondary); border: 1px solid var(--border); }
-    button.secondary:hover:not(:disabled) { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-dark); }
-    button.sm { padding: 0.34rem 0.68rem; font-size: 0.78rem; }
-    button.danger { background: var(--danger); }
-    button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
-    button.danger-outline:hover:not(:disabled) { background: #fef2f2; }
-    button.success-btn { background: var(--green); color: #fff; }
-    button.shop-cta {
-      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-      color: #fff;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.26);
-    }
-    button.shop-cta:hover:not(:disabled) { filter: brightness(1.06); transform: translateY(-1px); }
-    button.add-cart-outline {
-      background: var(--primary-soft);
-      color: var(--primary-dark);
-      border: 1.5px solid var(--primary);
-      font-weight: 700;
-    }
-    button.add-cart-outline:hover:not(:disabled) { background: var(--primary-light); }
-    button.text-link-btn {
-      background: transparent;
-      border: none;
-      color: var(--primary-dark);
-      padding: 0;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-decoration: underline;
-    }
-    button.active-nav { background: var(--primary-soft); color: var(--primary-dark); border-color: var(--primary); }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 0.56rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.87rem;
-      font-family: inherit;
-      background: #fff;
-      color: var(--text);
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
-    }
-
-    .container { max-width: 1240px; margin: 1.15rem auto 2.8rem; padding: 0 1rem; }
+    /* Container */
+    .container { max-width: 1240px; margin: 1rem auto; padding: 0 1rem 2.5rem; }
     .hidden { display: none !important; }
-    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-
-    /* Badges */
-    .badge {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-      background: rgba(255, 255, 255, 0.22);
-      color: #fff;
-    }
-    .badge.admin { background: #fef3c7; color: #92400e; }
-    .badge.seller { background: var(--primary-light); color: var(--primary-dark); }
-    .badge.cat-badge { background: #f1f5f9; color: var(--text-secondary); text-transform: none; font-weight: 600; }
-    .badge.ship-free { background: #dcfce7; color: #15803d; text-transform: none; }
-    .badge.ship-paid { background: #e0f2fe; color: #0369a1; text-transform: none; }
-    .badge.area-badge { background: #fef9c3; color: #854d0e; text-transform: none; }
-    .badge.status-approved { background: #dcfce7; color: #15803d; }
-    .badge.status-pending { background: #fef3c7; color: #92400e; }
-    .badge.status-suspended, .badge.status-cancelled { background: #fee2e2; color: #b91c1c; }
-    .badge.status-received { background: #e0f2fe; color: #0369a1; }
-    .badge.status-confirmed { background: #ccfbf1; color: #0f766e; }
-    .badge.status-shipped { background: #fef3c7; color: #b45309; }
-    .badge.status-delivered { background: #dcfce7; color: #15803d; }
 
     /* =========================================================
-       HERO SHOWCASE BANNER (MARKET & GADGET THEME)
+       GRASS-GREEN MARKET & GADGET HERO BANNER
        ========================================================= */
     .hero-showcase {
-      background: linear-gradient(125deg, #14532d 0%, #15803d 48%, #059669 100%);
+      background: linear-gradient(125deg, #14532d 0%, #166534 42%, #16a34a 100%);
       border-radius: 12px;
-      padding: 1.35rem 1.55rem;
-      margin-bottom: 1.1rem;
-      color: #fff;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
       display: grid;
-      grid-template-columns: 1.35fr 1fr;
+      grid-template-columns: 1.25fr 1fr;
       gap: 1.25rem;
       align-items: center;
       position: relative;
       overflow: hidden;
-      box-shadow: var(--shadow-md);
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: var(--shadow-sm);
     }
 
-    .hero-showcase::before {
+    .hero-showcase::after {
       content: "";
       position: absolute;
-      right: -50px;
-      top: -60px;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(187, 247, 208, 0.26) 0%, transparent 70%);
+      right: -40px;
+      bottom: -40px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(134, 239, 172, 0.25) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -452,21 +422,20 @@
       border-radius: 999px;
       font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       margin-bottom: 0.55rem;
-      backdrop-filter: blur(6px);
     }
 
     .hero-title {
       margin: 0 0 0.4rem;
-      font-size: 1.48rem;
+      font-size: 1.5rem;
       font-weight: 800;
       line-height: 1.22;
       letter-spacing: -0.02em;
     }
 
     .hero-sub {
-      margin: 0 0 0.95rem;
+      margin: 0 0 0.9rem;
       font-size: 0.85rem;
       color: rgba(255, 255, 255, 0.9);
       line-height: 1.45;
@@ -480,20 +449,20 @@
     }
 
     .hero-btn-light {
-      background: #fff;
+      background: #ffffff;
       color: var(--primary-deep);
       font-weight: 700;
-      padding: 0.52rem 1.05rem;
-      border-radius: 7px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+      padding: 0.55rem 1.05rem;
+      border-radius: 6px;
     }
-    .hero-btn-light:hover { background: #dcfce7; color: var(--primary-deep); }
+    .hero-btn-light:hover { background: #dcfce7; }
 
     .hero-btn-glass {
-      background: rgba(255, 255, 255, 0.16);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.34);
-      backdrop-filter: blur(6px);
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
     }
     .hero-btn-glass:hover { background: rgba(255, 255, 255, 0.26); }
 
@@ -506,11 +475,11 @@
     }
 
     .hero-float-card {
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.26);
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
       border-radius: 10px;
       padding: 0.72rem 0.8rem;
-      backdrop-filter: blur(8px);
       cursor: pointer;
       transition: transform 0.16s, background 0.16s;
     }
@@ -519,86 +488,91 @@
       background: rgba(255, 255, 255, 0.22);
     }
     .hero-float-icon { font-size: 1.35rem; margin-bottom: 0.2rem; }
-    .hero-float-title { font-size: 0.8rem; font-weight: 700; color: #fff; }
-    .hero-float-desc { font-size: 0.69rem; color: rgba(255, 255, 255, 0.84); }
+    .hero-float-title { font-size: 0.82rem; font-weight: 700; color: #ffffff; }
+    .hero-float-desc { font-size: 0.7rem; color: rgba(255, 255, 255, 0.85); margin-top: 0.1rem; }
 
     /* =========================================================
-       VERIFIED SHOPS SHOWCASE
+       VERIFIED SHOPS SHOWCASE (MALL STRIP)
        ========================================================= */
     .mall-section {
-      background: var(--surface);
-      backdrop-filter: blur(8px);
+      background: var(--card);
       border-radius: 10px;
-      padding: 0.9rem 1.05rem;
-      margin-bottom: 1.05rem;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-xs);
       border: 1px solid var(--border);
+      margin-bottom: 1rem;
+      overflow: hidden;
     }
 
     .mall-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.65rem;
-      border-bottom: 1px solid #e6f2ea;
-      margin-bottom: 0.78rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: #fafdfb;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .mall-title {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.92rem;
+      gap: 0.55rem;
       font-weight: 800;
+      font-size: 0.92rem;
       color: var(--primary-dark);
       letter-spacing: 0.02em;
     }
 
     .mall-shops-grid {
       display: flex;
-      gap: 0.7rem;
+      gap: 0.65rem;
+      padding: 0.8rem 1rem;
       overflow-x: auto;
-      padding-bottom: 0.25rem;
       scrollbar-width: thin;
     }
 
     .mall-shop-tile {
-      flex: 0 0 142px;
+      min-width: 145px;
+      max-width: 165px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.7rem 0.55rem;
+      padding: 0.68rem 0.6rem;
       text-align: center;
       cursor: pointer;
-      background: #fff;
-      transition: all 0.16s;
+      background: #ffffff;
+      transition: all 0.16s ease;
+      flex-shrink: 0;
     }
+
     .mall-shop-tile:hover {
       border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(22, 163, 74, 0.12);
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.12);
+      transform: translateY(-1px);
     }
+
     .mall-shop-tile.active {
-      border: 2px solid var(--primary);
+      border: 1.5px solid var(--primary);
       background: var(--primary-soft);
     }
 
     .mall-shop-logo {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       margin: 0 auto 0.4rem;
-      background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
-      color: #fff;
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      color: var(--primary-deep);
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 3px 8px rgba(22, 163, 74, 0.24);
+      border: 1px solid #86efac;
     }
 
     .mall-shop-name {
-      font-size: 0.79rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--text);
       white-space: nowrap;
@@ -607,58 +581,42 @@
     }
 
     .mall-shop-meta {
-      font-size: 0.67rem;
+      font-size: 0.68rem;
       color: var(--primary-dark);
       font-weight: 600;
-      margin-top: 0.18rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .selected-shop-banner {
-      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-      border: 1.5px solid #86efac;
-      border-radius: 10px;
-      padding: 0.9rem 1.1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.9rem;
-      flex-wrap: wrap;
-      box-shadow: var(--shadow-sm);
+      margin-top: 0.2rem;
     }
 
     /* =========================================================
-       2-COLUMN MARKETPLACE LAYOUT (LEFT SIDEBAR + PRODUCT GRID)
+       2-COLUMN MARKETPLACE LAYOUT (LEFT SIDEBAR + RIGHT GRID)
        ========================================================= */
     .marketplace-layout {
       display: grid;
       grid-template-columns: 205px 1fr;
-      gap: 1.1rem;
+      gap: 1rem;
       align-items: start;
     }
 
     .category-sidebar {
-      background: var(--surface);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
+      background: var(--card);
       border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
       padding: 0.9rem 0.85rem;
-      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 108px;
     }
 
     .sidebar-block { margin-bottom: 1.15rem; }
     .sidebar-block:last-child { margin-bottom: 0; }
 
     .sidebar-heading {
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 800;
       color: var(--primary-deep);
-      padding-bottom: 0.5rem;
-      margin-bottom: 0.5rem;
-      border-bottom: 1px solid #e6f2ea;
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.55rem;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 0.4rem;
@@ -672,28 +630,31 @@
 
     .sidebar-cat-item {
       background: transparent;
+      color: var(--text-secondary);
       border: none;
       text-align: left;
-      padding: 0.4rem 0.5rem;
-      border-radius: 6px;
+      padding: 0.42rem 0.5rem;
       font-size: 0.8rem;
       font-weight: 500;
-      color: var(--text-secondary);
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
     }
-    .sidebar-cat-item:hover { background: var(--primary-soft); color: var(--primary-dark); }
+
+    .sidebar-cat-item:hover { color: var(--primary-dark); background: var(--primary-soft); }
+
     .sidebar-cat-item.active {
-      background: var(--primary-light);
       color: var(--primary-dark);
       font-weight: 700;
+      background: var(--primary-tint);
     }
+
     .sidebar-cat-item.active::before {
-      content: "▶";
-      font-size: 0.6rem;
+      content: "▸";
       color: var(--primary);
+      font-size: 0.85rem;
     }
 
     .sidebar-filter-check {
@@ -702,51 +663,51 @@
       gap: 0.45rem;
       font-size: 0.8rem;
       color: var(--text-secondary);
-      padding: 0.3rem 0;
+      padding: 0.34rem 0;
       cursor: pointer;
+      user-select: none;
     }
-    .sidebar-filter-check input { width: auto; accent-color: var(--primary); }
 
-    /* Mobile Category Strip */
+    .sidebar-filter-check input { width: auto; accent-color: var(--primary); cursor: pointer; }
+
     .mobile-cat-strip {
       display: none;
       gap: 0.45rem;
       overflow-x: auto;
-      padding-bottom: 0.55rem;
+      padding-bottom: 0.5rem;
       margin-bottom: 0.65rem;
       scrollbar-width: none;
     }
     .mobile-cat-strip::-webkit-scrollbar { display: none; }
     .mobile-cat-pill {
-      flex-shrink: 0;
-      background: #fff;
-      border: 1px solid var(--border);
+      background: #ffffff;
       color: var(--text-secondary);
+      border: 1px solid var(--border);
       border-radius: 999px;
-      padding: 0.34rem 0.78rem;
-      font-size: 0.77rem;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .mobile-cat-pill.active {
       background: var(--primary);
-      color: #fff;
+      color: #ffffff;
       border-color: var(--primary);
     }
 
     /* Sort Bar */
     .sort-bar {
-      background: var(--surface);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.62rem 0.95rem;
-      margin-bottom: 0.85rem;
+      background: #e7f3ec;
+      border: 1px solid #cce3d5;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.6rem;
       flex-wrap: wrap;
-      box-shadow: var(--shadow-sm);
+      margin-bottom: 0.75rem;
     }
 
     .sort-options {
@@ -758,107 +719,125 @@
 
     .sort-label {
       font-size: 0.8rem;
-      color: var(--muted);
+      color: var(--text-secondary);
       font-weight: 600;
       margin-right: 0.25rem;
     }
 
     .sort-btn {
-      background: #fff;
+      background: #ffffff;
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 0.36rem 0.82rem;
-      border-radius: 6px;
+      border-radius: 5px;
+      padding: 0.42rem 0.82rem;
       font-size: 0.8rem;
       font-weight: 600;
     }
-    .sort-btn:hover { border-color: var(--primary); color: var(--primary-dark); }
+    .sort-btn:hover { border-color: var(--primary); color: var(--primary-dark); background: #fff; }
     .sort-btn.active {
       background: var(--primary);
-      color: #fff;
+      color: #ffffff;
       border-color: var(--primary);
     }
 
     .sort-select {
       width: auto;
-      padding: 0.35rem 0.65rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.4rem 0.7rem;
       font-size: 0.8rem;
-      border-radius: 6px;
-      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .selected-shop-banner {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 1px solid #86efac;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     /* =========================================================
-       PURE PRODUCT CARDS GRID (CLICK TO EXPAND FULL PAGE)
+       PURE PRODUCT CARDS (IMAGE + TITLE + PRICE + SOLD ONLY)
        ========================================================= */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
-      gap: 0.78rem;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 0.75rem;
     }
 
     .card {
-      background: #fff;
+      background: var(--card);
+      border-radius: 8px;
+      overflow: hidden;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      box-shadow: var(--shadow-xs);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
       cursor: pointer;
       transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
-      position: relative;
-      box-shadow: var(--shadow-sm);
     }
+
     .card:hover {
       transform: translateY(-3px);
       border-color: var(--primary);
-      box-shadow: 0 10px 22px rgba(22, 163, 74, 0.16);
+      box-shadow: var(--shadow-md);
     }
 
     .card-img-wrap {
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      background: #f2f9f4;
+      background: #f4f8f5;
       overflow: hidden;
     }
+
     .card-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.28s ease;
+      transition: transform 0.25s ease;
     }
+
     .card:hover .card-img-wrap img { transform: scale(1.04); }
 
     .card-mall-tag {
       position: absolute;
       top: 7px;
-      left: 7px;
+      left: 0;
       background: var(--primary-dark);
-      color: #fff;
-      font-size: 0.63rem;
+      color: #ffffff;
+      font-size: 0.64rem;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-      letter-spacing: 0.02em;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+      padding: 2px 7px;
+      border-radius: 0 4px 4px 0;
+      letter-spacing: 0.03em;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
 
     .card-top-badge {
       position: absolute;
       top: 7px;
       right: 7px;
-      background: #facc15;
-      color: #14532d;
+      background: rgba(254, 249, 195, 0.96);
+      color: #854d0e;
       font-size: 0.64rem;
       font-weight: 800;
       padding: 2px 6px;
       border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
     }
+
     .card-top-badge.soldout {
-      background: rgba(15, 23, 42, 0.84);
-      color: #fff;
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffffff;
     }
 
     .card-bottom-overlay {
@@ -866,51 +845,52 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(90deg, rgba(20, 83, 45, 0.92), rgba(22, 163, 74, 0.88));
-      color: #fff;
-      font-size: 0.67rem;
-      font-weight: 600;
-      padding: 3px 8px;
+      background: linear-gradient(90deg, rgba(20, 83, 45, 0.92), rgba(22, 163, 74, 0.86));
+      color: #ffffff;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 3px 7px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .card-pure-body {
-      padding: 0.62rem 0.68rem 0.72rem;
+      padding: 0.58rem 0.62rem 0.68rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       flex: 1;
-      gap: 0.42rem;
+      justify-content: space-between;
+      gap: 0.38rem;
     }
 
     .card-pure-title {
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      color: var(--text);
-      line-height: 1.32;
-      height: 2.2rem;
       margin: 0;
+      line-height: 1.35;
+      color: var(--text);
       display: -webkit-box;
-      -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
+      min-height: 2.2em;
     }
 
     .card-pure-tags {
       display: flex;
-      gap: 0.25rem;
+      gap: 0.28rem;
       flex-wrap: wrap;
-      min-height: 18px;
+      align-items: center;
     }
 
     .mini-tag-green {
       font-size: 0.63rem;
       font-weight: 700;
       color: var(--primary-dark);
-      background: var(--primary-light);
+      border: 1px solid #86efac;
+      background: var(--primary-soft);
       padding: 1px 5px;
       border-radius: 3px;
     }
@@ -920,21 +900,21 @@
       font-weight: 600;
       color: var(--text-secondary);
       border: 1px solid #cbd5e1;
-      padding: 0 5px;
+      background: #f8fafc;
+      padding: 1px 5px;
       border-radius: 3px;
     }
 
     .card-pure-footer {
       display: flex;
-      justify-content: space-between;
       align-items: baseline;
+      justify-content: space-between;
       gap: 0.35rem;
-      margin-top: auto;
-      padding-top: 0.2rem;
+      margin-top: 0.15rem;
     }
 
     .card-pure-price {
-      font-size: 1.02rem;
+      font-size: 1rem;
       font-weight: 800;
       color: var(--primary-dark);
     }
@@ -942,32 +922,31 @@
     .card-pure-sold {
       font-size: 0.7rem;
       color: var(--muted);
+      font-weight: 500;
       white-space: nowrap;
     }
 
     /* =========================================================
-       EXPANDED PRODUCT DETAIL PAGE (WHEN USER CLICKS A PRODUCT)
+       EXPANDED PRODUCT DETAIL PAGE (VIEW-PRODUCT-DETAIL)
        ========================================================= */
     .pdp-breadcrumb {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
       font-size: 0.8rem;
-      color: var(--text-secondary);
+      color: var(--muted);
       margin-bottom: 0.75rem;
-      background: var(--surface);
-      padding: 0.55rem 0.9rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
     }
+
     .pdp-crumb-trail {
       display: flex;
       align-items: center;
       gap: 0.4rem;
       flex-wrap: wrap;
     }
+
     .pdp-crumb-link {
       color: var(--primary-dark);
       font-weight: 600;
@@ -976,25 +955,26 @@
     .pdp-crumb-link:hover { text-decoration: underline; }
 
     .pdp-main-card {
-      background: #fff;
+      background: var(--card);
+      border-radius: 10px;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      box-shadow: var(--shadow-xs);
       padding: 1.25rem;
       display: grid;
-      grid-template-columns: 390px 1fr;
-      gap: 1.6rem;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 0.95rem;
+      grid-template-columns: 380px 1fr;
+      gap: 1.5rem;
+      margin-bottom: 0.9rem;
     }
 
     .pdp-gallery-main {
       width: 100%;
       aspect-ratio: 1 / 1;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
-      background: #f2f9f4;
+      border: 1px solid var(--border);
+      background: #f4f8f5;
     }
+
     .pdp-gallery-main img {
       width: 100%;
       height: 100%;
@@ -1005,17 +985,17 @@
     .pdp-thumbs {
       display: flex;
       gap: 0.5rem;
-      margin-top: 0.65rem;
+      margin-top: 0.6rem;
     }
+
     .pdp-thumb {
-      width: 68px;
-      height: 68px;
-      aspect-ratio: 1 / 1;
-      border-radius: 8px;
-      border: 2px solid transparent;
+      width: 64px;
+      height: 64px;
+      border-radius: 6px;
       overflow: hidden;
+      border: 2px solid transparent;
       cursor: pointer;
-      background: #f1f5f9;
+      background: #f8fafc;
     }
     .pdp-thumb.active { border-color: var(--primary); }
     .pdp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -1024,40 +1004,44 @@
       display: flex;
       align-items: flex-start;
       gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.55rem;
     }
+
     .pdp-mall-pill {
       background: var(--primary);
-      color: #fff;
-      font-size: 0.7rem;
+      color: #ffffff;
+      font-size: 0.68rem;
       font-weight: 800;
       padding: 2px 7px;
       border-radius: 4px;
-      flex-shrink: 0;
       margin-top: 4px;
+      flex-shrink: 0;
     }
+
     .pdp-title {
       margin: 0;
-      font-size: 1.28rem;
+      font-size: 1.3rem;
       font-weight: 700;
-      line-height: 1.35;
+      line-height: 1.32;
       color: var(--text);
     }
 
     .pdp-stats-bar {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 1rem;
       flex-wrap: wrap;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--text-secondary);
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.95rem;
     }
+
     .pdp-stat-item {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.32rem;
     }
+
     .pdp-stat-divider {
       width: 1px;
       height: 14px;
@@ -1065,166 +1049,186 @@
     }
 
     .pdp-price-box {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      background: var(--primary-soft);
       border: 1px solid #bbf7d0;
-      padding: 0.95rem 1.15rem;
       border-radius: 8px;
+      padding: 0.95rem 1.15rem;
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
       flex-wrap: wrap;
     }
+
     .pdp-price-val {
-      font-size: 1.8rem;
+      font-size: 1.85rem;
       font-weight: 800;
       color: var(--primary-dark);
+      line-height: 1;
     }
 
     .pdp-meta-table {
       display: flex;
       flex-direction: column;
-      gap: 0.78rem;
-      font-size: 0.86rem;
-      margin-bottom: 1.25rem;
+      gap: 0.72rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
     }
+
     .pdp-meta-row {
       display: grid;
       grid-template-columns: 120px 1fr;
       gap: 0.75rem;
       align-items: center;
     }
+
     .pdp-meta-label { color: var(--muted); font-weight: 600; }
 
     .qty-stepper {
       display: inline-flex;
       align-items: center;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 5px;
       overflow: hidden;
       background: #fff;
     }
+
     .qty-stepper button {
-      background: #fff;
+      background: #f8fafc;
       color: var(--text);
       border: none;
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       padding: 0;
-      font-size: 1rem;
       border-radius: 0;
+      font-size: 1rem;
+      font-weight: 700;
     }
     .qty-stepper button:hover { background: var(--primary-soft); color: var(--primary-dark); }
+
     .qty-stepper input {
-      width: 48px;
-      height: 32px;
+      width: 50px;
+      height: 34px;
       border: none;
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-radius: 0;
       text-align: center;
-      padding: 0;
       font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0;
     }
 
     .pdp-cta-row {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.8rem;
       flex-wrap: wrap;
     }
+
     .pdp-cta-row button {
-      padding: 0.78rem 1.45rem;
+      padding: 0.8rem 1.5rem;
       font-size: 0.94rem;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
       min-width: 165px;
     }
 
-    /* Seller Store Bar on PDP */
+    /* Seller Bar inside Expanded Product View */
     .pdp-shop-bar {
-      background: #fff;
+      background: var(--card);
+      border-radius: 10px;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      box-shadow: var(--shadow-xs);
       padding: 1rem 1.25rem;
-      margin-bottom: 0.95rem;
+      margin-bottom: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
       flex-wrap: wrap;
-      box-shadow: var(--shadow-sm);
     }
+
     .pdp-shop-left {
       display: flex;
       align-items: center;
       gap: 0.85rem;
     }
+
     .pdp-shop-avatar {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
-      color: #fff;
-      font-size: 1.4rem;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #ffffff;
       font-weight: 800;
+      font-size: 1.35rem;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
+
     .pdp-shop-stats {
       display: flex;
       gap: 1.5rem;
       flex-wrap: wrap;
       font-size: 0.82rem;
     }
-    .pdp-shop-stat-col span { color: var(--muted); display: block; font-size: 0.74rem; }
-    .pdp-shop-stat-col strong { color: var(--primary-dark); font-size: 0.94rem; }
 
-    /* Specs + Description + Ratings + Top Picks */
+    .pdp-shop-stat-col span { color: var(--muted); display: block; font-size: 0.74rem; }
+    .pdp-shop-stat-col strong { color: var(--primary-dark); font-size: 0.95rem; }
+
+    /* Bottom Specs + Description + Ratings + Top Picks */
     .pdp-bottom-grid {
       display: grid;
-      grid-template-columns: 1fr 235px;
-      gap: 0.95rem;
+      grid-template-columns: 1fr 240px;
+      gap: 0.9rem;
       align-items: start;
     }
 
     .pdp-section-card {
-      background: #fff;
+      background: var(--card);
+      border-radius: 10px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.15rem 1.25rem;
-      margin-bottom: 0.95rem;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-xs);
+      padding: 1.2rem;
+      margin-bottom: 0.9rem;
     }
+
     .pdp-section-heading {
       background: var(--primary-soft);
-      border-left: 4px solid var(--primary);
-      padding: 0.62rem 0.85rem;
-      margin: 0 0 1rem;
-      font-size: 0.94rem;
+      padding: 0.62rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
       font-weight: 700;
-      text-transform: uppercase;
       color: var(--primary-deep);
-      border-radius: 4px;
+      margin: 0 0 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
     }
 
     .pdp-spec-row {
       display: grid;
       grid-template-columns: 145px 1fr;
       gap: 0.75rem;
-      padding: 0.45rem 0.5rem;
-      font-size: 0.86rem;
+      padding: 0.42rem 0.4rem;
+      font-size: 0.85rem;
     }
+
     .pdp-spec-label { color: var(--muted); }
 
     .pdp-description-text {
-      padding: 0.4rem 0.5rem;
-      font-size: 0.9rem;
-      line-height: 1.65;
+      font-size: 0.88rem;
       color: var(--text-secondary);
+      line-height: 1.65;
       white-space: pre-line;
+      padding: 0 0.4rem;
     }
 
-    /* Product Ratings Summary Box */
+    /* Rating Overview Box */
     .rating-overview-box {
       background: var(--primary-soft);
       border: 1px solid #bbf7d0;
@@ -1232,141 +1236,158 @@
       padding: 1rem 1.15rem;
       display: flex;
       align-items: center;
-      gap: 1.4rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
       margin-bottom: 1rem;
     }
+
     .rating-big-score {
+      text-align: center;
       color: var(--primary-dark);
-      font-size: 1rem;
-      font-weight: 700;
     }
-    .rating-big-score .num { font-size: 1.85rem; font-weight: 800; }
+    .rating-big-score .num { font-size: 1.85rem; font-weight: 800; line-height: 1; }
+
     .rating-filter-pills {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.42rem;
       flex-wrap: wrap;
     }
+
     .rating-filter-btn {
-      background: #fff;
+      background: #ffffff;
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 0.34rem 0.75rem;
-      border-radius: 6px;
+      border-radius: 5px;
+      padding: 0.35rem 0.75rem;
       font-size: 0.78rem;
       font-weight: 600;
     }
     .rating-filter-btn.active {
       border-color: var(--primary);
       color: var(--primary-dark);
-      background: var(--primary-light);
+      background: var(--primary-tint);
     }
-
-    .star-picker { display: inline-flex; gap: 0.25rem; margin: 0.35rem 0; }
-    .star-btn { background: transparent; border: none; padding: 0; font-size: 1.4rem; color: #cbd5e1; cursor: pointer; }
-    .star-btn.selected { color: #f59e0b; }
-
-    .review-card {
-      padding: 0.85rem 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .review-card:last-child { border-bottom: none; }
 
     .top-picks-card {
-      background: #fff;
+      background: var(--card);
+      border-radius: 10px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.85rem;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-xs);
+      padding: 0.9rem;
     }
+
     .top-picks-title {
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 700;
       color: var(--primary-deep);
       margin-bottom: 0.75rem;
     }
+
     .top-pick-item {
-      border: 1px solid #e6f2ea;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45rem;
+      margin-bottom: 0.6rem;
       cursor: pointer;
-      transition: border-color 0.15s, transform 0.15s;
+      transition: border-color 0.15s;
     }
-    .top-pick-item:hover { border-color: var(--primary); transform: translateY(-2px); }
-    .top-pick-item img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      display: block;
-    }
-    .top-pick-name {
-      font-size: 0.78rem;
-      padding: 0.45rem 0.55rem 0.15rem;
-      color: var(--text);
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .top-pick-price {
-      font-size: 0.86rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-      padding: 0 0.55rem 0.55rem;
-    }
+    .top-pick-item:hover { border-color: var(--primary); }
+    .top-pick-item img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 4px; display: block; margin-bottom: 0.35rem; }
+    .top-pick-name { font-size: 0.76rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-pick-price { font-size: 0.84rem; font-weight: 800; color: var(--primary-dark); margin-top: 0.15rem; }
 
     /* =========================================================
-       SELLER DASHBOARD, ORDERS & ADMIN PANELS
+       PANELS, FORMS, KPI CARDS, TABLES, AND MODALS
        ========================================================= */
     .panel {
-      background: var(--surface);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: var(--card);
       padding: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
       margin-bottom: 1rem;
-      box-shadow: var(--shadow-sm);
     }
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.85rem; }
-    .field-label { display: block; font-size: 0.79rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.3rem; }
 
-    .shipping-config-box {
-      background: var(--primary-soft);
-      border: 1px solid #bbf7d0;
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.85rem;
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 0.79rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: var(--text-secondary);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.56rem 0.72rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background: #fff;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 0.85rem;
+      margin: 0.9rem 0 1.1rem;
+    }
+    .kpi-card {
+      background: #f8fbf9;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.85rem 1rem;
+      padding: 0.9rem 1rem;
     }
+    .kpi-card.highlight { background: var(--primary-soft); border-color: #86efac; }
+    .kpi-card.amber-highlight { background: #fffbeb; border-color: #fde68a; }
+    .kpi-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .kpi-value { font-size: 1.35rem; font-weight: 800; color: var(--text); margin-top: 0.25rem; }
+    .kpi-card.highlight .kpi-value { color: var(--primary-dark); }
+    .kpi-card.amber-highlight .kpi-value { color: #b45309; }
+    .kpi-sub { font-size: 0.74rem; color: var(--muted); margin-top: 0.2rem; }
 
+    /* Photo Slots (Max 2) */
     .photo-slots-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(120px, 175px));
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.75rem;
-      margin-top: 0.5rem;
+      margin-top: 0.45rem;
+      max-width: 340px;
     }
     .photo-slot {
       position: relative;
       aspect-ratio: 1 / 1;
-      border: 2px dashed #86efac;
+      border: 2px dashed #cbd5e1;
       border-radius: 8px;
-      background: var(--primary-soft);
+      background: #f8fbf9;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
       text-align: center;
       padding: 0.4rem;
     }
-    .photo-slot:hover { border-color: var(--primary); background: var(--primary-light); }
+    .photo-slot:hover { border-color: var(--primary); background: var(--primary-soft); }
     .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-    .photo-slot .slot-label { font-size: 0.74rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.25rem; }
+    .photo-slot .slot-label { font-size: 0.74rem; color: var(--muted); font-weight: 600; }
     .photo-slot .remove-slot-btn {
       position: absolute;
       top: 5px;
       right: 5px;
-      z-index: 2;
       background: rgba(15, 23, 42, 0.8);
       color: #fff;
       border-radius: 999px;
@@ -1374,220 +1395,356 @@
       height: 24px;
       padding: 0;
       font-size: 0.74rem;
+      z-index: 3;
     }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.86rem; }
-    th, td { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    th { background: var(--primary-soft); font-weight: 700; color: var(--primary-deep); }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.7rem; font-size: 0.84rem; }
+    th, td { text-align: left; padding: 0.68rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th { color: var(--muted); font-weight: 700; background: #f8fbf9; font-size: 0.75rem; text-transform: uppercase; }
 
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem; margin: 0.9rem 0; }
-    .kpi-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; }
-    .kpi-card.highlight { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #86efac; }
-    .kpi-label { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
-    .kpi-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-dark); margin: 0.25rem 0; }
-    .kpi-sub { font-size: 0.75rem; color: var(--text-secondary); }
-
-    /* Policy & Stepper */
-    .policy-notice-box {
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      border-left: 4px solid #f59e0b;
-      border-radius: 6px;
-      padding: 0.65rem 0.85rem;
-      font-size: 0.78rem;
-      color: #92400e;
-      line-height: 1.45;
-      margin: 0.65rem 0;
-    }
-    .policy-notice-box.strict-shipped {
-      background: #fef2f2;
-      border-color: #fecaca;
-      border-left-color: #dc2626;
-      color: #991b1b;
-    }
-
-    .order-stepper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 0.85rem 0;
-      padding: 0.65rem 0.5rem;
-      background: var(--primary-soft);
-      border-radius: 8px;
-      border: 1px solid #bbf7d0;
-    }
-    .step-item { flex: 1; text-align: center; font-size: 0.72rem; color: var(--muted); position: relative; }
-    .step-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      margin: 0 auto 0.25rem;
-      background: #e2e8f0;
-      color: #475569;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.74rem;
-    }
-    .step-item.done .step-dot { background: var(--green); color: #fff; }
-    .step-item.done { color: var(--green); font-weight: 600; }
-    .step-item.current .step-dot { background: #16a34a; color: #fff; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.24); }
-    .step-item.current { color: var(--primary-dark); font-weight: 700; }
-
-    .cancelled-banner {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #b91c1c;
-      padding: 0.6rem 0.8rem;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin: 0.75rem 0;
-    }
-
-    /* Modals & Toasts */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(10, 30, 18, 0.56);
-      backdrop-filter: blur(4px);
+      background: rgba(15, 23, 42, 0.58);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      z-index: 50;
+      z-index: 100;
     }
     .modal {
-      background: #fff;
+      background: var(--card);
       width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
+      max-width: 560px;
+      max-height: 92vh;
       overflow-y: auto;
-      border-radius: 12px;
+      border-radius: 10px;
       padding: 1.35rem;
-      box-shadow: 0 22px 45px rgba(10, 30, 18, 0.3);
-      border: 1px solid var(--border);
+      box-shadow: 0 22px 45px rgba(15, 23, 42, 0.25);
     }
 
-    .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: var(--primary-soft);
-      padding: 4px;
-      border-radius: 8px;
-      margin: 0.9rem 0;
-      border: 1px solid var(--border);
-    }
-    .auth-tab { background: transparent; color: var(--text-secondary); padding: 0.48rem; border-radius: 6px; font-weight: 600; }
-    .auth-tab.active { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); }
+    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--muted); font-size: 0.9rem; background: #fff; border-radius: 8px; border: 1px solid var(--border); }
+    .error-box { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.86rem; }
+
+    .auth-tabs { display: flex; background: #e8f3ec; padding: 4px; border-radius: 6px; margin: 0.85rem 0 1rem; gap: 4px; }
+    .auth-tab { flex: 1; background: transparent; color: var(--text-secondary); padding: 0.45rem; font-size: 0.83rem; border-radius: 4px; }
+    .auth-tab.active { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
 
     .google-btn {
       width: 100%;
-      background: #fff;
-      color: #1f2937;
+      background: #ffffff;
+      color: #1e293b;
       border: 1px solid #cbd5e1;
       padding: 0.6rem 1rem;
-      border-radius: 6px;
       font-size: 0.88rem;
       font-weight: 600;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.6rem;
-      cursor: pointer;
+      border-radius: 6px;
     }
-    .google-btn:hover:not(:disabled) { background: #f8fafc; border-color: #94a3b8; }
+    .google-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+    .auth-divider { display: flex; align-items: center; text-align: center; color: var(--muted); font-size: 0.75rem; margin: 0.85rem 0; }
+    .auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
+    .auth-divider:not(:empty)::before { margin-right: .65em; }
+    .auth-divider:not(:empty)::after { margin-left: .65em; }
 
-    .auth-divider {
+    .text-link-btn {
+      background: transparent;
+      color: var(--primary-dark);
+      padding: 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    /* Order Stepper & Policy Notice */
+    .order-stepper { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.25rem; margin: 0.9rem 0 0.75rem; padding: 0.8rem 0.6rem; background: #f8fbf9; border: 1px solid var(--border); border-radius: 8px; }
+    .step-item { flex: 1; text-align: center; position: relative; font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+    .step-dot { width: 22px; height: 22px; border-radius: 999px; background: #e2e8f0; color: #64748b; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .step-item.done .step-dot { background: var(--green); color: #fff; }
+    .step-item.done { color: var(--green); }
+    .step-item.current .step-dot { background: var(--primary); color: #fff; box-shadow: 0 0 0 3px #bbf7d0; }
+    .step-item.current { color: var(--primary-dark); }
+    .cancelled-banner { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 0.6rem 0.85rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; margin: 0.75rem 0; }
+
+    .policy-notice-box { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.78rem; line-height: 1.45; margin-bottom: 0.75rem; }
+    .policy-notice-box.strict-shipped { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+
+    .delivery-summary-card { background: var(--primary-soft); border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.75rem 0.9rem; margin-bottom: 0.75rem; font-size: 0.84rem; line-height: 1.45; }
+    .shipping-config-box { background: var(--primary-soft); border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.85rem 1rem; margin-top: 0.6rem; }
+
+    /* =========================================================
+       PAYMENT METHOD CARDS (COD + SCAN QR WITH E-WALLET)
+       ========================================================= */
+    .payment-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      margin: 0.45rem 0 0.75rem;
+    }
+
+    .payment-choice-card {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.68rem 0.75rem;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.15s ease;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin: 0.85rem 0;
-      color: var(--muted);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      font-weight: 600;
+      gap: 0.55rem;
     }
-    .auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
-    .delivery-summary-card {
+    .payment-choice-card:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .payment-choice-card.active {
+      border-color: var(--primary);
       background: var(--primary-soft);
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 0.8rem 0.95rem;
-      margin-bottom: 0.8rem;
+      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.16);
     }
 
-    .error-box {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-      padding: 0.8rem 1rem;
+    .qr-payment-panel {
+      background: #ffffff;
+      border: 1.5px solid #86efac;
       border-radius: 8px;
-      margin-bottom: 1rem;
-      font-size: 0.86rem;
+      padding: 0.85rem;
+      margin-bottom: 0.85rem;
     }
 
-    .empty-state {
+    .qr-preview-box {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+      flex-wrap: wrap;
+      background: var(--primary-soft);
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px dashed #4ade80;
+    }
+
+    .qr-preview-box img {
+      width: 128px;
+      height: 128px;
+      object-fit: contain;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
+      cursor: zoom-in;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================
+       PRINTABLE DELIVERY RECEIPT / WAYBILL MODAL & PRINT STYLES
+       ========================================================= */
+    .receipt-sheet {
+      background: #ffffff;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 1.25rem;
+      color: #0f172a;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .receipt-header {
       text-align: center;
-      padding: 2.5rem 1rem;
-      color: var(--muted);
-      background: var(--surface);
-      border-radius: 10px;
-      border: 1px dashed #86efac;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
     }
 
-    .toast-container {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
+    .receipt-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      padding: 0.65rem;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .receipt-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.6rem 0;
+    }
+    .receipt-table th, .receipt-table td {
+      border-bottom: 1px dashed #cbd5e1;
+      padding: 0.45rem 0.35rem;
+      font-size: 0.82rem;
+    }
+
+    .receipt-total-box {
+      background: #f1f5f9;
+      border: 1.5px solid #0f172a;
+      border-radius: 6px;
+      padding: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    @media print {
+      body * { visibility: hidden !important; }
+      #receipt-modal, #receipt-modal * { visibility: visible !important; }
+      #receipt-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        display: block !important;
+      }
+      #receipt-modal .modal {
+        box-shadow: none !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        padding: 0.5rem !important;
+      }
+      .no-print { display: none !important; }
+    }
+
+    /* =========================================================
+       LIVE CHAT MODAL (BUYER <-> SELLER ORDER SUPPORT)
+       ========================================================= */
+    .chat-modal-box {
+      max-width: 720px;
+      padding: 0;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      z-index: 100;
-      max-width: 360px;
+      height: 82vh;
+      max-height: 620px;
     }
-    .toast {
-      background: #14532d;
-      color: #fff;
-      padding: 0.78rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+
+    .chat-header-bar {
+      background: linear-gradient(135deg, #14532d, #16a34a);
+      color: #ffffff;
+      padding: 0.85rem 1.1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.75rem;
-      border-left: 4px solid #4ade80;
+      gap: 0.6rem;
     }
-    .toast.success { border-left-color: #4ade80; }
-    .toast.error { background: #7f1d1d; border-left-color: #f87171; }
-    .toast.warning { background: #78350f; border-left-color: #fbbf24; }
 
-    /* =========================================================
-       RESPONSIVE MOBILE & TABLET ADAPTATIONS
-       ========================================================= */
-    @media (max-width: 920px) {
-      .hero-showcase { grid-template-columns: 1fr; padding: 1.15rem; }
+    .chat-body-split {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .chat-threads-col {
+      border-right: 1px solid var(--border);
+      background: #f8fbf9;
+      overflow-y: auto;
+    }
+
+    .chat-thread-item {
+      padding: 0.75rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .chat-thread-item:hover { background: var(--primary-soft); }
+    .chat-thread-item.active {
+      background: var(--primary-tint);
+      border-left: 3px solid var(--primary);
+    }
+
+    .chat-messages-col {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #ffffff;
+    }
+
+    .chat-messages-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      background: #f4f9f6;
+    }
+
+    .chat-bubble {
+      max-width: 78%;
+      padding: 0.58rem 0.82rem;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      line-height: 1.42;
+      word-break: break-word;
+    }
+
+    .chat-bubble.mine {
+      align-self: flex-end;
+      background: var(--primary);
+      color: #ffffff;
+      border-bottom-right-radius: 3px;
+    }
+
+    .chat-bubble.theirs {
+      align-self: flex-start;
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 3px;
+    }
+
+    .chat-bubble-meta {
+      font-size: 0.67rem;
+      opacity: 0.78;
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.7rem 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    /* Star Rating & Reviews */
+    .star-picker { display: flex; gap: 0.25rem; margin: 0.35rem 0 0.6rem; }
+    .star-btn { background: transparent; border: 1px solid var(--border); color: #cbd5e1; font-size: 1.25rem; padding: 0.25rem 0.55rem; border-radius: 6px; }
+    .star-btn.selected { color: #f59e0b; border-color: #fde68a; background: #fffbeb; }
+    .review-card { border-bottom: 1px solid var(--border); padding: 0.75rem 0; }
+    .review-card:last-child { border-bottom: none; }
+
+    /* Toast */
+    .toast-container { position: fixed; bottom: 1rem; right: 1rem; z-index: 250; display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; }
+    .toast { background: #14532d; color: #fff; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.84rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; animation: slideIn 0.2s ease; }
+    .toast.success { border-left: 4px solid #4ade80; }
+    .toast.error { background: #7f1d1d; border-left: 4px solid #f87171; }
+    .toast.warning { background: #78350f; border-left: 4px solid #fbbf24; }
+    @keyframes slideIn { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Responsive Rules */
+    @media (max-width: 960px) {
+      .hero-showcase { grid-template-columns: 1fr; }
       .marketplace-layout { grid-template-columns: 1fr; }
       .category-sidebar { display: none; }
       .mobile-cat-strip { display: flex; }
-      .pdp-main-card { grid-template-columns: 1fr; gap: 1.15rem; }
+      .pdp-main-card { grid-template-columns: 1fr; }
       .pdp-bottom-grid { grid-template-columns: 1fr; }
+      .chat-body-split { grid-template-columns: 1fr; }
+      .chat-threads-col { max-height: 130px; border-right: none; border-bottom: 1px solid var(--border); }
     }
 
     @media (max-width: 640px) {
-      .header-inner { padding: 0.45rem 0.75rem 0.65rem; }
-      .header-main-row { gap: 0.6rem; }
-      .brand span { display: none; }
-      .hero-title { font-size: 1.22rem; }
-      .hero-visual-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+      .header-main-row { gap: 0.65rem; padding: 0.6rem 0 0.7rem; }
+      .brand { font-size: 1.15rem; }
+      .brand-icon { width: 30px; height: 30px; }
       .grid { grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
-      .container { padding: 0 0.65rem; margin-top: 0.8rem; }
-      .pdp-main-card { padding: 0.9rem; }
-      .pdp-cta-row button { flex: 1; min-width: 0; padding: 0.72rem 0.75rem; }
-      .toast-container { left: 0.75rem; right: 0.75rem; max-width: none; }
+      .pdp-cta-row button { flex: 1; min-width: 0; padding: 0.75rem 0.65rem; }
+      .payment-choice-grid { grid-template-columns: 1fr; }
+      .receipt-grid-2 { grid-template-columns: 1fr; }
+      .toast-container { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
     }
   </style>
   </head>
@@ -1606,6 +1763,10 @@
       </div>
 
       <div class="top-link-group">
+        <button type="button" id="btn-live-chat" class="top-link-btn hidden" onclick="openChatModal()">
+          💬 Live Chat <span id="chat-unread-badge" class="notif-badge hidden">0</span>
+        </button>
+
         <div id="notif-wrapper" class="notif-wrapper hidden">
           <button type="button" id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)">
             🔔 Notifications <span id="notif-badge" class="notif-badge hidden">0</span>
@@ -1625,10 +1786,11 @@
         <button type="button" id="btn-orders" class="top-link-btn hidden" onclick="switchView('orders')">📦 My Orders</button>
         <button type="button" id="btn-admin" class="top-link-btn hidden" onclick="switchView('admin')">🛡️ Platform Admin</button>
 
-        <div id="user-pill" class="user-pill hidden" onclick="openProfileModal()" title="Edit saved delivery profile">
+        <div id="user-pill" class="user-pill hidden" onclick="openProfileModal()" title="Profile, Shipping Address & Password Settings">
           <span id="user-avatar-dot" class="user-avatar-dot">U</span>
           <span id="user-info">Account</span>
           <span id="role-badge" class="badge">Buyer</span>
+          <span style="font-size:0.72rem; opacity:0.9;">⚙️</span>
         </div>
 
         <button type="button" id="btn-login" class="top-link-btn" style="font-weight:700;" onclick="openAuthModal('signin')">Sign Up / Login</button>
@@ -1683,7 +1845,7 @@
       <div style="position:relative; z-index:1;">
         <div class="hero-pill">🌿 FRESH LOCAL MARKET &amp; TECH GADGETS</div>
         <h1 class="hero-title">Everything You Need — From Daily Market Picks to Smart Gadgets.</h1>
-        <p class="hero-sub">Shop directly from 100% Admin-verified local stores with transparent shipping fees, fast area delivery, and real buyer ratings.</p>
+        <p class="hero-sub">Shop directly from 100% Admin-verified local stores with COD or E-Wallet QR payment, live seller chat, and fast area delivery.</p>
         <div class="hero-actions">
           <button type="button" class="hero-btn-light" onclick="document.getElementById('product-grid').scrollIntoView({ behavior: 'smooth' })">
             🛍️ Browse Products
@@ -1742,7 +1904,7 @@
         </div>
         <p id="banner-shop-desc" style="margin:0; font-size:0.82rem; color:var(--text-secondary);">Shop description</p>
       </div>
-      <div style="display:flex; gap:1.15rem; align-items:center; flex-wrap:wrap;">
+      <div style="display:flex; gap:0.85rem; align-items:center; flex-wrap:wrap;">
         <div style="text-align:center;">
           <div id="banner-shop-products" style="font-size:1.05rem; font-weight:800; color:var(--primary-dark);">0</div>
           <div style="font-size:0.7rem; color:var(--muted);">Products</div>
@@ -1751,6 +1913,7 @@
           <div id="banner-shop-sold" style="font-size:1.05rem; font-weight:800; color:var(--primary-dark);">0</div>
           <div style="font-size:0.7rem; color:var(--muted);">Total Sold</div>
         </div>
+        <button type="button" id="btn-banner-chat-shop" class="shop-cta sm">💬 Chat Seller</button>
         <button type="button" class="secondary sm" onclick="setShopFilter('all')">← All Shops</button>
       </div>
     </div>
@@ -1846,7 +2009,7 @@
       <button type="button" class="secondary sm" onclick="closeExpandedProduct()">← Back to Products</button>
     </div>
 
-    <!-- TOP PRODUCT CARD: LARGE IMAGE + PRICE + QTY + ADD TO CART / BUY NOW -->
+    <!-- TOP PRODUCT CARD: LARGE IMAGE + PRICE + QTY + ADD TO CART / BUY NOW / CHAT SELLER -->
     <div class="pdp-main-card">
       <div>
         <div class="pdp-gallery-main">
@@ -1887,6 +2050,10 @@
 
           <div class="pdp-meta-table">
             <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Payment Options</span>
+              <span id="pdp-payment-info" style="font-weight:600; color:var(--primary-deep);">💵 Cash on Delivery (COD)</span>
+            </div>
+            <div class="pdp-meta-row">
               <span class="pdp-meta-label">Shipping</span>
               <span id="pdp-shipping-info" style="font-weight:600; color:var(--green);">Free Shipping</span>
             </div>
@@ -1919,6 +2086,9 @@
           <button type="button" id="pdp-buy-btn" class="shop-cta">
             ⚡ Buy Now
           </button>
+          <button type="button" id="pdp-chat-btn" class="secondary" style="min-width:130px;">
+            💬 Chat Seller
+          </button>
         </div>
       </div>
     </div>
@@ -1930,7 +2100,10 @@
         <div>
           <div style="font-weight:700; font-size:0.98rem; color:var(--text);" id="pdp-shop-name">Shop Name</div>
           <div style="font-size:0.78rem; color:var(--muted); margin:0.15rem 0 0.45rem;" id="pdp-shop-desc-short">Verified MarketHub Seller</div>
-          <button type="button" id="pdp-view-shop-btn" class="secondary sm">🏪 View Shop</button>
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+            <button type="button" id="pdp-shop-chat-btn" class="shop-cta sm">💬 Chat Now</button>
+            <button type="button" id="pdp-view-shop-btn" class="secondary sm">🏪 View Shop</button>
+          </div>
         </div>
       </div>
 
@@ -2021,10 +2194,11 @@
     </div>
   </section>
   <!-- =========================================================
-       VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS
+       VIEW 2: MY SHOP / MONTHLY INCOME & ADMIN FEE + QR SETTINGS
        ========================================================= -->
   <section id="view-seller" class="hidden">
-    <div id="create-shop-panel" class="panel hidden" style="max-width:660px; margin:0.5rem auto;">
+    <!-- STEP A: APPLY TO OPEN A VERIFIED SHOP -->
+    <div id="create-shop-panel" class="panel hidden" style="max-width:680px; margin:0.5rem auto;">
       <div style="text-align:center; margin-bottom:1.1rem;">
         <div style="font-size:2.2rem; margin-bottom:0.25rem;">🌿🏪</div>
         <h2 style="margin:0 0 0.3rem; font-size:1.25rem; color:var(--primary-deep);">Apply to Open a Verified Seller Shop</h2>
@@ -2067,6 +2241,7 @@
           <textarea id="new-shop-desc" rows="2" placeholder="Describe your shop, return policy, or delivery schedule..." required></textarea>
         </div>
 
+        <!-- SHIPPING FEE & DELIVERY AREA -->
         <div class="shipping-config-box">
           <label class="field-label" style="color:var(--green);">🚚 Shop Shipping Fee &amp; Allowed Delivery Location *</label>
           <div class="form-grid">
@@ -2096,7 +2271,22 @@
               <input type="text" id="new-shop-area-text" value="Roxas Only" placeholder="e.g., Roxas Only" required />
             </div>
           </div>
-          <small style="display:block; margin-top:0.35rem; color:var(--text-secondary);">Buyers outside your set delivery location (e.g., outside Roxas) will be blocked from checking out.</small>
+        </div>
+
+        <!-- OPTIONAL E-WALLET QR PAYMENT SETUP (GCASH, MAYA, MARIBANK, ETC.) -->
+        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:0.85rem 1rem;">
+          <label class="field-label" style="color:#0369a1;">📱 E-Wallet Scan QR Payment Option (Optional — GCash, Maya, MariBank, etc.)</label>
+          <p style="margin:0 0 0.55rem; font-size:0.77rem; color:#0c4a6e;">COD is enabled by default. Upload your E-Wallet QR code below if you also want buyers to pay via Scan QR.</p>
+          <div class="form-grid">
+            <div>
+              <label class="field-label">Upload E-Wallet QR Code Image</label>
+              <input type="file" id="new-shop-qr-file" accept="image/*" />
+            </div>
+            <div>
+              <label class="field-label">QR Description (E-Wallet Type &amp; Account Name/No.)</label>
+              <input type="text" id="new-shop-qr-desc" placeholder="e.g., GCash / Maya / MariBank — Juan D. (0917-XXX-XXXX)" />
+            </div>
+          </div>
         </div>
 
         <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem 1rem;">
@@ -2116,6 +2306,7 @@
       </form>
     </div>
 
+    <!-- STEP B: PENDING / REJECTED GATE -->
     <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:0.5rem auto; text-align:center;">
       <div id="gate-icon" style="font-size:2.5rem; margin-bottom:0.35rem;">⏳</div>
       <h2 id="gate-title" style="margin:0 0 0.4rem; color:var(--primary-deep);">Shop Application Pending Approval</h2>
@@ -2150,7 +2341,9 @@
       </form>
     </div>
 
+    <!-- STEP C: APPROVED SELLER DASHBOARD -->
     <div id="seller-dashboard-panel" class="hidden">
+      <!-- SHOP HEADER + SETTINGS (SHIPPING, AREA, E-WALLET QR) -->
       <div class="panel" style="border-left:4px solid var(--primary);">
         <div class="row-between">
           <div>
@@ -2160,15 +2353,18 @@
               <span id="my-shop-cat-badge" class="badge seller">Category</span>
               <span id="my-shop-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
               <span id="my-shop-area-badge" class="badge area-badge">📍 Roxas Only</span>
+              <span id="my-shop-qr-badge" class="badge cat-badge">💵 COD Only</span>
             </div>
             <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.84rem; color:var(--text-secondary);"></p>
           </div>
           <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
-            <button type="button" class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop, Shipping &amp; Area</button>
-            <button type="button" class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Orders (<span id="seller-pending-count">0</span>)</button>
+            <button type="button" class="secondary sm" onclick="toggleEditShopBox()">⚙️ Shop, Shipping &amp; QR Settings</button>
+            <button type="button" class="secondary sm" onclick="openChatModal()">💬 Buyer Messages</button>
+            <button type="button" class="shop-cta sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Orders (<span id="seller-pending-count">0</span>)</button>
           </div>
         </div>
 
+        <!-- COLLAPSIBLE SHOP SETTINGS FORM -->
         <form id="edit-shop-box" class="hidden" onsubmit="updateApprovedShopSettings(event)" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
           <div class="form-grid">
             <div>
@@ -2225,10 +2421,92 @@
             </div>
           </div>
 
-          <div style="margin-top:0.8rem;">
-            <button type="submit" class="sm">Save Shop, Shipping &amp; Delivery Area</button>
+          <!-- E-WALLET SCAN QR SETTINGS (GCASH, MAYA, MARIBANK, ETC.) -->
+          <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:0.85rem 1rem; margin-top:0.85rem;">
+            <div class="row-between" style="margin-bottom:0.45rem;">
+              <label class="field-label" style="color:#0369a1; margin:0;">📱 E-Wallet Scan QR Payment Setup (GCash, Maya, MariBank, etc.)</label>
+              <button type="button" id="btn-remove-shop-qr" class="danger-outline sm hidden" onclick="removeShopQrCode()">🗑️ Remove QR</button>
+            </div>
+            <div class="form-grid" style="align-items:center;">
+              <div>
+                <label class="field-label">Upload / Replace QR Code Image</label>
+                <input type="file" id="edit-shop-qr-file" accept="image/*" />
+              </div>
+              <div>
+                <label class="field-label">QR Description (E-Wallet Name, Account Name &amp; Number)</label>
+                <input type="text" id="edit-shop-qr-desc" placeholder="e.g., GCash / Maya / MariBank — Juan Dela Cruz (0917-123-4567)" />
+              </div>
+            </div>
+            <div id="edit-shop-qr-preview-wrap" class="hidden" style="margin-top:0.65rem; display:flex; align-items:center; gap:0.75rem;">
+              <img id="edit-shop-qr-preview" src="" alt="Shop QR" style="width:74px; height:74px; object-fit:contain; background:#fff; border:1px solid #cbd5e1; border-radius:6px; padding:3px;" />
+              <div style="font-size:0.78rem; color:#0c4a6e;">
+                <strong>Active QR Code Ready for Buyers</strong><br/>
+                <span id="edit-shop-qr-desc-preview"></span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:0.85rem;">
+            <button type="submit" id="btn-save-shop-settings" class="shop-cta sm">Save Shop, Shipping &amp; QR Settings</button>
           </div>
         </form>
+      </div>
+
+      <!-- =========================================================
+           SELLER MINI-DASHBOARD: MONTHLY INCOME & 10% ADMIN FEE MONITOR
+           ========================================================= -->
+      <div class="panel" style="border-color:#99f6e4;">
+        <div class="row-between">
+          <div>
+            <h3 style="margin:0; color:var(--indigo); font-size:1.05rem;">📊 Monthly Shop Income &amp; Admin Fee Monitoring</h3>
+            <p style="margin:0.2rem 0 0; font-size:0.8rem; color:var(--muted);">Track your monthly shop earnings (90% product sales + 100% shipping) and your 10% Platform Admin fee payable.</p>
+          </div>
+          <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
+            <input type="month" id="seller-finance-month" onchange="onSellerMonthChange()" style="width:auto; font-weight:600;" />
+            <button type="button" id="btn-seller-all-months" class="secondary sm" onclick="toggleSellerAllMonths()">All Months</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card highlight">
+            <div class="kpi-label">Your Net Shop Income</div>
+            <div class="kpi-value" id="seller-kpi-net-income">₱0.00</div>
+            <div class="kpi-sub" id="seller-kpi-income-sub">90% product sales + shipping</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Gross Sales (Items + Ship)</div>
+            <div class="kpi-value" id="seller-kpi-gross">₱0.00</div>
+            <div class="kpi-sub" id="seller-kpi-order-count">0 valid orders this period</div>
+          </div>
+          <div class="kpi-card amber-highlight">
+            <div class="kpi-label">Admin Fee Payable (10%)</div>
+            <div class="kpi-value" id="seller-kpi-admin-unpaid">₱0.00</div>
+            <div class="kpi-sub">Total 10% fee: <strong id="seller-kpi-admin-total">₱0.00</strong></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Admin Fee Settled / Paid</div>
+            <div class="kpi-value" id="seller-kpi-admin-paid" style="color:var(--green);">₱0.00</div>
+            <div class="kpi-sub" id="seller-kpi-fee-status">Up to date</div>
+          </div>
+        </div>
+
+        <!-- Monthly Summary History Table -->
+        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Orders</th>
+                <th>Product Sales</th>
+                <th>Shipping</th>
+                <th>Your Net Income</th>
+                <th>10% Admin Fee</th>
+                <th>Admin Fee Status</th>
+              </tr>
+            </thead>
+            <tbody id="seller-monthly-history-tbody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Add / Edit Product Form (2 Square Photos Max + Auto WebP Compression) -->
@@ -2314,7 +2592,7 @@
   </section>
 
   <!-- =========================================================
-       VIEW 3: ORDERS & LIVE TRACKING
+       VIEW 3: ORDERS, PRINT RECEIPT & LIVE TRACKING
        ========================================================= -->
   <section id="view-orders" class="hidden">
     <div class="row-between" style="margin-bottom: 0.8rem;">
@@ -2322,7 +2600,10 @@
         <h2 style="margin:0; font-size:1.25rem; color:var(--primary-deep);">Orders &amp; Live Tracking</h2>
         <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">⚠️ Policy: Cancellation is allowed only while <strong>Pending</strong>. Strictly <strong>No to Cancel after Shipping</strong>.</p>
       </div>
-      <button type="button" class="secondary sm" onclick="loadOrders()">↻ Refresh</button>
+      <div style="display:flex; gap:0.45rem;">
+        <button type="button" class="secondary sm" onclick="openChatModal()">💬 Live Chat</button>
+        <button type="button" class="secondary sm" onclick="loadOrders()">↻ Refresh</button>
+      </div>
     </div>
 
     <div class="auth-tabs" style="max-width:460px; margin-bottom:1rem;">
@@ -2352,7 +2633,7 @@
             <tr>
               <th>Shop &amp; Description</th>
               <th>Contact &amp; Pickup Address</th>
-              <th>Shipping &amp; Delivery Area</th>
+              <th>Shipping, Area &amp; QR</th>
               <th>ID / Store Proof</th>
               <th>Status</th>
               <th>Admin Action</th>
@@ -2438,6 +2719,11 @@
     </div>
   </section>
 </div>
+
+<!-- =========================================================
+     MODALS: IOS GUIDE, AUTH, RECOVERY, PROFILE SETTINGS,
+     CART + COD/QR PAYMENT, PRINT RECEIPT, & LIVE CHAT
+     ========================================================= -->
 
 <!-- IOS ADD TO HOME SCREEN GUIDE MODAL -->
 <div id="ios-install-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeIosInstallModal()">
@@ -2565,14 +2851,21 @@
   </div>
 </div>
 
-<!-- PROFILE MODAL -->
+<!-- USER & SELLER PROFILE, SHIPPING ADDRESS & PASSWORD SETTINGS MODAL -->
 <div id="profile-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0; color:var(--primary-deep);">👤 Account &amp; Saved Delivery Profile</h3>
+      <h3 style="margin:0; color:var(--primary-deep);">⚙️ Profile, Shipping Address &amp; Security</h3>
       <button type="button" class="secondary sm" onclick="closeProfileModal()">✕</button>
     </div>
-    <form onsubmit="saveUserProfile(event)" style="display:flex; flex-direction:column; gap:0.8rem; margin-top:0.85rem;">
+
+    <div class="auth-tabs">
+      <button type="button" id="prof-tab-info" class="auth-tab active" onclick="switchProfileTab('info')">👤 Profile &amp; Address</button>
+      <button type="button" id="prof-tab-security" class="auth-tab" onclick="switchProfileTab('security')">🔐 Password &amp; Recovery</button>
+    </div>
+
+    <!-- TAB 1: PROFILE & SHIPPING ADDRESS -->
+    <form id="profile-info-form" onsubmit="saveUserProfile(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
       <div>
         <label class="field-label">Complete Name *</label>
         <input type="text" id="prof-name" required />
@@ -2582,19 +2875,47 @@
         <input type="tel" id="prof-phone" required />
       </div>
       <div>
-        <label class="field-label">Complete Delivery Address *</label>
+        <label class="field-label">Default Shipping / Delivery Address *</label>
         <textarea id="prof-address" rows="2" placeholder="House/Street, Barangay, Roxas, Oriental Mindoro" required></textarea>
       </div>
       <div>
         <label class="field-label">Account Email</label>
         <input type="email" id="prof-email" disabled style="background:#f8fafc; color:var(--muted);" />
       </div>
-      <button type="submit" class="shop-cta">Save Profile Details</button>
+      <div id="prof-seller-shortcut" class="hidden" style="background:var(--primary-soft); border:1px solid #bbf7d0; border-radius:6px; padding:0.65rem 0.85rem; font-size:0.8rem; color:var(--primary-deep); display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">
+        <span>🏪 Want to update your Shop QR, Shipping Fee, or Delivery Area?</span>
+        <button type="button" class="secondary sm" onclick="closeProfileModal(); switchView('seller'); document.getElementById('edit-shop-box').classList.remove('hidden');">Open Shop Settings</button>
+      </div>
+      <button type="submit" class="shop-cta">Save Profile &amp; Shipping Address</button>
     </form>
+
+    <!-- TAB 2: PASSWORD UPDATE & FORGOT PASSWORD RECOVERY -->
+    <div id="profile-security-pane" class="hidden" style="display:flex; flex-direction:column; gap:0.9rem;">
+      <form onsubmit="updatePasswordFromSettings(event)" style="display:flex; flex-direction:column; gap:0.75rem; background:#f8fbf9; border:1px solid var(--border); border-radius:8px; padding:0.9rem;">
+        <strong style="font-size:0.88rem; color:var(--primary-deep);">Change Account Password</strong>
+        <div>
+          <label class="field-label">New Password (Min. 6 characters) *</label>
+          <input type="password" id="settings-new-pass" minlength="6" placeholder="Enter new password" required />
+        </div>
+        <div>
+          <label class="field-label">Confirm New Password *</label>
+          <input type="password" id="settings-confirm-pass" minlength="6" placeholder="Re-type new password" required />
+        </div>
+        <button type="submit" id="btn-settings-update-pass" class="shop-cta sm">Update Password Now</button>
+      </form>
+
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem; font-size:0.82rem; color:#92400e;">
+        <strong>Forgot Password / Email Reset Link:</strong><br/>
+        If you forgot your old password or signed in via Gmail, click below to send a password reset link directly to <strong id="settings-reset-email-label">your email</strong>.
+        <div style="margin-top:0.55rem;">
+          <button type="button" class="secondary sm" onclick="sendResetLinkFromProfileSettings()">📧 Send Password Reset Email</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- CART & EXPRESS BUY NOW CHECKOUT MODAL -->
+<!-- CART & EXPRESS BUY NOW CHECKOUT MODAL (COD + SCAN QR) -->
 <div id="cart-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeCart()">
   <div class="modal">
     <div class="row-between">
@@ -2607,6 +2928,37 @@
     <div id="cart-items-container" style="margin: 0.9rem 0;"></div>
     <div id="checkout-section" class="hidden">
       <hr style="border:0; border-top:1px solid var(--border); margin:0.9rem 0;" />
+
+      <!-- PAYMENT METHOD SELECTOR: COD OR SCAN QR -->
+      <div style="margin-bottom:0.85rem;">
+        <label class="field-label" style="color:var(--primary-deep);">💳 Select Payment Method *</label>
+        <div class="payment-choice-grid">
+          <div id="pay-choice-cod" class="payment-choice-card active" onclick="selectCheckoutPaymentMethod('COD')">
+            <span style="font-size:1.35rem;">💵</span>
+            <div>
+              <strong style="font-size:0.85rem; display:block;">Cash on Delivery (COD)</strong>
+              <small style="font-size:0.72rem; color:var(--muted);">Pay cash upon delivery</small>
+            </div>
+          </div>
+          <div id="pay-choice-qr" class="payment-choice-card" onclick="selectCheckoutPaymentMethod('QR')">
+            <span style="font-size:1.35rem;">📱</span>
+            <div>
+              <strong style="font-size:0.85rem; display:block;">Scan E-Wallet QR</strong>
+              <small style="font-size:0.72rem; color:var(--muted);">GCash, Maya, MariBank, etc.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- SELLER QR CODE DISPLAY PANEL (SHOWN WHEN SCAN QR IS SELECTED) -->
+        <div id="checkout-qr-panel" class="qr-payment-panel hidden">
+          <div id="checkout-qr-list"></div>
+          <div style="margin-top:0.65rem;">
+            <label class="field-label">Payment Reference No. / Sender Account Name *</label>
+            <input type="text" id="checkout-qr-ref" placeholder="e.g., GCash Ref #1234567890 — Juan D." />
+          </div>
+        </div>
+      </div>
+
       <div class="row-between" style="margin-bottom:0.55rem;">
         <h4 style="margin:0; color:var(--primary-deep);">Customer Info &amp; Delivery Address *</h4>
         <button type="button" id="btn-toggle-checkout-edit" class="secondary sm" onclick="toggleCheckoutEdit()">Edit Details</button>
@@ -2661,8 +3013,51 @@
   </div>
 </div>
 
-<div id="toast-container" class="toast-container"></div>
+<!-- PRINTABLE DELIVERY RECEIPT / WAYBILL MODAL -->
+<div id="receipt-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeReceiptModal()">
+  <div class="modal" style="max-width:520px;">
+    <div class="row-between no-print" style="margin-bottom:0.85rem;">
+      <h3 style="margin:0; color:var(--primary-deep);">🖨️ Delivery Receipt &amp; Waybill</h3>
+      <div style="display:flex; gap:0.45rem;">
+        <button type="button" class="shop-cta sm" onclick="window.print()">🖨️ Print Receipt</button>
+        <button type="button" class="secondary sm" onclick="closeReceiptModal()">✕</button>
+      </div>
+    </div>
+    <div id="receipt-printable-area" class="receipt-sheet"></div>
+  </div>
+</div>
 
+<!-- LIVE CHAT MODAL (BUYER <-> SELLER ORDER & SHOP SUPPORT) -->
+<div id="chat-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeChatModal()">
+  <div class="modal chat-modal-box">
+    <div class="chat-header-bar">
+      <div>
+        <strong style="font-size:1rem; display:block;" id="chat-modal-title">💬 MarketHub Live Chat</strong>
+        <small style="font-size:0.75rem; opacity:0.9;" id="chat-modal-subtitle">Direct message between Buyer &amp; Seller</small>
+      </div>
+      <div style="display:flex; gap:0.4rem;">
+        <button type="button" class="secondary sm" onclick="loadChatMessages(true)">↻</button>
+        <button type="button" class="secondary sm" onclick="closeChatModal()">✕</button>
+      </div>
+    </div>
+
+    <div class="chat-body-split">
+      <div class="chat-threads-col" id="chat-threads-list"></div>
+      <div class="chat-messages-col">
+        <div id="chat-active-banner" style="padding:0.55rem 0.85rem; background:#f8fbf9; border-bottom:1px solid var(--border); font-size:0.8rem; font-weight:700; color:var(--primary-deep);">
+          Select a shop or order conversation
+        </div>
+        <div class="chat-messages-feed" id="chat-messages-feed"></div>
+        <form class="chat-input-bar" onsubmit="sendChatMessage(event)">
+          <input type="text" id="chat-message-input" placeholder="Type your message to seller/buyer..." autocomplete="off" required />
+          <button type="submit" id="btn-send-chat" class="shop-cta sm">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
 <script>
   const SUPABASE_URL = "https://tvueqgzmsbpmtrnkjitn.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_Yvbk_uPNOu_ZNGOTNXpLIw_urRuUer2";
@@ -2697,8 +3092,13 @@
   let sortMode = "popular";
   let visibleProductLimit = PRODUCTS_PAGE_SIZE;
   let ordersSubTab = "purchases";
+
   let adminSelectedMonth = getCurrentYearMonth();
   let adminShowAllMonths = false;
+  let sellerSelectedMonth = getCurrentYearMonth();
+  let sellerShowAllMonths = false;
+
+  let selectedPaymentMethod = "COD";
 
   let photoSlots = [
     { url: null, file: null, preview: null },
@@ -2712,9 +3112,15 @@
   let selectedReviewFilter = "all";
 
   let ordersChannel = null;
+  let chatChannel = null;
   let pollIntervalId = null;
   let knownOrderSnapshots = new Map();
   let isCheckoutEditing = false;
+
+  // Live Chat State
+  let chatMessages = [];
+  let activeChatThreadKey = null;
+  let customDraftThreads = [];
 
   const ORDER_STAGES = [
     { key: "Pending", label: "Order Placed" },
@@ -2815,7 +3221,7 @@
   }
 
   /* =========================================================
-     LOCAL STORAGE FALLBACK FOR SHOP DELIVERY AREA
+     LOCAL STORAGE FALLBACKS FOR DELIVERY AREA & E-WALLET QR
      ========================================================= */
   function getLocalShopAreaMap() {
     try { return JSON.parse(localStorage.getItem("markethub_shop_delivery_areas") || "{}"); }
@@ -2829,6 +3235,37 @@
       map[String(shopId)] = areaText;
       localStorage.setItem("markethub_shop_delivery_areas", JSON.stringify(map));
     } catch (_) {}
+  }
+
+  function getLocalShopQrMap() {
+    try { return JSON.parse(localStorage.getItem("markethub_shop_qr_codes") || "{}"); }
+    catch { return {}; }
+  }
+
+  function saveLocalShopQr(shopId, qrUrl, qrDesc) {
+    if (!shopId) return;
+    try {
+      const map = getLocalShopQrMap();
+      if (!qrUrl) {
+        delete map[String(shopId)];
+      } else {
+        map[String(shopId)] = { qr_url: qrUrl, qr_description: qrDesc || "" };
+      }
+      localStorage.setItem("markethub_shop_qr_codes", JSON.stringify(map));
+    } catch (_) {}
+  }
+
+  function getShopQrInfo(shop) {
+    if (!shop) return { hasQr: false, qrUrl: "", qrDesc: "" };
+    const localMap = getLocalShopQrMap();
+    const localEntry = localMap[String(shop.id)] || {};
+    const qrUrl = (shop.qr_url || localEntry.qr_url || "").trim();
+    const qrDesc = (shop.qr_description || localEntry.qr_description || "").trim();
+    return {
+      hasQr: Boolean(qrUrl),
+      qrUrl,
+      qrDesc: qrDesc || "Scan QR to pay via E-Wallet (GCash / Maya / MariBank)"
+    };
   }
 
   function getShopDeliveryArea(shop) {
@@ -2858,6 +3295,33 @@
     if (!cleanedKeywords.length) return true;
     const lowerAddr = (address || "").toLowerCase();
     return cleanedKeywords.some(kw => lowerAddr.includes(kw));
+  }
+
+  function parseOrderAddressAndPayment(rawAddress) {
+    const str = String(rawAddress || "");
+    const parts = str.split("|").map(s => s.trim()).filter(Boolean);
+    let deliveryAddress = parts[0] || str;
+    let contactPhone = "";
+    let paymentMethod = "COD";
+    let paymentRef = "";
+
+    for (let i = 1; i < parts.length; i++) {
+      const p = parts[i];
+      if (/^contact:/i.test(p)) {
+        contactPhone = p.replace(/^contact:/i, "").trim();
+      } else if (/^payment:/i.test(p)) {
+        const payVal = p.replace(/^payment:/i, "").trim();
+        if (/scan qr/i.test(payVal)) {
+          paymentMethod = "Scan E-Wallet QR";
+          const refMatch = payVal.match(/\(([^)]+)\)/);
+          paymentRef = refMatch ? refMatch[1].trim() : "";
+        } else {
+          paymentMethod = "COD";
+        }
+      }
+    }
+
+    return { deliveryAddress, contactPhone, paymentMethod, paymentRef };
   }
 
   /* =========================================================
@@ -2940,6 +3404,13 @@
     if (!isoString) return "";
     const d = new Date(isoString);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  function formatYearMonthLabel(ym) {
+    if (!ym || !ym.includes("-")) return ym || "Unknown";
+    const [y, m] = ym.split("-");
+    const date = new Date(Number(y), Number(m) - 1, 1);
+    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   }
 
   function escapeHtml(str) {
@@ -3026,8 +3497,11 @@
       document.getElementById("notif-dropdown").classList.add("hidden");
     });
 
-    const monthInput = document.getElementById("admin-commission-month");
-    if (monthInput) monthInput.value = adminSelectedMonth;
+    const adminMonthInput = document.getElementById("admin-commission-month");
+    if (adminMonthInput) adminMonthInput.value = adminSelectedMonth;
+
+    const sellerMonthInput = document.getElementById("seller-finance-month");
+    if (sellerMonthInput) sellerMonthInput.value = sellerSelectedMonth;
 
     const isRecoveryRedirect = window.location.hash.includes("type=recovery");
 
@@ -3130,6 +3604,7 @@
 
       document.getElementById("btn-login").classList.add("hidden");
       document.getElementById("btn-logout").classList.remove("hidden");
+      document.getElementById("btn-live-chat").classList.remove("hidden");
 
       if (myShop) {
         headerApplyBtn.classList.add("hidden");
@@ -3149,7 +3624,10 @@
         document.getElementById("btn-admin").classList.add("hidden");
       }
 
-      await Promise.all([loadCart(), syncOrdersAndNotifications(true)]);
+      await Promise.all([loadCart(), syncOrdersAndNotifications(true), loadChatMessages(false)]);
+      if (myShop && myShop.status === "approved") {
+        renderSellerFinanceDashboard();
+      }
       if (currentRole === "admin") {
         renderAdminShopsModeration();
         renderAdminCommissionMonitor();
@@ -3163,9 +3641,11 @@
       cart = [];
       cachedOrders = [];
       notifications = [];
+      chatMessages = [];
       updateCartBadge();
       updateNotifBadge();
-      ["user-pill", "btn-logout", "btn-seller", "btn-orders", "btn-admin", "notif-wrapper"].forEach(id => {
+      updateChatUnreadBadge();
+      ["user-pill", "btn-logout", "btn-seller", "btn-orders", "btn-admin", "notif-wrapper", "btn-live-chat"].forEach(id => {
         document.getElementById(id).classList.add("hidden");
       });
       headerApplyBtn.classList.remove("hidden");
@@ -3211,7 +3691,7 @@
       if (el) el.classList.toggle("hidden", v !== view);
     });
     if (view === "seller") {
-      loadMyShop(true).then(() => renderSellerWorkspace());
+      Promise.all([loadMyShop(true), loadOrders()]).then(() => renderSellerWorkspace());
     }
     if (view === "orders") loadOrders();
     if (view === "admin") {
@@ -3224,7 +3704,7 @@
   }
 
   /* =========================================================
-     VERIFIED SHOPS SHOWCASE, DELIVERY AREA & SHIPPING FEE
+     VERIFIED SHOPS SHOWCASE, DELIVERY AREA, SHIPPING & QR
      ========================================================= */
   async function loadShops() {
     const { data, error } = await db
@@ -3371,6 +3851,8 @@
 
     const ship = getShopShippingInfo(myShop);
     const area = getShopDeliveryArea(myShop);
+    const qrInfo = getShopQrInfo(myShop);
+
     document.getElementById("my-shop-title").textContent = `🏪 ${myShop.name}`;
     document.getElementById("my-shop-cat-badge").textContent = myShop.category;
 
@@ -3379,6 +3861,11 @@
     shipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
 
     document.getElementById("my-shop-area-badge").textContent = area.label;
+
+    const qrBadge = document.getElementById("my-shop-qr-badge");
+    qrBadge.textContent = qrInfo.hasQr ? "💵 COD + 📱 Scan QR" : "💵 COD Only";
+    qrBadge.className = qrInfo.hasQr ? "badge ship-paid" : "badge cat-badge";
+
     document.getElementById("my-shop-desc-text").textContent = myShop.description || "";
 
     document.getElementById("edit-shop-name").value = myShop.name;
@@ -3393,10 +3880,24 @@
     document.getElementById("edit-shop-area-text").value = area.isRestricted ? area.raw : "Roxas Only";
     toggleEditShopAreaInput();
 
+    document.getElementById("edit-shop-qr-desc").value = qrInfo.hasQr ? qrInfo.qrDesc : "";
+    const qrPrevWrap = document.getElementById("edit-shop-qr-preview-wrap");
+    const btnRemoveQr = document.getElementById("btn-remove-shop-qr");
+    if (qrInfo.hasQr) {
+      document.getElementById("edit-shop-qr-preview").src = qrInfo.qrUrl;
+      document.getElementById("edit-shop-qr-desc-preview").textContent = qrInfo.qrDesc;
+      qrPrevWrap.classList.remove("hidden");
+      btnRemoveQr.classList.remove("hidden");
+    } else {
+      qrPrevWrap.classList.add("hidden");
+      btnRemoveQr.classList.add("hidden");
+    }
+
     if (!document.getElementById("edit-prod-id").value) {
       document.getElementById("p-category").value = myShop.category;
     }
 
+    renderSellerFinanceDashboard();
     renderSellerProductsTable();
   }
 
@@ -3404,9 +3905,9 @@
     document.getElementById("edit-shop-box").classList.toggle("hidden");
   }
 
-  async function uploadVerificationImage(file) {
-    const compressed = await compressImageToWebP(file, 900, 0.78);
-    const path = `verifications/${currentUser.id}-${Date.now()}.${compressed.ext}`;
+  async function uploadVerificationImage(file, folder = "verifications") {
+    const compressed = await compressImageToWebP(file, 900, 0.80);
+    const path = `${folder}/${currentUser.id}-${Date.now()}.${compressed.ext}`;
     const { error } = await db.storage.from(STORAGE_BUCKET).upload(path, compressed.blob, {
       cacheControl: CACHE_ONE_YEAR,
       contentType: compressed.contentType,
@@ -3424,6 +3925,9 @@
     const idFile = document.getElementById("new-shop-id-file").files?.[0];
     if (!idFile) return showToast("Please upload a Valid ID or Store/Product Photo.", "warning");
 
+    const qrFile = document.getElementById("new-shop-qr-file").files?.[0];
+    const qrDesc = document.getElementById("new-shop-qr-desc").value.trim();
+
     const shipMode = document.getElementById("new-shop-ship-mode").value;
     const isFree = shipMode === "free";
     const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("new-shop-ship-fee").value) || 0);
@@ -3438,7 +3942,8 @@
     btn.textContent = "Compressing & Submitting...";
 
     try {
-      const verificationUrl = await uploadVerificationImage(idFile);
+      const verificationUrl = await uploadVerificationImage(idFile, "verifications");
+      const qrUrl = qrFile ? await uploadVerificationImage(qrFile, "shop-qrs") : null;
       const initialStatus = currentRole === "admin" ? "approved" : "pending";
 
       const baseInsert = {
@@ -3456,11 +3961,15 @@
 
       let { data, error } = await db
         .from("shops")
-        .insert({ ...baseInsert, delivery_area: deliveryArea })
+        .insert({
+          ...baseInsert,
+          delivery_area: deliveryArea,
+          ...(qrUrl ? { qr_url: qrUrl, qr_description: qrDesc } : {})
+        })
         .select()
         .single();
 
-      if (error && error.message.toLowerCase().includes("delivery_area")) {
+      if (error && (error.message.toLowerCase().includes("delivery_area") || error.message.toLowerCase().includes("qr_"))) {
         const retry = await db.from("shops").insert(baseInsert).select().single();
         data = retry.data;
         error = retry.error;
@@ -3469,7 +3978,13 @@
       if (error) return showToast("Application failed: " + error.message, "error");
 
       saveLocalShopArea(data.id, deliveryArea);
-      myShop = { ...data, delivery_area: deliveryArea };
+      if (qrUrl) saveLocalShopQr(data.id, qrUrl, qrDesc);
+
+      myShop = {
+        ...data,
+        delivery_area: deliveryArea,
+        ...(qrUrl ? { qr_url: qrUrl, qr_description: qrDesc } : {})
+      };
       document.getElementById("btn-header-apply").classList.add("hidden");
       const sellerBtn = document.getElementById("btn-seller");
       sellerBtn.classList.remove("hidden");
@@ -3500,7 +4015,7 @@
       const newFile = document.getElementById("resub-shop-id-file").files?.[0];
       if (newFile) {
         const oldUrl = myShop.verification_url;
-        verificationUrl = await uploadVerificationImage(newFile);
+        verificationUrl = await uploadVerificationImage(newFile, "verifications");
         if (oldUrl) await deleteStorageImagesByUrls([oldUrl]);
       }
 
@@ -3532,48 +4047,233 @@
     e.preventDefault();
     if (!myShop) return;
 
-    const shipMode = document.getElementById("edit-shop-ship-mode").value;
-    const isFree = shipMode === "free";
-    const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("edit-shop-ship-fee").value) || 0);
+    const btn = document.getElementById("btn-save-shop-settings");
+    btn.disabled = true;
+    btn.textContent = "Saving...";
 
-    const areaMode = document.getElementById("edit-shop-area-mode").value;
-    const deliveryArea = areaMode === "specific"
-      ? (document.getElementById("edit-shop-area-text").value.trim() || "Roxas Only")
-      : "All Areas";
+    try {
+      const shipMode = document.getElementById("edit-shop-ship-mode").value;
+      const isFree = shipMode === "free";
+      const shipFee = isFree ? 0 : Math.max(0, parseFloat(document.getElementById("edit-shop-ship-fee").value) || 0);
 
-    const baseUpdate = {
-      name: document.getElementById("edit-shop-name").value.trim(),
-      category: document.getElementById("edit-shop-category").value,
-      contact_phone: document.getElementById("edit-shop-phone").value.trim(),
-      description: document.getElementById("edit-shop-desc").value.trim(),
-      free_shipping: isFree,
-      shipping_fee: shipFee
-    };
+      const areaMode = document.getElementById("edit-shop-area-mode").value;
+      const deliveryArea = areaMode === "specific"
+        ? (document.getElementById("edit-shop-area-text").value.trim() || "Roxas Only")
+        : "All Areas";
 
-    let { data, error } = await db
-      .from("shops")
-      .update({ ...baseUpdate, delivery_area: deliveryArea })
-      .eq("id", myShop.id)
-      .select()
-      .single();
+      const existingQr = getShopQrInfo(myShop);
+      let qrUrl = existingQr.qrUrl;
+      const qrDesc = document.getElementById("edit-shop-qr-desc").value.trim();
+      const newQrFile = document.getElementById("edit-shop-qr-file").files?.[0];
 
-    if (error && error.message.toLowerCase().includes("delivery_area")) {
-      const retry = await db.from("shops").update(baseUpdate).eq("id", myShop.id).select().single();
-      data = retry.data;
-      error = retry.error;
+      if (newQrFile) {
+        const oldQr = qrUrl;
+        qrUrl = await uploadVerificationImage(newQrFile, "shop-qrs");
+        if (oldQr && oldQr !== qrUrl) await deleteStorageImagesByUrls([oldQr]);
+      }
+
+      const baseUpdate = {
+        name: document.getElementById("edit-shop-name").value.trim(),
+        category: document.getElementById("edit-shop-category").value,
+        contact_phone: document.getElementById("edit-shop-phone").value.trim(),
+        description: document.getElementById("edit-shop-desc").value.trim(),
+        free_shipping: isFree,
+        shipping_fee: shipFee
+      };
+
+      let { data, error } = await db
+        .from("shops")
+        .update({
+          ...baseUpdate,
+          delivery_area: deliveryArea,
+          qr_url: qrUrl || null,
+          qr_description: qrDesc || null
+        })
+        .eq("id", myShop.id)
+        .select()
+        .single();
+
+      if (error && (error.message.toLowerCase().includes("delivery_area") || error.message.toLowerCase().includes("qr_"))) {
+        const retry = await db.from("shops").update(baseUpdate).eq("id", myShop.id).select().single();
+        data = retry.data;
+        error = retry.error;
+      }
+
+      if (error) return showToast("Update failed: " + error.message, "error");
+
+      saveLocalShopArea(myShop.id, deliveryArea);
+      saveLocalShopQr(myShop.id, qrUrl, qrDesc);
+
+      myShop = {
+        ...data,
+        delivery_area: deliveryArea,
+        qr_url: qrUrl,
+        qr_description: qrDesc
+      };
+      document.getElementById("edit-shop-qr-file").value = "";
+      document.getElementById("edit-shop-box").classList.add("hidden");
+      document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
+      applyOwnerHeaderDisplay();
+      await loadShops();
+      renderSellerWorkspace();
+      renderProducts();
+      showToast("Shop settings, shipping & E-Wallet QR updated!", "success");
+    } catch (err) {
+      showToast("Save error: " + err.message, "error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Shop, Shipping & QR Settings";
     }
+  }
 
-    if (error) return showToast("Update failed: " + error.message, "error");
+  async function removeShopQrCode() {
+    if (!myShop) return;
+    if (!confirm("Remove your E-Wallet QR code? Buyers will only see COD until you upload a new QR.")) return;
 
-    saveLocalShopArea(myShop.id, deliveryArea);
-    myShop = { ...data, delivery_area: deliveryArea };
-    document.getElementById("edit-shop-box").classList.add("hidden");
-    document.getElementById("btn-seller").textContent = `🏪 ${myShop.name}`;
-    applyOwnerHeaderDisplay();
+    const existingQr = getShopQrInfo(myShop);
+    if (existingQr.qrUrl) await deleteStorageImagesByUrls([existingQr.qrUrl]);
+
+    try {
+      await db.from("shops").update({ qr_url: null, qr_description: null }).eq("id", myShop.id);
+    } catch (_) {}
+
+    saveLocalShopQr(myShop.id, "", "");
+    myShop = { ...myShop, qr_url: null, qr_description: "" };
+    document.getElementById("edit-shop-qr-desc").value = "";
+    document.getElementById("edit-shop-qr-file").value = "";
     await loadShops();
     renderSellerWorkspace();
-    renderProducts();
-    showToast(`Shop settings updated (${deliveryArea})!`, "success");
+    showToast("E-Wallet QR code removed.", "info");
+  }
+
+  /* =========================================================
+     SELLER MINI-DASHBOARD: MONTHLY INCOME & 10% ADMIN FEE MONITOR
+     ========================================================= */
+  function onSellerMonthChange() {
+    sellerSelectedMonth = document.getElementById("seller-finance-month").value || getCurrentYearMonth();
+    sellerShowAllMonths = false;
+    document.getElementById("btn-seller-all-months").classList.remove("active-nav");
+    renderSellerFinanceDashboard();
+  }
+
+  function toggleSellerAllMonths() {
+    sellerShowAllMonths = !sellerShowAllMonths;
+    document.getElementById("btn-seller-all-months").classList.toggle("active-nav", sellerShowAllMonths);
+    renderSellerFinanceDashboard();
+  }
+
+  function renderSellerFinanceDashboard() {
+    if (!myShop) return;
+
+    const allMyShopOrders = cachedOrders.filter(o =>
+      String(o.shop_id) === String(myShop.id) && o.status !== "Cancelled"
+    );
+
+    const periodOrders = allMyShopOrders.filter(o => {
+      if (!sellerShowAllMonths && sellerSelectedMonth) {
+        return getOrderYearMonth(o.created_at) === sellerSelectedMonth;
+      }
+      return true;
+    });
+
+    let grossSales = 0;
+    let totalProdSales = 0;
+    let totalShipping = 0;
+    let totalAdminFee = 0;
+    let unpaidAdminFee = 0;
+    let paidAdminFee = 0;
+    let netIncome = 0;
+
+    for (const o of periodOrders) {
+      const shipFee = Number(o.shipping_fee || 0);
+      const gross = Number(o.total_amount || 0);
+      const prodSales = o.subtotal_amount != null && Number(o.subtotal_amount) > 0
+        ? Number(o.subtotal_amount)
+        : Math.max(0, gross - shipFee);
+      const comm = o.commission_amount != null && Number(o.commission_amount) > 0
+        ? Number(o.commission_amount)
+        : Number((prodSales * 0.10).toFixed(2));
+      const sellerNet = Number(((prodSales - comm) + shipFee).toFixed(2));
+
+      grossSales += gross;
+      totalProdSales += prodSales;
+      totalShipping += shipFee;
+      totalAdminFee += comm;
+      netIncome += sellerNet;
+
+      if (o.commission_paid) paidAdminFee += comm;
+      else unpaidAdminFee += comm;
+    }
+
+    document.getElementById("seller-kpi-net-income").textContent = `₱${netIncome.toFixed(2)}`;
+    document.getElementById("seller-kpi-income-sub").textContent = `Items ₱${(totalProdSales - totalAdminFee).toFixed(2)} + Ship ₱${totalShipping.toFixed(2)}`;
+    document.getElementById("seller-kpi-gross").textContent = `₱${grossSales.toFixed(2)}`;
+    document.getElementById("seller-kpi-order-count").textContent = `${periodOrders.length} valid order(s)`;
+    document.getElementById("seller-kpi-admin-unpaid").textContent = `₱${unpaidAdminFee.toFixed(2)}`;
+    document.getElementById("seller-kpi-admin-total").textContent = `₱${totalAdminFee.toFixed(2)}`;
+    document.getElementById("seller-kpi-admin-paid").textContent = `₱${paidAdminFee.toFixed(2)}`;
+    document.getElementById("seller-kpi-fee-status").textContent = unpaidAdminFee > 0
+      ? "Pending remittance to Admin"
+      : "✓ All settled for this period";
+
+    // Group all shop orders by YYYY-MM for monthly breakdown history
+    const monthMap = new Map();
+    for (const o of allMyShopOrders) {
+      const ym = getOrderYearMonth(o.created_at) || "Unknown";
+      if (!monthMap.has(ym)) {
+        monthMap.set(ym, {
+          ym,
+          orders: 0,
+          prodSales: 0,
+          shipping: 0,
+          netIncome: 0,
+          adminFee: 0,
+          unpaidFee: 0
+        });
+      }
+      const row = monthMap.get(ym);
+      const shipFee = Number(o.shipping_fee || 0);
+      const gross = Number(o.total_amount || 0);
+      const prodSales = o.subtotal_amount != null && Number(o.subtotal_amount) > 0
+        ? Number(o.subtotal_amount)
+        : Math.max(0, gross - shipFee);
+      const comm = o.commission_amount != null && Number(o.commission_amount) > 0
+        ? Number(o.commission_amount)
+        : Number((prodSales * 0.10).toFixed(2));
+
+      row.orders += 1;
+      row.prodSales += prodSales;
+      row.shipping += shipFee;
+      row.adminFee += comm;
+      row.netIncome += Number(((prodSales - comm) + shipFee).toFixed(2));
+      if (!o.commission_paid) row.unpaidFee += comm;
+    }
+
+    const tbody = document.getElementById("seller-monthly-history-tbody");
+    const historyRows = Array.from(monthMap.values()).sort((a, b) => b.ym.localeCompare(a.ym));
+
+    if (!historyRows.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:1rem;">No shop sales recorded yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = historyRows.map(r => {
+      const statusBadge = r.unpaidFee <= 0
+        ? `<span class="badge status-delivered">✓ Settled</span>`
+        : `<span class="badge status-pending">Payable: ₱${r.unpaidFee.toFixed(2)}</span>`;
+
+      return `
+        <tr>
+          <td><strong>${escapeHtml(formatYearMonthLabel(r.ym))}</strong></td>
+          <td>${r.orders}</td>
+          <td>₱${r.prodSales.toFixed(2)}</td>
+          <td>₱${r.shipping.toFixed(2)}</td>
+          <td><strong style="color:var(--green);">₱${r.netIncome.toFixed(2)}</strong></td>
+          <td><strong style="color:#b45309;">₱${r.adminFee.toFixed(2)}</strong></td>
+          <td>${statusBadge}</td>
+        </tr>
+      `;
+    }).join("");
   }
 
   /* =========================================================
@@ -3826,6 +4526,7 @@
       const st = s.status || "pending";
       const ship = getShopShippingInfo(s);
       const area = getShopDeliveryArea(s);
+      const qrInfo = getShopQrInfo(s);
       const badgeClass =
         st === "approved" ? "status-approved" :
         st === "pending" ? "status-pending" : "status-suspended";
@@ -3865,7 +4566,8 @@
           </td>
           <td>
             <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span><br/>
-            <span class="badge area-badge" style="margin-top:0.25rem; display:inline-block;">${escapeHtml(area.label)}</span>
+            <span class="badge area-badge" style="margin-top:0.25rem; display:inline-block;">${escapeHtml(area.label)}</span><br/>
+            <span class="badge cat-badge" style="margin-top:0.25rem; display:inline-block;">${qrInfo.hasQr ? "💵 COD + 📱 QR" : "💵 COD Only"}</span>
           </td>
           <td>${idLinkHtml}</td>
           <td><span class="badge ${badgeClass}">${escapeHtml(st)}</span></td>
@@ -3908,6 +4610,7 @@
     const shopProducts = products.filter(p => String(p.shop_id) === String(shopId));
     const urlsToClean = [
       shopObj?.verification_url,
+      shopObj?.qr_url,
       ...shopProducts.flatMap(p => getProductImages(p))
     ].filter(Boolean);
 
@@ -4206,6 +4909,7 @@
         document.getElementById("banner-shop-desc").textContent = shop.description || "Verified MarketHub Seller Storefront";
         document.getElementById("banner-shop-products").textContent = shopProds.length;
         document.getElementById("banner-shop-sold").textContent = totalSold;
+        document.getElementById("btn-banner-chat-shop").onclick = () => openChatModal(shop.id, null, null, shop.name);
         banner.classList.remove("hidden");
       }
     }
@@ -4309,7 +5013,6 @@
       loadMoreWrap.classList.add("hidden");
     }
 
-    /* PURE PRODUCT CARDS: Image + Title + Tags + Price + Sold (Expands on Click) */
     grid.innerHTML = visibleItems.map(p => {
       const stockNum = Number(p.stock || 0);
       const soldNum = Number(p.sold_count || 0);
@@ -4318,6 +5021,7 @@
       const shopLabel = shop ? shop.name : "MarketHub Official";
       const ship = getShopShippingInfo(shop);
       const area = getShopDeliveryArea(shop);
+      const qrInfo = getShopQrInfo(shop);
 
       const topBadgeHtml = stockNum <= 0
         ? `<span class="card-top-badge soldout">Sold Out</span>`
@@ -4335,7 +5039,7 @@
             <h3 class="card-pure-title">${escapeHtml(p.name)}</h3>
             <div class="card-pure-tags">
               ${ship.isFree ? `<span class="mini-tag-green">Free Shipping</span>` : `<span class="mini-tag-outline">Ship ₱${ship.fee.toFixed(0)}</span>`}
-              <span class="mini-tag-outline">${escapeHtml(area.raw)}</span>
+              ${qrInfo.hasQr ? `<span class="mini-tag-green">COD / QR</span>` : `<span class="mini-tag-outline">COD</span>`}
             </div>
             <div class="card-pure-footer">
               <div class="card-pure-price">₱${Number(p.price).toFixed(2)}</div>
@@ -4362,12 +5066,12 @@
     const shopName = shop ? shop.name : "MarketHub Official";
     const ship = getShopShippingInfo(shop);
     const area = getShopDeliveryArea(shop);
+    const qrInfo = getShopQrInfo(shop);
     const rating = getProductRatingStats(p.id);
     const stockNum = Number(p.stock || 0);
     const soldNum = Number(p.sold_count || 0);
     const catLabel = p.category || (shop ? shop.category : "General Merchandise");
 
-    // Breadcrumb
     document.getElementById("pdp-crumb-cat").textContent = catLabel;
     document.getElementById("pdp-crumb-cat").onclick = () => {
       closeExpandedProduct();
@@ -4375,7 +5079,6 @@
     };
     document.getElementById("pdp-crumb-title").textContent = p.name;
 
-    // Gallery
     document.getElementById("pdp-main-img").src = imgs[0];
     document.getElementById("pdp-thumbs").innerHTML = imgs.map((url, idx) => `
       <div class="pdp-thumb ${idx === 0 ? "active" : ""}" onclick="selectPdpImage(${idx}, '${escapeHtml(url)}')">
@@ -4383,7 +5086,6 @@
       </div>
     `).join("");
 
-    // Main Info
     document.getElementById("pdp-title").textContent = p.name;
     document.getElementById("pdp-rating-avg").textContent = rating.count > 0 ? rating.avg : "0.0";
     document.getElementById("pdp-review-count").textContent = rating.count;
@@ -4395,6 +5097,9 @@
     shipPill.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
 
     document.getElementById("pdp-area-pill").textContent = area.label;
+    document.getElementById("pdp-payment-info").textContent = qrInfo.hasQr
+      ? "💵 Cash on Delivery (COD) or 📱 Scan E-Wallet QR"
+      : "💵 Cash on Delivery (COD)";
     document.getElementById("pdp-shipping-info").textContent = ship.isFree
       ? "Free Shipping (₱0.00)"
       : `₱${ship.fee.toFixed(2)} flat rate per shop order`;
@@ -4402,7 +5107,6 @@
       ? `${area.raw} (Buyers outside this area cannot checkout)`
       : "All Areas / Province-Wide";
 
-    // Quantity & Buttons
     const qtyInput = document.getElementById("pdp-qty");
     qtyInput.value = 1;
     qtyInput.max = Math.max(1, stockNum);
@@ -4426,7 +5130,13 @@
       buyNow(p.id, qty);
     };
 
-    // Seller Store Bar
+    const openSellerChatFn = () => {
+      if (!shop) return showToast("This is an official platform listing.", "info");
+      openChatModal(shop.id, null, null, `${shop.name} (${p.name})`);
+    };
+    document.getElementById("pdp-chat-btn").onclick = openSellerChatFn;
+    document.getElementById("pdp-shop-chat-btn").onclick = openSellerChatFn;
+
     const shopProds = products.filter(item => String(item.shop_id) === String(p.shop_id));
     const shopTotalSold = shopProds.reduce((sum, item) => sum + Number(item.sold_count || 0), 0);
 
@@ -4442,7 +5152,6 @@
       if (shop) setShopFilter(shop.id);
     };
 
-    // Specifications & Full Description
     document.getElementById("pdp-spec-cat").textContent = catLabel;
     document.getElementById("pdp-spec-stock").textContent = stockNum > 0 ? `IN STOCK (${stockNum})` : "SOLD OUT";
     document.getElementById("pdp-spec-area").textContent = area.raw;
@@ -4450,7 +5159,6 @@
     document.getElementById("pdp-spec-shop").textContent = shopName;
     document.getElementById("pdp-description").textContent = p.description || "No additional description provided by the seller.";
 
-    // Ratings Overview & Review Form
     document.getElementById("pdp-overview-score").textContent = rating.count > 0 ? rating.avg : "0.0";
     document.querySelectorAll("#pdp-rating-filters .rating-filter-btn").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.star === "all");
@@ -4594,7 +5302,7 @@
   }
 
   /* =========================================================
-     CART, BUY NOW & CHECKOUT (WITH DELIVERY AREA & PROFILE SAVE)
+     CART, COD + SCAN QR PAYMENT & CHECKOUT
      ========================================================= */
   async function loadCart() {
     if (!currentUser) return;
@@ -4668,6 +5376,50 @@
     openCart(true);
   }
 
+  function selectCheckoutPaymentMethod(method) {
+    selectedPaymentMethod = method;
+    document.getElementById("pay-choice-cod").classList.toggle("active", method === "COD");
+    document.getElementById("pay-choice-qr").classList.toggle("active", method === "QR");
+    const qrPanel = document.getElementById("checkout-qr-panel");
+    qrPanel.classList.toggle("hidden", method !== "QR");
+    if (method === "QR") {
+      renderCheckoutQrCodes();
+    }
+  }
+
+  function renderCheckoutQrCodes() {
+    const container = document.getElementById("checkout-qr-list");
+    const approvedShops = getApprovedShops();
+    const shopIdsInCart = [...new Set(cart.map(i => String(i.products?.shop_id ?? "official")))];
+
+    container.innerHTML = shopIdsInCart.map(shopKey => {
+      const shopObj = approvedShops.find(s => String(s.id) === shopKey);
+      const shopName = shopObj ? shopObj.name : "MarketHub Official";
+      const qrInfo = getShopQrInfo(shopObj);
+
+      if (qrInfo.hasQr) {
+        return `
+          <div class="qr-preview-box" style="margin-bottom:0.55rem;">
+            <a href="${escapeHtml(qrInfo.qrUrl)}" target="_blank" rel="noopener" title="Tap to open full QR code">
+              <img src="${escapeHtml(qrInfo.qrUrl)}" alt="${escapeHtml(shopName)} QR" />
+            </a>
+            <div style="flex:1; min-width:170px;">
+              <strong style="font-size:0.86rem; color:var(--primary-deep); display:block;">🏪 ${escapeHtml(shopName)}</strong>
+              <div style="font-size:0.8rem; color:var(--text); font-weight:600; margin:0.25rem 0;">${escapeHtml(qrInfo.qrDesc)}</div>
+              <small style="font-size:0.72rem; color:var(--muted);">Scan using GCash, Maya, MariBank, or any QRPh app, then enter your Reference No. below.</small>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:6px; padding:0.65rem 0.8rem; font-size:0.79rem; color:#92400e; margin-bottom:0.55rem;">
+          <strong>🏪 ${escapeHtml(shopName)}:</strong> This seller has not uploaded an E-Wallet QR code yet. Please select <strong>Cash on Delivery (COD)</strong> or message the seller via <strong>Live Chat</strong> first.
+        </div>
+      `;
+    }).join("");
+  }
+
   function populateCheckoutFromSavedProfile() {
     document.getElementById("checkout-name").value = userProfileData.full_name || "";
     document.getElementById("checkout-phone").value = userProfileData.phone || "";
@@ -4707,6 +5459,8 @@
     document.getElementById("cart-modal-title").textContent = isBuyNow ? "⚡ Express Checkout" : "🛒 Shopping Cart";
     document.getElementById("express-buy-badge").classList.toggle("hidden", !isBuyNow);
     document.getElementById("checkout-policy-agree").checked = true;
+    document.getElementById("checkout-qr-ref").value = "";
+    selectCheckoutPaymentMethod("COD");
     populateCheckoutFromSavedProfile();
     renderCartModal();
     document.getElementById("cart-modal").classList.remove("hidden");
@@ -4785,6 +5539,7 @@
       </div>
     `;
 
+    if (selectedPaymentMethod === "QR") renderCheckoutQrCodes();
     checkoutSec.classList.remove("hidden");
   }
 
@@ -4827,6 +5582,23 @@
       }
     }
 
+    let paymentTag = "Payment: COD";
+    if (selectedPaymentMethod === "QR") {
+      const hasAnyQr = cart.some(item => {
+        const shopObj = approvedShops.find(s => String(s.id) === String(item.products?.shop_id));
+        return getShopQrInfo(shopObj).hasQr;
+      });
+      if (!hasAnyQr) {
+        return showToast("This shop has no E-Wallet QR uploaded. Please choose COD or chat the seller first.", "warning");
+      }
+      const qrRef = document.getElementById("checkout-qr-ref").value.trim();
+      if (!qrRef) {
+        document.getElementById("checkout-qr-ref").focus();
+        return showToast("Please enter your E-Wallet Payment Reference No. / Sender Name.", "warning");
+      }
+      paymentTag = `Payment: Scan QR (${qrRef})`;
+    }
+
     const orderBtn = document.getElementById("btn-place-order");
     orderBtn.disabled = true;
     orderBtn.textContent = "Saving Info & Placing Order...";
@@ -4839,11 +5611,11 @@
       try { await db.auth.updateUser({ data: updatedProfile }); } catch (_) {}
       await syncProfileToDatabase(currentUser.id, updatedProfile);
 
-      const combinedAddress = `${address} | Contact: ${phone}`;
+      const combinedAddress = `${address} | Contact: ${phone} | ${paymentTag}`;
       const { error } = await db.rpc("checkout_cart", { p_customer_name: name, p_address: combinedAddress });
       if (error) return showToast("Checkout failed: " + error.message, "error");
 
-      showToast("Order placed & your delivery info is saved! Reminder: No to Cancel after shipping.", "success");
+      showToast("Order placed! Reminder: No to Cancel after shipping.", "success");
       closeCart();
       await loadCart();
       await loadProducts();
@@ -4857,7 +5629,7 @@
   }
 
   /* =========================================================
-     ORDERS & STRICT "NO TO CANCEL AFTER SHIPPING" ENFORCEMENT
+     ORDERS, PRINTABLE DELIVERY RECEIPT & LIVE TRACKING
      ========================================================= */
   function switchOrdersSubTab(tab) {
     ordersSubTab = tab;
@@ -4887,6 +5659,7 @@
     updateSellerOrderCounters();
     buildNotificationsFromOrders(cachedOrders);
     renderOrdersList();
+    if (myShop && myShop.status === "approved") renderSellerFinanceDashboard();
     if (currentRole === "admin") renderAdminCommissionMonitor();
   }
 
@@ -4945,6 +5718,11 @@
       const shopName = shop ? shop.name : "MarketHub Official";
       const placedDate = o.created_at ? new Date(o.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : "";
 
+      const parsed = parseOrderAddressAndPayment(o.address);
+      const paymentBadgeHtml = parsed.paymentMethod === "COD"
+        ? `<span class="badge cat-badge">💵 Cash on Delivery (COD)</span>`
+        : `<span class="badge ship-paid">📱 Scan QR${parsed.paymentRef ? ` • Ref: ${escapeHtml(parsed.paymentRef)}` : ""}</span>`;
+
       const shipFee = Number(o.shipping_fee || 0);
       const grossAmt = Number(o.total_amount || 0);
       const prodSubtotal = o.subtotal_amount != null && Number(o.subtotal_amount) > 0 ? Number(o.subtotal_amount) : Math.max(0, grossAmt - shipFee);
@@ -4968,6 +5746,10 @@
         }
       }
 
+      const chatActionBtn = isBuyerOrder
+        ? (shop ? `<button type="button" class="secondary sm" onclick="openChatModal(${shop.id}, ${o.id}, '${currentUser.id}', 'Order #${o.id} • ${escapeHtml(shopName)}')">💬 Chat Seller</button>` : "")
+        : `<button type="button" class="secondary sm" onclick="openChatModal(${o.shop_id || 0}, ${o.id}, '${escapeHtml(o.user_id || "")}', 'Order #${o.id} • ${escapeHtml(o.customer_name)}')">💬 Chat Buyer</button>`;
+
       return `
         <div class="panel" id="order-card-${o.id}">
           <div class="row-between">
@@ -4975,13 +5757,21 @@
               <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
                 <strong style="font-size:1.05rem;">Order #${o.id} — ${escapeHtml(o.customer_name)}</strong>
                 <span class="badge seller">🏪 ${escapeHtml(shopName)}</span>
+                ${paymentBadgeHtml}
               </div>
               <div style="font-size:0.78rem; color:var(--muted); margin-top:0.2rem;">Placed: ${escapeHtml(placedDate)}</div>
             </div>
-            <span class="badge ${getStatusBadgeClass(o.status)}">${escapeHtml(o.status)}</span>
+            <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+              ${chatActionBtn}
+              <button type="button" class="secondary sm" onclick="openPrintReceiptModal(${o.id})">🖨️ Print Receipt</button>
+              <span class="badge ${getStatusBadgeClass(o.status)}">${escapeHtml(o.status)}</span>
+            </div>
           </div>
 
-          <p style="font-size:0.86rem; color:var(--text-secondary); margin:0.65rem 0 0;"><strong>Delivery Details:</strong> ${escapeHtml(o.address)}</p>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin:0.65rem 0 0;">
+            <strong>Delivery Address:</strong> ${escapeHtml(parsed.deliveryAddress)}
+            ${parsed.contactPhone ? ` • <strong>Contact:</strong> ${escapeHtml(parsed.contactPhone)}` : ""}
+          </p>
 
           ${renderOrderStepper(o.status)}
           ${policyNoticeHtml}
@@ -4998,7 +5788,7 @@
           <div class="row-between" style="margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid var(--border);">
             <div>
               <div style="font-size:0.8rem; color:var(--muted);">Items: ₱${prodSubtotal.toFixed(2)} • Shipping Fee: <strong>${shipFee <= 0 ? "FREE" : `₱${shipFee.toFixed(2)}`}</strong></div>
-              <strong style="font-size:1.05rem; color:var(--primary-dark);">Total Paid: ₱${grossAmt.toFixed(2)}</strong>
+              <strong style="font-size:1.05rem; color:var(--primary-dark);">Total: ₱${grossAmt.toFixed(2)}</strong>
               ${ordersSubTab === "sales" && o.shop_id && o.status !== "Cancelled" ? `
                 <div style="font-size:0.77rem; color:var(--muted); margin-top:0.2rem;">
                   Admin Fee (10% on items): <span style="color:var(--primary-dark); font-weight:600;">−₱${commAmt.toFixed(2)}</span> • Your Net + Shipping: <strong style="color:var(--green);">₱${sellerNet.toFixed(2)}</strong>
@@ -5032,6 +5822,102 @@
     }).join("");
   }
 
+  function openPrintReceiptModal(orderId) {
+    const o = cachedOrders.find(item => Number(item.id) === Number(orderId));
+    if (!o) return;
+
+    const shop = shops.find(s => String(s.id) === String(o.shop_id));
+    const shopName = shop ? shop.name : "MarketHub Official";
+    const shopPhone = shop?.contact_phone || "—";
+    const shopAddr = shop?.shop_address || "Roxas, Oriental Mindoro";
+    const parsed = parseOrderAddressAndPayment(o.address);
+
+    const shipFee = Number(o.shipping_fee || 0);
+    const grossAmt = Number(o.total_amount || 0);
+    const prodSubtotal = o.subtotal_amount != null && Number(o.subtotal_amount) > 0
+      ? Number(o.subtotal_amount)
+      : Math.max(0, grossAmt - shipFee);
+    const placedDate = o.created_at
+      ? new Date(o.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
+      : new Date().toLocaleString();
+
+    const isCod = parsed.paymentMethod === "COD";
+    const amountDueOnDelivery = isCod ? grossAmt : 0;
+
+    document.getElementById("receipt-printable-area").innerHTML = `
+      <div class="receipt-header">
+        <div style="font-size:1.15rem; font-weight:800; letter-spacing:0.03em;">🌿 MARKETHUB DELIVERY RECEIPT</div>
+        <div style="font-size:0.78rem; color:#475569; margin-top:2px;">Official Customer Waybill &amp; Payment Slip</div>
+        <div style="margin-top:0.4rem; font-weight:700; font-size:0.95rem;">ORDER #${o.id} • ${escapeHtml(placedDate)}</div>
+      </div>
+
+      <div class="receipt-grid-2">
+        <div>
+          <div style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">From Seller Store</div>
+          <strong style="font-size:0.88rem;">${escapeHtml(shopName)}</strong><br/>
+          <span>📞 ${escapeHtml(shopPhone)}</span><br/>
+          <span style="font-size:0.78rem; color:#475569;">${escapeHtml(shopAddr)}</span>
+        </div>
+        <div>
+          <div style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Deliver To Customer</div>
+          <strong style="font-size:0.88rem;">${escapeHtml(o.customer_name)}</strong><br/>
+          <span>📞 ${escapeHtml(parsed.contactPhone || "See address")}</span><br/>
+          <span style="font-size:0.78rem; color:#0f172a; font-weight:600;">📍 ${escapeHtml(parsed.deliveryAddress)}</span>
+        </div>
+      </div>
+
+      <table class="receipt-table">
+        <thead>
+          <tr>
+            <th>Item Description</th>
+            <th style="text-align:center;">Qty</th>
+            <th style="text-align:right;">Price</th>
+            <th style="text-align:right;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${(o.order_items || []).map(item => `
+            <tr>
+              <td><strong>${escapeHtml(item.product_name)}</strong></td>
+              <td style="text-align:center;">${item.quantity}</td>
+              <td style="text-align:right;">₱${Number(item.unit_price).toFixed(2)}</td>
+              <td style="text-align:right;"><strong>₱${(Number(item.unit_price) * Number(item.quantity)).toFixed(2)}</strong></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <div class="receipt-total-box">
+        <div class="row-between" style="font-size:0.82rem;">
+          <span>Items Subtotal:</span>
+          <strong>₱${prodSubtotal.toFixed(2)}</strong>
+        </div>
+        <div class="row-between" style="font-size:0.82rem; margin-top:0.2rem;">
+          <span>Delivery / Shipping Fee:</span>
+          <strong>${shipFee <= 0 ? "FREE (₱0.00)" : `₱${shipFee.toFixed(2)}`}</strong>
+        </div>
+        <div class="row-between" style="font-size:0.84rem; margin-top:0.35rem; padding-top:0.35rem; border-top:1px dashed #94a3b8;">
+          <span>Payment Method:</span>
+          <strong>${escapeHtml(parsed.paymentMethod)}${parsed.paymentRef ? ` (${escapeHtml(parsed.paymentRef)})` : ""}</strong>
+        </div>
+        <div class="row-between" style="font-size:1.05rem; margin-top:0.45rem; padding-top:0.45rem; border-top:2px solid #0f172a;">
+          <span>${isCod ? "AMOUNT TO PAY UPON DELIVERY (COD):" : "TOTAL ORDER AMOUNT (PAID VIA QR):"}</span>
+          <strong style="font-size:1.2rem;">₱${(isCod ? amountDueOnDelivery : grossAmt).toFixed(2)}</strong>
+        </div>
+      </div>
+
+      <div style="margin-top:0.75rem; font-size:0.74rem; color:#475569; text-align:center; border-top:1px dashed #cbd5e1; padding-top:0.55rem;">
+        ⚠️ Policy: Strictly <strong>NO TO CANCEL AFTER SHIPPING</strong>. Thank you for shopping at MarketHub!
+      </div>
+    `;
+
+    document.getElementById("receipt-modal").classList.remove("hidden");
+  }
+
+  function closeReceiptModal() {
+    document.getElementById("receipt-modal").classList.add("hidden");
+  }
+
   async function cancelOrderByBuyer(orderId) {
     const order = cachedOrders.find(o => o.id === orderId);
     if (order && order.status !== "Pending") {
@@ -5062,6 +5948,295 @@
     knownOrderSnapshots.delete(orderId);
     showToast(`Order #${orderId} deleted.`, "info");
     await loadOrders();
+  }
+
+  /* =========================================================
+     BUYER <-> SELLER LIVE CHAT (ORDER & SHOP MESSAGING)
+     ========================================================= */
+  function getLocalChatStorageKey() {
+    return "markethub_live_chat_messages_v1";
+  }
+
+  function getLocalChatMessages() {
+    try { return JSON.parse(localStorage.getItem(getLocalChatStorageKey()) || "[]"); }
+    catch { return []; }
+  }
+
+  function saveLocalChatMessages(list) {
+    try { localStorage.setItem(getLocalChatStorageKey(), JSON.stringify(list.slice(-400))); }
+    catch (_) {}
+  }
+
+  function getChatReadTimestamp() {
+    if (!currentUser) return 0;
+    return Number(localStorage.getItem(`markethub_chat_last_read_${currentUser.id}`) || "0");
+  }
+
+  function markChatAsReadNow() {
+    if (!currentUser) return;
+    localStorage.setItem(`markethub_chat_last_read_${currentUser.id}`, String(Date.now()));
+    updateChatUnreadBadge();
+  }
+
+  function updateChatUnreadBadge() {
+    const badge = document.getElementById("chat-unread-badge");
+    if (!badge || !currentUser) return;
+    const lastRead = getChatReadTimestamp();
+    const myThreads = getAllChatThreads();
+    const validThreadKeys = new Set(myThreads.map(t => t.threadKey));
+
+    const unreadCount = chatMessages.filter(m =>
+      validThreadKeys.has(m.thread_key) &&
+      m.sender_id !== currentUser.id &&
+      new Date(m.created_at).getTime() > lastRead
+    ).length;
+
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount > 99 ? "99+" : unreadCount;
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+  }
+
+  async function loadChatMessages(showFeedback = false) {
+    if (!currentUser) return;
+    const localList = getLocalChatMessages();
+
+    try {
+      const { data, error } = await db
+        .from("chat_messages")
+        .select("*")
+        .order("created_at", { ascending: true })
+        .limit(400);
+
+      if (!error && Array.isArray(data)) {
+        const mergedMap = new Map();
+        [...localList, ...data].forEach(m => {
+          const key = m.id ? `db-${m.id}` : `loc-${m.created_at}-${m.sender_id}-${m.message}`;
+          mergedMap.set(key, m);
+        });
+        chatMessages = Array.from(mergedMap.values()).sort(
+          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+      } else {
+        chatMessages = localList;
+      }
+    } catch (_) {
+      chatMessages = localList;
+    }
+
+    updateChatUnreadBadge();
+    if (!document.getElementById("chat-modal").classList.contains("hidden")) {
+      renderChatThreadsAndFeed();
+      markChatAsReadNow();
+    }
+    if (showFeedback) showToast("Chat refreshed.", "info");
+  }
+
+  function getAllChatThreads() {
+    if (!currentUser) return [];
+    const threadMap = new Map();
+
+    // 1. Threads from existing messages
+    for (const m of chatMessages) {
+      const involvesMeAsBuyer = m.buyer_id === currentUser.id || m.sender_id === currentUser.id;
+      const involvesMyShop = myShop && String(m.shop_id) === String(myShop.id);
+      if (!involvesMeAsBuyer && !involvesMyShop) continue;
+
+      if (!threadMap.has(m.thread_key)) {
+        const shopObj = shops.find(s => String(s.id) === String(m.shop_id));
+        const isSellerSide = myShop && String(m.shop_id) === String(myShop.id);
+        threadMap.set(m.thread_key, {
+          threadKey: m.thread_key,
+          shopId: m.shop_id,
+          orderId: m.order_id || null,
+          buyerId: m.buyer_id,
+          title: isSellerSide
+            ? `${m.order_id ? `Order #${m.order_id} • ` : ""}${m.sender_id !== currentUser.id ? m.sender_name : "Customer"}`
+            : `${shopObj ? shopObj.name : "Seller Shop"}${m.order_id ? ` (Order #${m.order_id})` : ""}`,
+          subtitle: isSellerSide ? "Buyer Inquiry / Order Support" : "Verified Seller Chat",
+          lastTime: m.created_at
+        });
+      } else {
+        threadMap.get(m.thread_key).lastTime = m.created_at;
+      }
+    }
+
+    // 2. Threads from orders (so buyer or seller can message any active order partner)
+    for (const o of cachedOrders) {
+      if (!o.shop_id) continue;
+      const shopObj = shops.find(s => String(s.id) === String(o.shop_id));
+      const tKey = `shop-${o.shop_id}-buyer-${o.user_id}`;
+
+      if (o.user_id === currentUser.id && !threadMap.has(tKey)) {
+        threadMap.set(tKey, {
+          threadKey: tKey,
+          shopId: o.shop_id,
+          orderId: o.id,
+          buyerId: o.user_id,
+          title: `${shopObj ? shopObj.name : "Seller Shop"} (Order #${o.id})`,
+          subtitle: `Order Status: ${o.status}`,
+          lastTime: o.created_at || new Date().toISOString()
+        });
+      }
+
+      if (myShop && String(o.shop_id) === String(myShop.id) && !threadMap.has(tKey)) {
+        threadMap.set(tKey, {
+          threadKey: tKey,
+          shopId: o.shop_id,
+          orderId: o.id,
+          buyerId: o.user_id,
+          title: `Order #${o.id} • ${o.customer_name}`,
+          subtitle: `Buyer • Status: ${o.status}`,
+          lastTime: o.created_at || new Date().toISOString()
+        });
+      }
+    }
+
+    // 3. Any newly opened draft thread from Product Detail / Shop Banner
+    for (const draft of customDraftThreads) {
+      if (!threadMap.has(draft.threadKey)) {
+        threadMap.set(draft.threadKey, draft);
+      }
+    }
+
+    return Array.from(threadMap.values()).sort(
+      (a, b) => new Date(b.lastTime).getTime() - new Date(a.lastTime).getTime()
+    );
+  }
+
+  function openChatModal(targetShopId = null, targetOrderId = null, targetBuyerId = null, targetTitle = null) {
+    if (!currentUser) {
+      openAuthModal("signin");
+      showToast("Please sign in first to chat with the seller.", "info");
+      return;
+    }
+
+    if (targetShopId) {
+      const buyerId = targetBuyerId || currentUser.id;
+      const tKey = `shop-${targetShopId}-buyer-${buyerId}`;
+      const shopObj = shops.find(s => String(s.id) === String(targetShopId));
+      const draft = {
+        threadKey: tKey,
+        shopId: targetShopId,
+        orderId: targetOrderId || null,
+        buyerId,
+        title: targetTitle || (shopObj ? shopObj.name : "Seller Chat"),
+        subtitle: targetOrderId ? `Order #${targetOrderId} Support` : "Direct Shop Inquiry",
+        lastTime: new Date().toISOString()
+      };
+      customDraftThreads = [draft, ...customDraftThreads.filter(d => d.threadKey !== tKey)];
+      activeChatThreadKey = tKey;
+    }
+
+    const threads = getAllChatThreads();
+    if (!activeChatThreadKey && threads.length > 0) {
+      activeChatThreadKey = threads[0].threadKey;
+    }
+
+    document.getElementById("chat-modal").classList.remove("hidden");
+    markChatAsReadNow();
+    renderChatThreadsAndFeed();
+  }
+
+  function closeChatModal() {
+    document.getElementById("chat-modal").classList.add("hidden");
+  }
+
+  function selectChatThread(threadKey) {
+    activeChatThreadKey = threadKey;
+    markChatAsReadNow();
+    renderChatThreadsAndFeed();
+  }
+
+  function renderChatThreadsAndFeed() {
+    const threads = getAllChatThreads();
+    const threadsEl = document.getElementById("chat-threads-list");
+    const feedEl = document.getElementById("chat-messages-feed");
+    const bannerEl = document.getElementById("chat-active-banner");
+
+    if (!threads.length) {
+      threadsEl.innerHTML = `<div style="padding:1rem; font-size:0.78rem; color:var(--muted);">No conversations yet. Click <strong>"💬 Chat Seller"</strong> on any product or order to start chatting!</div>`;
+      bannerEl.textContent = "No active conversation";
+      feedEl.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:0.84rem; margin:auto;">Start a conversation with a verified seller or buyer.</div>`;
+      return;
+    }
+
+    if (!activeChatThreadKey || !threads.some(t => t.threadKey === activeChatThreadKey)) {
+      activeChatThreadKey = threads[0].threadKey;
+    }
+
+    threadsEl.innerHTML = threads.map(t => `
+      <div class="chat-thread-item ${t.threadKey === activeChatThreadKey ? "active" : ""}" onclick="selectChatThread('${escapeHtml(t.threadKey)}')">
+        <div style="font-size:0.81rem; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(t.title)}</div>
+        <div style="font-size:0.7rem; color:var(--muted); margin-top:0.15rem;">${escapeHtml(t.subtitle)}</div>
+      </div>
+    `).join("");
+
+    const activeThread = threads.find(t => t.threadKey === activeChatThreadKey);
+    bannerEl.textContent = activeThread ? `💬 ${activeThread.title}` : "Conversation";
+
+    const msgs = chatMessages.filter(m => m.thread_key === activeChatThreadKey);
+    if (!msgs.length) {
+      feedEl.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:0.82rem; margin:auto;">Send your first message below regarding your order or product question.</div>`;
+      return;
+    }
+
+    feedEl.innerHTML = msgs.map(m => {
+      const isMine = m.sender_id === currentUser.id;
+      const timeStr = m.created_at
+        ? new Date(m.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+        : "";
+      return `
+        <div class="chat-bubble ${isMine ? "mine" : "theirs"}">
+          <div>${escapeHtml(m.message)}</div>
+          <span class="chat-bubble-meta">${escapeHtml(isMine ? "You" : m.sender_name)} • ${escapeHtml(timeStr)}</span>
+        </div>
+      `;
+    }).join("");
+
+    feedEl.scrollTop = feedEl.scrollHeight;
+  }
+
+  async function sendChatMessage(e) {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    const input = document.getElementById("chat-message-input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const threads = getAllChatThreads();
+    const activeThread = threads.find(t => t.threadKey === activeChatThreadKey);
+    if (!activeThread) {
+      return showToast("Please open a product or order first to select who to message.", "warning");
+    }
+
+    const senderName = (userProfileData.full_name || "").trim() || currentUser.email.split("@")[0];
+    const isSellerSender = myShop && String(activeThread.shopId) === String(myShop.id);
+
+    const newMsg = {
+      thread_key: activeThread.threadKey,
+      shop_id: activeThread.shopId,
+      order_id: activeThread.orderId || null,
+      buyer_id: activeThread.buyerId,
+      sender_id: currentUser.id,
+      sender_name: isSellerSender ? `${myShop.name} (Seller)` : senderName,
+      sender_role: isSellerSender ? "seller" : "buyer",
+      message: text,
+      created_at: new Date().toISOString()
+    };
+
+    input.value = "";
+    chatMessages.push(newMsg);
+    saveLocalChatMessages(chatMessages);
+    markChatAsReadNow();
+    renderChatThreadsAndFeed();
+
+    try {
+      await db.from("chat_messages").insert(newMsg);
+    } catch (_) {}
   }
 
   /* =========================================================
@@ -5191,7 +6366,12 @@
     updateSellerOrderCounters();
     buildNotificationsFromOrders(latestOrders);
     if (!document.getElementById("view-orders").classList.contains("hidden")) renderOrdersList();
-    if (currentRole === "admin" && !document.getElementById("view-admin").classList.contains("hidden")) renderAdminCommissionMonitor();
+    if (myShop && myShop.status === "approved" && !document.getElementById("view-seller").classList.contains("hidden")) {
+      renderSellerFinanceDashboard();
+    }
+    if (currentRole === "admin" && !document.getElementById("view-admin").classList.contains("hidden")) {
+      renderAdminCommissionMonitor();
+    }
   }
 
   function startOrderSync() {
@@ -5200,18 +6380,28 @@
       .channel("marketplace-live-orders")
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => syncOrdersAndNotifications(false))
       .subscribe();
+
+    chatChannel = db
+      .channel("marketplace-live-chat")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, () => loadChatMessages(false))
+      .subscribe();
+
     pollIntervalId = setInterval(() => {
-      if (!document.hidden) syncOrdersAndNotifications(false);
-    }, 60000);
+      if (!document.hidden) {
+        syncOrdersAndNotifications(false);
+        loadChatMessages(false);
+      }
+    }, 30000);
   }
 
   function stopOrderSync() {
     if (ordersChannel) { db.removeChannel(ordersChannel); ordersChannel = null; }
+    if (chatChannel) { db.removeChannel(chatChannel); chatChannel = null; }
     if (pollIntervalId) { clearInterval(pollIntervalId); pollIntervalId = null; }
   }
 
   /* =========================================================
-     AUTH (GOOGLE GMAIL OAUTH + FORGOT/RESET PASSWORD + PROFILE)
+     AUTH & USER/SELLER PROFILE + PASSWORD SETTINGS
      ========================================================= */
   function switchAuthTab(mode) {
     const isSignIn = mode === "signin";
@@ -5384,16 +6574,36 @@
     showToast("Signed out.", "info");
   }
 
+  function switchProfileTab(tab) {
+    const isInfo = tab === "info";
+    document.getElementById("prof-tab-info").classList.toggle("active", isInfo);
+    document.getElementById("prof-tab-security").classList.toggle("active", !isInfo);
+    document.getElementById("profile-info-form").classList.toggle("hidden", !isInfo);
+    document.getElementById("profile-security-pane").classList.toggle("hidden", isInfo);
+  }
+
   function openProfileModal() {
     if (!currentUser) return;
+    switchProfileTab("info");
     document.getElementById("prof-name").value = userProfileData.full_name || "";
     document.getElementById("prof-phone").value = userProfileData.phone || "";
     document.getElementById("prof-address").value = userProfileData.address || "";
     document.getElementById("prof-email").value = currentUser.email || "";
+    document.getElementById("settings-reset-email-label").textContent = currentUser.email || "your email";
+    document.getElementById("settings-new-pass").value = "";
+    document.getElementById("settings-confirm-pass").value = "";
+
+    const sellerShortcut = document.getElementById("prof-seller-shortcut");
+    if (sellerShortcut) {
+      sellerShortcut.classList.toggle("hidden", !myShop);
+    }
+
     document.getElementById("profile-modal").classList.remove("hidden");
   }
 
-  function closeProfileModal() { document.getElementById("profile-modal").classList.add("hidden"); }
+  function closeProfileModal() {
+    document.getElementById("profile-modal").classList.add("hidden");
+  }
 
   async function saveUserProfile(e) {
     e.preventDefault();
@@ -5410,7 +6620,41 @@
     applyOwnerHeaderDisplay();
     await syncProfileToDatabase(currentUser.id, updated);
     closeProfileModal();
-    showToast("Profile & delivery address saved!", "success");
+    showToast("Profile & default shipping address saved!", "success");
+  }
+
+  async function updatePasswordFromSettings(e) {
+    e.preventDefault();
+    const p1 = document.getElementById("settings-new-pass").value;
+    const p2 = document.getElementById("settings-confirm-pass").value;
+
+    if (p1 !== p2) {
+      return showToast("Passwords do not match.", "warning");
+    }
+
+    const btn = document.getElementById("btn-settings-update-pass");
+    btn.disabled = true;
+    btn.textContent = "Updating...";
+
+    try {
+      const { error } = await db.auth.updateUser({ password: p1 });
+      if (error) return showToast("Password update failed: " + error.message, "error");
+      document.getElementById("settings-new-pass").value = "";
+      document.getElementById("settings-confirm-pass").value = "";
+      showToast("Your account password has been updated!", "success");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Update Password Now";
+    }
+  }
+
+  async function sendResetLinkFromProfileSettings() {
+    if (!currentUser?.email) return;
+    const { error } = await db.auth.resetPasswordForEmail(currentUser.email, {
+      redirectTo: getAppRedirectUrl()
+    });
+    if (error) return showToast("Failed to send reset link: " + error.message, "error");
+    showToast(`Password reset link sent to ${currentUser.email}!`, "success");
   }
 
   init();
