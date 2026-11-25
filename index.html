@@ -2,1161 +2,2032 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>MarketHub — Verified Multi-Shop E-Commerce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>MarketHub — Fresh Market &amp; Gadget Online Store</title>
 
-  <!-- PWA & Mobile App Meta Tags (Android & iOS) -->
-  <link rel="manifest" href="./manifest.json" />
+  <!-- PWA & Mobile App Meta Tags -->
   <meta name="theme-color" content="#15803d" />
-  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="MarketHub" />
-  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-  <link rel="apple-touch-icon" href="./icon.svg" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%2316a34a'/%3E%3Cpath d='M52 66h88l-8 78H60L52 66zm26 0V54a18 18 0 0 1 36 0v12' fill='none' stroke='%23ffffff' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #15803d;
-      --primary-dark: #166534;
-      --primary-light: #16a34a;
-      --primary-soft: #dcfce7;
-      --accent: #ea580c;
-      --accent-soft: #ffedd5;
-      --indigo: #4338ca;
-      --indigo-soft: #e0e7ff;
-      --bg: #f3f7f4;
-      --card: rgba(255, 255, 255, 0.96);
-      --card-solid: #ffffff;
-      --text: #142419;
-      --text-secondary: #334639;
-      --muted: #607366;
-      --border: #dce6df;
+      /* Fresh Grass Green & Emerald Online Store Palette */
+      --primary: #16a34a;
+      --primary-dark: #15803d;
+      --primary-deep: #14532d;
+      --primary-light: #dcfce7;
+      --primary-soft: #f0fdf4;
+      --accent-emerald: #059669;
+      --accent-lime: #65a30d;
+      --green: #15803d;
+      --indigo: #0f766e;
       --danger: #dc2626;
-      --danger-soft: #fef2f2;
-      --star: #f59e0b;
-      --shadow-sm: 0 1px 3px rgba(20, 36, 25, 0.06);
-      --shadow-md: 0 10px 25px -5px rgba(20, 36, 25, 0.09);
-      --shadow-lg: 0 20px 35px -10px rgba(20, 36, 25, 0.18);
-      --radius: 14px;
+      --bg: #eef7f0;
+      --surface: rgba(255, 255, 255, 0.94);
+      --text: #14281d;
+      --text-secondary: #3b5245;
+      --muted: #647c6e;
+      --border: #cde4d4;
+      --shadow-sm: 0 2px 8px rgba(20, 83, 45, 0.06);
+      --shadow-md: 0 10px 26px rgba(20, 83, 45, 0.11);
     }
 
-    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      max-width: 100%;
-      overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; }
 
     body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--text);
-      background-color: var(--bg);
-      background-image:
-        linear-gradient(180deg, rgba(243, 247, 244, 0.93) 0%, rgba(236, 245, 239, 0.98) 100%),
-        radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.11) 0px, transparent 50%);
       min-height: 100vh;
-      min-height: 100dvh;
-      padding-bottom: env(safe-area-inset-bottom);
+      /* Layered Grass-Green Glow + Custom Market & Gadget SVG Wallpaper Pattern */
+      background-color: #ecf7ef;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(34, 197, 94, 0.16) 0%, transparent 42%),
+        radial-gradient(circle at 88% 25%, rgba(16, 185, 129, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 50% 88%, rgba(101, 163, 13, 0.12) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%2316a34a' stroke-opacity='0.085' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Smartphone Gadget --%3E%3Crect x='22' y='18' width='22' height='36' rx='4'/%3E%3Cline x1='30' y1='49' x2='36' y2='49'/%3E%3C!-- Shopping Bag --%3E%3Cpath d='M110 26h26l-3 28h-20z'/%3E%3Cpath d='M117 26v-5a6 6 0 0 1 12 0v5'/%3E%3C!-- Headphones Gadget --%3E%3Cpath d='M24 128v-8a13 13 0 0 1 26 0v8'/%3E%3Crect x='20' y='126' width='6' height='12' rx='2'/%3E%3Crect x='48' y='126' width='6' height='12' rx='2'/%3E%3C!-- Market Cart --%3E%3Ccircle cx='118' cy='144' r='2.5'/%3E%3Ccircle cx='136' cy='144' r='2.5'/%3E%3Cpath d='M106 116h6l4 20h22l4-14h-24'/%3E%3C!-- Fresh Leaf & Sparkle --%3E%3Cpath d='M78 78c10-10 22-8 22-8s2 12-8 22c-7 7-16 4-16 4s-5-11 2-18z'/%3E%3Ccircle cx='156' cy='84' r='3'/%3E%3Ccircle cx='72' cy='158' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+      background-attachment: fixed;
     }
 
-    img { max-width: 100%; display: block; }
-
-    header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      padding: calc(0.75rem + env(safe-area-inset-top)) 1.25rem 0.75rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.65rem;
+    /* =========================================================
+       FRESH GRASS GREEN TOP HEADER (GLASSMORPHIC & CRISP)
+       ========================================================= */
+    .site-header {
+      background: linear-gradient(135deg, #14532d 0%, #15803d 52%, #16a34a 100%);
+      color: #fff;
       position: sticky;
       top: 0;
       z-index: 40;
-      box-shadow: 0 4px 20px rgba(20, 36, 25, 0.05);
+      box-shadow: 0 4px 18px rgba(20, 83, 45, 0.24);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0.45rem 1rem 0.78rem;
+    }
+
+    .header-top-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.77rem;
+      padding-bottom: 0.45rem;
+      color: rgba(255, 255, 255, 0.94);
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .top-link-group {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .top-link-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.95);
+      padding: 0.15rem 0.3rem;
+      font-size: 0.77rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .top-link-btn:hover { color: #bbf7d0; text-decoration: underline; }
+    .top-sep { opacity: 0.45; }
+
+    .header-main-row {
+      display: flex;
+      align-items: center;
+      gap: 1.15rem;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 1.15rem;
+      gap: 0.55rem;
+      font-size: 1.48rem;
       font-weight: 800;
-      color: var(--text);
+      color: #fff;
+      letter-spacing: -0.02em;
       cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
-      color: #fff;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.28);
-    }
-
-    .brand span.sub {
-      font-size: 0.7rem;
-      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%);
       color: var(--primary-dark);
-      background: var(--primary-soft);
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
     }
 
-    .nav-actions { display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap; }
+    .header-search-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.32rem;
+    }
 
+    .header-search-box {
+      display: flex;
+      background: #fff;
+      border-radius: 8px;
+      padding: 3px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .header-search-box input {
+      border: none;
+      background: transparent;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.88rem;
+      color: var(--text);
+      flex: 1;
+      outline: none;
+    }
+
+    .header-search-btn {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.45rem 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      transition: filter 0.15s;
+    }
+    .header-search-btn:hover { filter: brightness(1.08); }
+
+    .header-quick-tags {
+      display: flex;
+      gap: 0.6rem;
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.92);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .header-quick-tags::-webkit-scrollbar { display: none; }
+    .header-quick-tags span {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      transition: background 0.15s;
+    }
+    .header-quick-tags span:hover { background: rgba(255, 255, 255, 0.28); }
+
+    .header-right-icons {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .header-cart-btn {
+      position: relative;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.45rem 0.6rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .header-cart-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+    .header-cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #facc15;
+      color: #14532d;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 2px solid #15803d;
+    }
+
+    /* User & Notifications in Header */
     .user-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      padding: 0.3rem 0.68rem;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.2rem 0.55rem;
       border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.76rem;
+      color: #fff;
       cursor: pointer;
-      max-width: 100%;
+      backdrop-filter: blur(6px);
     }
-
+    .user-pill:hover { background: rgba(255, 255, 255, 0.28); }
     .user-avatar-dot {
-      width: 21px;
-      height: 21px;
-      border-radius: 999px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      display: grid;
-      place-items: center;
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0.52rem 0.9rem;
-      border-radius: 9px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.84rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 0.68rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.38rem;
-      transition: all 0.18s ease;
     }
 
-    button:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
-    button.secondary { background: #fff; color: var(--text-secondary); border: 1px solid var(--border); }
-    button.secondary:hover:not(:disabled) { background: #f4f9f5; border-color: #bfd3c5; }
-    button.secondary.active-nav { background: var(--primary-soft); color: var(--primary-dark); border-color: #86efac; }
-    button.shop-cta { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; box-shadow: 0 3px 10px rgba(234, 88, 12, 0.25); }
-    button.shop-cta:hover:not(:disabled) { background: linear-gradient(135deg, #c2410c, #9a3412); }
-    button.install-pwa-btn { background: linear-gradient(135deg, #1d4ed8, #1e40af); color: #fff; }
-    button.success-btn { background: var(--primary-light); }
-    button.danger { background: var(--danger); }
-    button.danger:hover:not(:disabled) { background: #b91c1c; }
-    button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
-    button.danger-outline:hover:not(:disabled) { background: var(--danger-soft); }
-    button.sm { padding: 0.36rem 0.65rem; font-size: 0.76rem; border-radius: 8px; }
-    button:disabled { opacity: 0.55; cursor: not-allowed; }
-
-    button.google-btn {
-      width: 100%;
-      background: #ffffff;
-      color: #1f2937;
-      border: 1px solid #cbd5e1;
-      padding: 0.65rem 1rem;
-      font-size: 0.88rem;
-      font-weight: 700;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-
-    button.google-btn:hover:not(:disabled) {
-      background: #f8fafc;
-      border-color: #94a3b8;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-    }
-
-    .auth-divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin: 0.85rem 0;
-    }
-    .auth-divider::before, .auth-divider::after {
-      content: "";
-      flex: 1;
-      border-bottom: 1px solid var(--border);
-    }
-    .auth-divider:not(:empty)::before { margin-right: 0.65rem; }
-    .auth-divider:not(:empty)::after { margin-left: 0.65rem; }
-
-    .text-link-btn {
-      background: transparent;
-      color: var(--primary-dark);
-      padding: 0;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-decoration: underline;
-    }
-    .text-link-btn:hover:not(:disabled) {
-      background: transparent;
-      color: var(--accent);
-      transform: none;
-    }
-
-    .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.4rem;
-      background: #f1f7f3;
-      padding: 0.32rem;
-      border-radius: 10px;
-      margin: 0.85rem 0 1rem;
-      border: 1px solid var(--border);
-    }
-
-    .auth-tab {
-      background: transparent;
-      color: var(--muted);
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.84rem;
-      font-weight: 700;
-    }
-    .auth-tab.active { background: #fff; color: var(--primary-dark); box-shadow: var(--shadow-sm); }
-
-    /* Notification Bell */
-    .notif-wrapper { position: relative; }
+    .notif-wrapper { position: relative; display: inline-block; }
     .notif-btn {
       position: relative;
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      border-radius: 10px;
-      background: #fff;
-      color: var(--text);
-      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.76rem;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
     }
     .notif-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      min-width: 19px;
-      height: 19px;
-      padding: 0 5px;
+      background: #facc15;
+      color: #14532d;
+      font-size: 0.66rem;
+      font-weight: 800;
+      padding: 1px 5px;
       border-radius: 999px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #fff;
     }
     .notif-dropdown {
       position: absolute;
       right: 0;
-      top: calc(100% + 10px);
-      width: 380px;
-      max-width: calc(100vw - 24px);
-      background: var(--card-solid);
+      top: calc(100% + 8px);
+      width: 345px;
+      max-width: 92vw;
+      background: #fff;
+      color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow-lg);
+      border-radius: 10px;
+      box-shadow: 0 14px 34px rgba(20, 83, 45, 0.2);
       z-index: 60;
       overflow: hidden;
     }
     .notif-header {
-      padding: 0.8rem 0.95rem;
-      background: #f4f9f5;
+      padding: 0.65rem 0.9rem;
+      background: var(--primary-soft);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .notif-header h4 { margin: 0; font-size: 0.88rem; }
-    .notif-list { max-height: 340px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .notif-header h4 { margin: 0; font-size: 0.86rem; color: var(--primary-deep); }
+    .notif-list { max-height: 320px; overflow-y: auto; }
     .notif-item {
-      padding: 0.75rem 0.95rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 0.28rem;
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid #f1f5f9;
       cursor: pointer;
     }
-    .notif-item.unread { background: #fff7ed; border-left: 3px solid var(--accent); }
-    .notif-item-top { display: flex; justify-content: space-between; gap: 0.5rem; }
-    .notif-title { font-size: 0.82rem; font-weight: 700; }
-    .notif-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
-    .notif-desc { font-size: 0.78rem; color: var(--text-secondary); }
-    .notif-actions { display: flex; gap: 0.4rem; margin-top: 0.2rem; }
+    .notif-item:hover { background: #f8fafc; }
+    .notif-item.unread { background: #f0fdf4; border-left: 3px solid var(--primary); }
+    .notif-item-top { display: flex; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.2rem; }
+    .notif-title { font-size: 0.8rem; font-weight: 700; color: var(--text); }
+    .notif-time { font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
+    .notif-desc { font-size: 0.76rem; color: var(--text-secondary); }
+    .notif-actions { display: flex; gap: 0.35rem; margin-top: 0.4rem; }
 
-    .container { max-width: 1200px; margin: 1.1rem auto 2.5rem; padding: 0 1rem; }
-
-    /* Hero */
-    .hero-banner {
-      border-radius: 18px;
-      padding: 1.9rem 2rem;
-      margin-bottom: 1.15rem;
+    /* =========================================================
+       GENERAL BUTTONS & INPUTS
+       ========================================================= */
+    button {
+      background: var(--primary);
       color: #fff;
-      background:
-        linear-gradient(115deg, rgba(15, 23, 42, 0.92) 0%, rgba(20, 83, 45, 0.86) 52%, rgba(30, 58, 138, 0.82) 100%),
-        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1000&q=75') center/cover no-repeat;
-      box-shadow: var(--shadow-lg);
-      display: grid;
-      grid-template-columns: 1.35fr 0.95fr;
-      align-items: center;
-      gap: 1.5rem;
-      position: relative;
-      overflow: hidden;
+      border: none;
+      padding: 0.5rem 0.95rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button:hover:not(:disabled) { background: var(--primary-dark); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    button.secondary { background: #fff; color: var(--text-secondary); border: 1px solid var(--border); }
+    button.secondary:hover:not(:disabled) { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-dark); }
+    button.sm { padding: 0.34rem 0.68rem; font-size: 0.78rem; }
+    button.danger { background: var(--danger); }
+    button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
+    button.danger-outline:hover:not(:disabled) { background: #fef2f2; }
+    button.success-btn { background: var(--green); color: #fff; }
+    button.shop-cta {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.26);
+    }
+    button.shop-cta:hover:not(:disabled) { filter: brightness(1.06); transform: translateY(-1px); }
+    button.add-cart-outline {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border: 1.5px solid var(--primary);
+      font-weight: 700;
+    }
+    button.add-cart-outline:hover:not(:disabled) { background: var(--primary-light); }
+    button.text-link-btn {
+      background: transparent;
+      border: none;
+      color: var(--primary-dark);
+      padding: 0;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    button.active-nav { background: var(--primary-soft); color: var(--primary-dark); border-color: var(--primary); }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.56rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.87rem;
+      font-family: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
     }
 
-    .hero-banner::after {
+    .container { max-width: 1240px; margin: 1.15rem auto 2.8rem; padding: 0 1rem; }
+    .hidden { display: none !important; }
+    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* Badges */
+    .badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+    .badge.admin { background: #fef3c7; color: #92400e; }
+    .badge.seller { background: var(--primary-light); color: var(--primary-dark); }
+    .badge.cat-badge { background: #f1f5f9; color: var(--text-secondary); text-transform: none; font-weight: 600; }
+    .badge.ship-free { background: #dcfce7; color: #15803d; text-transform: none; }
+    .badge.ship-paid { background: #e0f2fe; color: #0369a1; text-transform: none; }
+    .badge.area-badge { background: #fef9c3; color: #854d0e; text-transform: none; }
+    .badge.status-approved { background: #dcfce7; color: #15803d; }
+    .badge.status-pending { background: #fef3c7; color: #92400e; }
+    .badge.status-suspended, .badge.status-cancelled { background: #fee2e2; color: #b91c1c; }
+    .badge.status-received { background: #e0f2fe; color: #0369a1; }
+    .badge.status-confirmed { background: #ccfbf1; color: #0f766e; }
+    .badge.status-shipped { background: #fef3c7; color: #b45309; }
+    .badge.status-delivered { background: #dcfce7; color: #15803d; }
+
+    /* =========================================================
+       HERO SHOWCASE BANNER (MARKET & GADGET THEME)
+       ========================================================= */
+    .hero-showcase {
+      background: linear-gradient(125deg, #14532d 0%, #15803d 48%, #059669 100%);
+      border-radius: 12px;
+      padding: 1.35rem 1.55rem;
+      margin-bottom: 1.1rem;
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.25rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .hero-showcase::before {
       content: "";
       position: absolute;
-      width: 280px;
-      height: 280px;
-      right: -60px;
-      top: -90px;
-      background: radial-gradient(circle, rgba(251, 146, 60, 0.24) 0%, transparent 70%);
+      right: -50px;
+      top: -60px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(187, 247, 208, 0.26) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    .hero-content { position: relative; z-index: 1; }
-    .hero-kicker {
+    .hero-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      background: rgba(255, 255, 255, 0.14);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.26);
-      padding: 0.26rem 0.75rem;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.22rem 0.65rem;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      margin-bottom: 0.6rem;
-      color: #fef08a;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.55rem;
+      backdrop-filter: blur(6px);
     }
-    .hero-banner h1 {
-      margin: 0 0 0.5rem;
-      font-size: clamp(1.32rem, 2.8vw, 2.15rem);
+
+    .hero-title {
+      margin: 0 0 0.4rem;
+      font-size: 1.48rem;
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.22;
       letter-spacing: -0.02em;
     }
-    .hero-banner p {
-      margin: 0 0 1rem;
-      font-size: 0.88rem;
-      color: rgba(241, 245, 249, 0.93);
-      line-height: 1.52;
-      max-width: 600px;
-    }
-    .trust-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-    .trust-chip {
-      background: rgba(15, 23, 42, 0.52);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 0.34rem 0.68rem;
-      border-radius: 9px;
-      font-size: 0.74rem;
-      font-weight: 600;
-      color: #f8fafc;
+
+    .hero-sub {
+      margin: 0 0 0.95rem;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.45;
+      max-width: 520px;
     }
 
-    .hero-showcase {
-      position: relative;
-      z-index: 1;
+    .hero-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn-light {
+      background: #fff;
+      color: var(--primary-deep);
+      font-weight: 700;
+      padding: 0.52rem 1.05rem;
+      border-radius: 7px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+    .hero-btn-light:hover { background: #dcfce7; color: var(--primary-deep); }
+
+    .hero-btn-glass {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      backdrop-filter: blur(6px);
+    }
+    .hero-btn-glass:hover { background: rgba(255, 255, 255, 0.26); }
+
+    .hero-visual-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.55rem;
+      gap: 0.65rem;
+      position: relative;
+      z-index: 1;
     }
-    .hero-cat-card {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      border-radius: 12px;
-      padding: 0.75rem 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: left;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.18rem;
-    }
-    .hero-cat-card:hover {
-      background: rgba(255, 255, 255, 0.22);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-    }
-    .hero-cat-icon { font-size: 1.35rem; line-height: 1; margin-bottom: 0.1rem; }
-    .hero-cat-title { font-size: 0.82rem; font-weight: 700; color: #fff; }
-    .hero-cat-sub { font-size: 0.69rem; color: rgba(226, 232, 240, 0.88); font-weight: 500; }
 
-    /* Shops Strip */
-    .shops-strip {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0.75rem 0.95rem;
-      margin-bottom: 0.85rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .shops-strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.55rem; gap: 0.5rem; flex-wrap: wrap; }
-    .shops-list-pills {
-      display: flex;
-      gap: 0.45rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding-bottom: 0.15rem;
-    }
-    .shops-list-pills::-webkit-scrollbar { display: none; }
-    .shop-chip {
-      background: #f8faf9;
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 0.42rem 0.78rem;
+    .hero-float-card {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.26);
       border-radius: 10px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      white-space: nowrap;
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      padding: 0.72rem 0.8rem;
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: transform 0.16s, background 0.16s;
     }
-    .shop-chip.active { background: #142419; color: #fff; border-color: #142419; }
-    .shop-chip .cat-mini { font-size: 0.66rem; padding: 0.1rem 0.42rem; border-radius: 999px; background: rgba(22, 163, 74, 0.14); color: var(--primary-dark); }
-    .shop-chip.active .cat-mini { background: rgba(255, 255, 255, 0.18); color: #dcfce7; }
+    .hero-float-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.22);
+    }
+    .hero-float-icon { font-size: 1.35rem; margin-bottom: 0.2rem; }
+    .hero-float-title { font-size: 0.8rem; font-weight: 700; color: #fff; }
+    .hero-float-desc { font-size: 0.69rem; color: rgba(255, 255, 255, 0.84); }
+
+    /* =========================================================
+       VERIFIED SHOPS SHOWCASE
+       ========================================================= */
+    .mall-section {
+      background: var(--surface);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      padding: 0.9rem 1.05rem;
+      margin-bottom: 1.05rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .mall-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid #e6f2ea;
+      margin-bottom: 0.78rem;
+    }
+
+    .mall-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .mall-shops-grid {
+      display: flex;
+      gap: 0.7rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+      scrollbar-width: thin;
+    }
+
+    .mall-shop-tile {
+      flex: 0 0 142px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 0.55rem;
+      text-align: center;
+      cursor: pointer;
+      background: #fff;
+      transition: all 0.16s;
+    }
+    .mall-shop-tile:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(22, 163, 74, 0.12);
+    }
+    .mall-shop-tile.active {
+      border: 2px solid var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .mall-shop-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      margin: 0 auto 0.4rem;
+      background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 8px rgba(22, 163, 74, 0.24);
+    }
+
+    .mall-shop-name {
+      font-size: 0.79rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mall-shop-meta {
+      font-size: 0.67rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+      margin-top: 0.18rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .selected-shop-banner {
-      background: linear-gradient(135deg, #142419, #1e3a29);
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 1rem 1.2rem;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border: 1.5px solid #86efac;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
       margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.9rem;
       flex-wrap: wrap;
-      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Toolbar */
-    .catalog-toolbar {
-      background: var(--card);
+    /* =========================================================
+       2-COLUMN MARKETPLACE LAYOUT (LEFT SIDEBAR + PRODUCT GRID)
+       ========================================================= */
+    .marketplace-layout {
+      display: grid;
+      grid-template-columns: 205px 1fr;
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    .category-sidebar {
+      background: var(--surface);
+      backdrop-filter: blur(8px);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0.75rem 0.95rem;
-      margin-bottom: 1.05rem;
+      border-radius: 10px;
+      padding: 0.9rem 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-block { margin-bottom: 1.15rem; }
+    .sidebar-block:last-child { margin-bottom: 0; }
+
+    .sidebar-heading {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary-deep);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid #e6f2ea;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
       align-items: center;
-      gap: 0.7rem;
+      gap: 0.4rem;
     }
-    .filter-pills { display: flex; gap: 0.38rem; flex-wrap: wrap; }
-    .filter-pill {
-      background: #f6faf7;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-      padding: 0.36rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.77rem;
-      font-weight: 600;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .filter-pill.active { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
-    .search-box { position: relative; flex: 1; min-width: 200px; max-width: 340px; }
-    .search-box input { padding-left: 2.15rem; background: #f6faf7; }
-    .search-box svg { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
 
-    /* Badges */
-    .badge {
-      background: var(--primary-soft);
-      color: var(--primary-dark);
-      padding: 0.18rem 0.54rem;
-      border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-    .badge.seller { background: var(--accent-soft); color: #c2410c; }
-    .badge.admin { background: var(--indigo-soft); color: var(--indigo); }
-    .badge.cat-badge { background: #f1f5f9; color: #334155; text-transform: none; font-weight: 600; }
-    .badge.ship-free { background: #dcfce7; color: #15803d; text-transform: none; font-weight: 700; }
-    .badge.ship-paid { background: #eff6ff; color: #1d4ed8; text-transform: none; font-weight: 700; }
-    .badge.area-badge { background: #fef3c7; color: #92400e; text-transform: none; font-weight: 700; }
-    .badge.status-pending { background: #fef3c7; color: #b45309; }
-    .badge.status-approved, .badge.status-delivered { background: #d1fae5; color: #065f46; }
-    .badge.status-received { background: #dcfce7; color: #166534; }
-    .badge.status-confirmed { background: #dbeafe; color: #1d4ed8; }
-    .badge.status-shipped { background: #ffedd5; color: #c2410c; }
-    .badge.status-cancelled, .badge.status-rejected, .badge.status-suspended { background: #fee2e2; color: #b91c1c; }
-
-    /* Product Cards — Square 1:1 Image Ratio for Mobile & Desktop Consistency */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
-    .card {
-      background: var(--card-solid);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
+    .sidebar-cat-list {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      gap: 0.22rem;
     }
-    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #a7f3d0; }
+
+    .sidebar-cat-item {
+      background: transparent;
+      border: none;
+      text-align: left;
+      padding: 0.4rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .sidebar-cat-item:hover { background: var(--primary-soft); color: var(--primary-dark); }
+    .sidebar-cat-item.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+    .sidebar-cat-item.active::before {
+      content: "▶";
+      font-size: 0.6rem;
+      color: var(--primary);
+    }
+
+    .sidebar-filter-check {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      padding: 0.3rem 0;
+      cursor: pointer;
+    }
+    .sidebar-filter-check input { width: auto; accent-color: var(--primary); }
+
+    /* Mobile Category Strip */
+    .mobile-cat-strip {
+      display: none;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.65rem;
+      scrollbar-width: none;
+    }
+    .mobile-cat-strip::-webkit-scrollbar { display: none; }
+    .mobile-cat-pill {
+      flex-shrink: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 0.34rem 0.78rem;
+      font-size: 0.77rem;
+      font-weight: 600;
+    }
+    .mobile-cat-pill.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Sort Bar */
+    .sort-bar {
+      background: var(--surface);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.62rem 0.95rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sort-options {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .sort-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    .sort-btn {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.36rem 0.82rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .sort-btn:hover { border-color: var(--primary); color: var(--primary-dark); }
+    .sort-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .sort-select {
+      width: auto;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    /* =========================================================
+       PURE PRODUCT CARDS GRID (CLICK TO EXPAND FULL PAGE)
+       ========================================================= */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
+      gap: 0.78rem;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 22px rgba(22, 163, 74, 0.16);
+    }
+
     .card-img-wrap {
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
+      background: #f2f9f4;
       overflow: hidden;
-      background: #eef6f0;
-      cursor: pointer;
     }
     .card-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
-      transition: transform 0.3s ease;
+      display: block;
+      transition: transform 0.28s ease;
     }
     .card:hover .card-img-wrap img { transform: scale(1.04); }
 
-    .stock-tag {
+    .card-mall-tag {
       position: absolute;
-      top: 8px;
-      left: 8px;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.94);
-      color: var(--primary-dark);
-    }
-    .stock-tag.low { color: var(--accent); }
-    .stock-tag.out { background: rgba(220, 38, 38, 0.94); color: #fff; }
-
-    .ship-tag-overlay {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      padding: 0.2rem 0.52rem;
-      border-radius: 999px;
-      font-size: 0.67rem;
-      font-weight: 700;
-      background: rgba(20, 36, 25, 0.85);
-      color: #dcfce7;
-    }
-    .ship-tag-overlay.free { background: rgba(21, 128, 61, 0.94); color: #fff; }
-
-    .area-tag-overlay {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      max-width: calc(100% - 62px);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 0.16rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.66rem;
-      font-weight: 700;
-      background: rgba(254, 243, 199, 0.96);
-      color: #92400e;
-      border: 1px solid #fcd34d;
+      top: 7px;
+      left: 7px;
+      background: var(--primary-dark);
+      color: #fff;
+      font-size: 0.63rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
     }
 
-    .photo-count-pill {
+    .card-top-badge {
       position: absolute;
-      bottom: 8px;
-      right: 8px;
-      padding: 0.16rem 0.48rem;
-      border-radius: 999px;
-      font-size: 0.66rem;
-      font-weight: 700;
-      background: rgba(20, 36, 25, 0.8);
+      top: 7px;
+      right: 7px;
+      background: #facc15;
+      color: #14532d;
+      font-size: 0.64rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+    }
+    .card-top-badge.soldout {
+      background: rgba(15, 23, 42, 0.84);
       color: #fff;
     }
 
-    .card-body { padding: 0.85rem 0.95rem 0.95rem; display: flex; flex-direction: column; flex: 1; }
-    .shop-link-row { display: flex; justify-content: space-between; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; flex-wrap: wrap; }
-    .shop-tag-btn {
-      background: #f0fdf4;
-      color: var(--primary-dark);
-      border: 1px solid #bbf7d0;
-      padding: 0.15rem 0.48rem;
-      border-radius: 6px;
-      font-size: 0.69rem;
-      font-weight: 700;
-      cursor: pointer;
-      max-width: 100%;
+    .card-bottom-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(90deg, rgba(20, 83, 45, 0.92), rgba(22, 163, 74, 0.88));
+      color: #fff;
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .card-pure-body {
+      padding: 0.62rem 0.68rem 0.72rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      gap: 0.42rem;
+    }
+
+    .card-pure-title {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.32;
+      height: 2.2rem;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .card-pure-tags {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      min-height: 18px;
+    }
+
+    .mini-tag-green {
+      font-size: 0.63rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .mini-tag-outline {
+      font-size: 0.63rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border: 1px solid #cbd5e1;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+
+    .card-pure-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.35rem;
+      margin-top: auto;
+      padding-top: 0.2rem;
+    }
+
+    .card-pure-price {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .card-pure-sold {
+      font-size: 0.7rem;
+      color: var(--muted);
       white-space: nowrap;
     }
 
-    .card-title {
-      font-weight: 700;
-      font-size: 0.96rem;
-      margin: 0 0 0.25rem;
-      cursor: pointer;
-      line-height: 1.3;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .card-title:hover { color: var(--primary); }
-    .card-desc {
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      margin: 0 0 0.45rem;
-      line-height: 1.38;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .card-shop-desc-box {
-      font-size: 0.72rem;
-      color: var(--muted);
-      background: #f8faf9;
-      border-left: 2.5px solid #86efac;
-      padding: 0.3rem 0.48rem;
-      border-radius: 0 6px 6px 0;
-      margin-bottom: 0.55rem;
-      line-height: 1.32;
-      flex: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .metrics-row {
+    /* =========================================================
+       EXPANDED PRODUCT DETAIL PAGE (WHEN USER CLICKS A PRODUCT)
+       ========================================================= */
+    .pdp-breadcrumb {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.74rem;
-      margin-bottom: 0.55rem;
-      padding: 0.32rem 0.5rem;
-      background: #f8faf9;
-      border-radius: 7px;
-      border: 1px solid #ebf2ed;
-    }
-    .rating-pill { font-weight: 700; }
-    .star-icon { color: var(--star); }
-    .sold-pill { font-weight: 600; color: var(--text-secondary); }
-
-    .card-footer-meta { display: flex; justify-content: space-between; align-items: center; gap: 0.35rem; margin-bottom: 0.6rem; }
-    .price { font-size: 1.12rem; font-weight: 800; color: var(--primary-dark); }
-
-    .card-action-btns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.4rem;
-    }
-    .card-action-btns button {
-      padding: 0.48rem 0.4rem;
-      font-size: 0.77rem;
-      white-space: nowrap;
-    }
-
-    /* Policy / Warning Boxes */
-    .policy-notice-box {
-      background: #fff7ed;
-      border: 1px solid #fdba74;
-      border-left: 4px solid var(--accent);
-      color: #9a3412;
-      padding: 0.68rem 0.82rem;
-      border-radius: 9px;
-      font-size: 0.78rem;
-      line-height: 1.45;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
       margin-bottom: 0.75rem;
+      background: var(--surface);
+      padding: 0.55rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
     }
-    .policy-notice-box.strict-shipped {
-      background: #fef2f2;
-      border-color: #fecaca;
-      border-left-color: var(--danger);
-      color: #991b1b;
+    .pdp-crumb-trail {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .pdp-crumb-link {
+      color: var(--primary-dark);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pdp-crumb-link:hover { text-decoration: underline; }
+
+    .pdp-main-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 1.6rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 0.95rem;
+    }
+
+    .pdp-gallery-main {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f2f9f4;
+    }
+    .pdp-gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pdp-thumbs {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+    }
+    .pdp-thumb {
+      width: 68px;
+      height: 68px;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      overflow: hidden;
+      cursor: pointer;
+      background: #f1f5f9;
+    }
+    .pdp-thumb.active { border-color: var(--primary); }
+    .pdp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .pdp-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .pdp-mall-pill {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .pdp-title {
+      margin: 0;
+      font-size: 1.28rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .pdp-stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.85rem;
+    }
+    .pdp-stat-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .pdp-stat-divider {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+    }
+
+    .pdp-price-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 1px solid #bbf7d0;
+      padding: 0.95rem 1.15rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .pdp-price-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .pdp-meta-table {
+      display: flex;
+      flex-direction: column;
+      gap: 0.78rem;
+      font-size: 0.86rem;
+      margin-bottom: 1.25rem;
+    }
+    .pdp-meta-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .pdp-meta-label { color: var(--muted); font-weight: 600; }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .qty-stepper button {
+      background: #fff;
+      color: var(--text);
+      border: none;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      font-size: 1rem;
+      border-radius: 0;
+    }
+    .qty-stepper button:hover { background: var(--primary-soft); color: var(--primary-dark); }
+    .qty-stepper input {
+      width: 48px;
+      height: 32px;
+      border: none;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-radius: 0;
+      text-align: center;
+      padding: 0;
+      font-weight: 700;
+    }
+
+    .pdp-cta-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .pdp-cta-row button {
+      padding: 0.78rem 1.45rem;
+      font-size: 0.94rem;
+      min-width: 165px;
+    }
+
+    /* Seller Store Bar on PDP */
+    .pdp-shop-bar {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
+    }
+    .pdp-shop-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .pdp-shop-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .pdp-shop-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+    }
+    .pdp-shop-stat-col span { color: var(--muted); display: block; font-size: 0.74rem; }
+    .pdp-shop-stat-col strong { color: var(--primary-dark); font-size: 0.94rem; }
+
+    /* Specs + Description + Ratings + Top Picks */
+    .pdp-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 235px;
+      gap: 0.95rem;
+      align-items: start;
+    }
+
+    .pdp-section-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+      margin-bottom: 0.95rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .pdp-section-heading {
+      background: var(--primary-soft);
+      border-left: 4px solid var(--primary);
+      padding: 0.62rem 0.85rem;
+      margin: 0 0 1rem;
+      font-size: 0.94rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--primary-deep);
+      border-radius: 4px;
+    }
+
+    .pdp-spec-row {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 0.75rem;
+      padding: 0.45rem 0.5rem;
+      font-size: 0.86rem;
+    }
+    .pdp-spec-label { color: var(--muted); }
+
+    .pdp-description-text {
+      padding: 0.4rem 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      white-space: pre-line;
+    }
+
+    /* Product Ratings Summary Box */
+    .rating-overview-box {
+      background: var(--primary-soft);
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .rating-big-score {
+      color: var(--primary-dark);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .rating-big-score .num { font-size: 1.85rem; font-weight: 800; }
+    .rating-filter-pills {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .rating-filter-btn {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.34rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
       font-weight: 600;
     }
+    .rating-filter-btn.active {
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      background: var(--primary-light);
+    }
 
-    /* KPI Grid */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 0.8rem; margin: 0.9rem 0 1.1rem; }
-    .kpi-card { background: #f8fbf9; border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 0.95rem; }
-    .kpi-card.highlight { background: linear-gradient(135deg, #eef2ff, #f5f3ff); border-color: #c7d2fe; }
-    .kpi-label { font-size: 0.71rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 0.22rem; }
-    .kpi-value { font-size: 1.3rem; font-weight: 800; color: var(--text); }
-    .kpi-card.highlight .kpi-value { color: var(--indigo); }
-    .kpi-sub { font-size: 0.73rem; color: var(--text-secondary); margin-top: 0.18rem; }
+    .star-picker { display: inline-flex; gap: 0.25rem; margin: 0.35rem 0; }
+    .star-btn { background: transparent; border: none; padding: 0; font-size: 1.4rem; color: #cbd5e1; cursor: pointer; }
+    .star-btn.selected { color: #f59e0b; }
+
+    .review-card {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .review-card:last-child { border-bottom: none; }
+
+    .top-picks-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .top-picks-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary-deep);
+      margin-bottom: 0.75rem;
+    }
+    .top-pick-item {
+      border: 1px solid #e6f2ea;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 0.7rem;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .top-pick-item:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .top-pick-item img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    .top-pick-name {
+      font-size: 0.78rem;
+      padding: 0.45rem 0.55rem 0.15rem;
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top-pick-price {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      padding: 0 0.55rem 0.55rem;
+    }
+
+    /* =========================================================
+       SELLER DASHBOARD, ORDERS & ADMIN PANELS
+       ========================================================= */
+    .panel {
+      background: var(--surface);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.85rem; }
+    .field-label { display: block; font-size: 0.79rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.3rem; }
 
     .shipping-config-box {
-      background: #f0fdf4;
+      background: var(--primary-soft);
       border: 1px solid #bbf7d0;
-      border-radius: 11px;
+      border-radius: 8px;
       padding: 0.85rem 1rem;
     }
 
-    /* 2-Photo Slots (1:1 Square Ratio) */
-    .photo-slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-top: 0.5rem; max-width: 340px; }
+    .photo-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 175px));
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
     .photo-slot {
-      border: 2px dashed #bfd3c5;
-      border-radius: 12px;
-      aspect-ratio: 1 / 1;
       position: relative;
-      overflow: hidden;
-      background: #f8fbf9;
+      aspect-ratio: 1 / 1;
+      border: 2px dashed #86efac;
+      border-radius: 8px;
+      background: var(--primary-soft);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
       text-align: center;
       padding: 0.4rem;
-      cursor: pointer;
     }
-    .photo-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .photo-slot .slot-label { font-size: 0.73rem; font-weight: 700; color: var(--muted); }
+    .photo-slot:hover { border-color: var(--primary); background: var(--primary-light); }
+    .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .photo-slot .slot-label { font-size: 0.74rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.25rem; }
     .photo-slot .remove-slot-btn {
       position: absolute;
       top: 5px;
       right: 5px;
+      z-index: 2;
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      border-radius: 999px;
       width: 24px;
       height: 24px;
       padding: 0;
-      border-radius: 999px;
-      background: rgba(220, 38, 38, 0.92);
-      color: #fff;
       font-size: 0.74rem;
-      z-index: 2;
     }
 
-    /* Product Detail Modal */
-    .product-modal-wide { max-width: 780px; }
-    .detail-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.25rem; margin-top: 0.8rem; }
-    .gallery-main { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #f8fafc; }
-    .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
-    .gallery-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.45rem; margin-top: 0.5rem; }
-    .gallery-thumb { aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; opacity: 0.72; }
-    .gallery-thumb.active, .gallery-thumb:hover { border-color: var(--primary); opacity: 1; }
-    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .shop-about-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.75rem 0.9rem; margin: 0.7rem 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.86rem; }
+    th, td { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th { background: var(--primary-soft); font-weight: 700; color: var(--primary-deep); }
 
-    .star-picker { display: inline-flex; gap: 0.3rem; margin: 0.35rem 0 0.6rem; }
-    .star-btn { background: #f8fafc; border: 1px solid var(--border); color: #cbd5e1; font-size: 1.2rem; padding: 0.22rem 0.52rem; border-radius: 8px; }
-    .star-btn.selected { color: var(--star); background: #fffbeb; border-color: #fde68a; }
-    .review-card { padding: 0.7rem; border: 1px solid var(--border); border-radius: 10px; background: #fbfdfb; margin-bottom: 0.55rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem; margin: 0.9rem 0; }
+    .kpi-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; }
+    .kpi-card.highlight { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #86efac; }
+    .kpi-label { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+    .kpi-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-dark); margin: 0.25rem 0; }
+    .kpi-sub { font-size: 0.75rem; color: var(--text-secondary); }
 
-    /* Panels & Stepper */
-    .panel {
-      background: var(--card-solid);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.15rem;
-      margin-bottom: 1.2rem;
-      box-shadow: var(--shadow-sm);
+    /* Policy & Stepper */
+    .policy-notice-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #f59e0b;
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.78rem;
+      color: #92400e;
+      line-height: 1.45;
+      margin: 0.65rem 0;
     }
-    .panel.highlight-order { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22); }
+    .policy-notice-box.strict-shipped {
+      background: #fef2f2;
+      border-color: #fecaca;
+      border-left-color: #dc2626;
+      color: #991b1b;
+    }
 
     .order-stepper {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin: 0.85rem 0;
-      padding: 0.7rem;
-      background: #f6faf7;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-    .step-item { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 0.7rem; color: var(--muted); font-weight: 600; }
-    .step-dot { width: 22px; height: 22px; border-radius: 999px; background: #dce6df; display: grid; place-items: center; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.28rem; }
-    .step-item.done .step-dot { background: var(--primary-light); color: #fff; }
-    .step-item.done { color: var(--primary-dark); }
-    .step-item.current .step-dot { background: var(--accent); color: #fff; }
-    .step-item.current { color: var(--accent); font-weight: 700; }
-
-    .cancelled-banner {
-      background: var(--danger-soft);
-      border: 1px solid #fecaca;
-      color: #991b1b;
-      padding: 0.65rem 0.9rem;
-      border-radius: 9px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin: 0.8rem 0;
-    }
-
-    .error-box { background: var(--danger-soft); border: 1px solid #fecaca; color: #991b1b; padding: 0.85rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.85rem; }
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.8rem; }
-    .field-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.28rem; }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 0.56rem 0.74rem;
-      border: 1px solid var(--border);
+      padding: 0.65rem 0.5rem;
+      background: var(--primary-soft);
       border-radius: 8px;
-      font-size: 0.86rem;
-      color: var(--text);
-      background: #fff;
+      border: 1px solid #bbf7d0;
     }
-    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14); }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 0.7rem; font-size: 0.84rem; }
-    th { background: #f4f9f5; color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-    th, td { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-
-    .hidden { display: none !important; }
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(20, 36, 25, 0.58);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+    .step-item { flex: 1; text-align: center; font-size: 0.72rem; color: var(--muted); position: relative; }
+    .step-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin: 0 auto 0.25rem;
+      background: #e2e8f0;
+      color: #475569;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0.85rem;
-      z-index: 70;
+      font-weight: 700;
+      font-size: 0.74rem;
+    }
+    .step-item.done .step-dot { background: var(--green); color: #fff; }
+    .step-item.done { color: var(--green); font-weight: 600; }
+    .step-item.current .step-dot { background: #16a34a; color: #fff; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.24); }
+    .step-item.current { color: var(--primary-dark); font-weight: 700; }
+
+    .cancelled-banner {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin: 0.75rem 0;
+    }
+
+    /* Modals & Toasts */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 30, 18, 0.56);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 50;
     }
     .modal {
-      background: var(--card-solid);
-      border-radius: 16px;
-      max-width: 550px;
+      background: #fff;
       width: 100%;
-      padding: 1.25rem;
-      max-height: 90dvh;
+      max-width: 520px;
+      max-height: 90vh;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      box-shadow: var(--shadow-lg);
+      border-radius: 12px;
+      padding: 1.35rem;
+      box-shadow: 0 22px 45px rgba(10, 30, 18, 0.3);
       border: 1px solid var(--border);
     }
 
-    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
-    .delivery-summary-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 11px; padding: 0.8rem 0.95rem; margin-bottom: 0.8rem; font-size: 0.84rem; }
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--primary-soft);
+      padding: 4px;
+      border-radius: 8px;
+      margin: 0.9rem 0;
+      border: 1px solid var(--border);
+    }
+    .auth-tab { background: transparent; color: var(--text-secondary); padding: 0.48rem; border-radius: 6px; font-weight: 600; }
+    .auth-tab.active { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); }
+
+    .google-btn {
+      width: 100%;
+      background: #fff;
+      color: #1f2937;
+      border: 1px solid #cbd5e1;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+    .google-btn:hover:not(:disabled) { background: #f8fafc; border-color: #94a3b8; }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.85rem 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+    .delivery-summary-card {
+      background: var(--primary-soft);
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 0.8rem 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .error-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.86rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--muted);
+      background: var(--surface);
+      border-radius: 10px;
+      border: 1px dashed #86efac;
+    }
 
     .toast-container {
       position: fixed;
-      bottom: calc(1rem + env(safe-area-inset-bottom));
-      right: 1rem;
-      z-index: 95;
+      bottom: 1.25rem;
+      right: 1.25rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      max-width: 370px;
-      width: calc(100vw - 2rem);
+      z-index: 100;
+      max-width: 360px;
     }
-    .toast { background: #142419; color: #f0fdf4; padding: 0.75rem 0.9rem; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary-light); font-size: 0.82rem; display: flex; justify-content: space-between; gap: 0.7rem; }
-    .toast.success { border-left-color: #22c55e; }
-    .toast.warning { border-left-color: #f97316; }
-    .toast.error { border-left-color: #ef4444; }
-
-    .empty-state { text-align: center; padding: 2.4rem 1rem; background: var(--card); border: 1px dashed #bfd3c5; border-radius: var(--radius); color: var(--muted); }
+    .toast {
+      background: #14532d;
+      color: #fff;
+      padding: 0.78rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      border-left: 4px solid #4ade80;
+    }
+    .toast.success { border-left-color: #4ade80; }
+    .toast.error { background: #7f1d1d; border-left-color: #f87171; }
+    .toast.warning { background: #78350f; border-left-color: #fbbf24; }
 
     /* =========================================================
-       MOBILE PHONE (CP) RESPONSIVE OPTIMIZATIONS (ANDROID & IOS)
+       RESPONSIVE MOBILE & TABLET ADAPTATIONS
        ========================================================= */
-    @media (max-width: 860px) {
-      .hero-banner { grid-template-columns: 1fr; padding: 1.35rem; gap: 1rem; }
+    @media (max-width: 920px) {
+      .hero-showcase { grid-template-columns: 1fr; padding: 1.15rem; }
+      .marketplace-layout { grid-template-columns: 1fr; }
+      .category-sidebar { display: none; }
+      .mobile-cat-strip { display: flex; }
+      .pdp-main-card { grid-template-columns: 1fr; gap: 1.15rem; }
+      .pdp-bottom-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      /* Prevent iOS Safari input auto-zoom on focus */
-      input, textarea, select { font-size: 16px !important; }
-
-      header {
-        padding: calc(0.6rem + env(safe-area-inset-top)) 0.75rem 0.6rem;
-        gap: 0.5rem;
-      }
-
-      .brand { font-size: 1.05rem; gap: 0.45rem; }
-      .brand-icon { width: 32px; height: 32px; }
-      .brand span.sub { display: none; }
-
-      .nav-actions {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 0.38rem;
-      }
-      .nav-actions button {
-        padding: 0.44rem 0.68rem;
-        font-size: 0.78rem;
-      }
-
-      .notif-dropdown {
-        position: fixed;
-        top: calc(64px + env(safe-area-inset-top));
-        left: 10px;
-        right: 10px;
-        width: auto;
-        max-width: none;
-      }
-
-      .container { margin: 0.75rem auto 2rem; padding: 0 0.7rem; }
-
-      .hero-banner {
-        border-radius: 15px;
-        padding: 1.1rem 1rem;
-        margin-bottom: 0.85rem;
-      }
-      .hero-banner h1 { font-size: 1.24rem; }
-      .hero-banner p { font-size: 0.82rem; margin-bottom: 0.75rem; }
-      .trust-chip { font-size: 0.7rem; padding: 0.28rem 0.55rem; }
-      .hero-cat-card { padding: 0.65rem 0.7rem; }
-      .hero-cat-icon { font-size: 1.2rem; }
-      .hero-cat-title { font-size: 0.78rem; }
-      .hero-cat-sub { font-size: 0.66rem; }
-
-      /* Horizontal Swipeable Category Bar on CP */
-      .catalog-toolbar { padding: 0.65rem 0.75rem; gap: 0.55rem; }
-      .filter-pills {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        width: 100%;
-        padding-bottom: 2px;
-      }
-      .filter-pills::-webkit-scrollbar { display: none; }
-      .search-box { max-width: 100%; min-width: 0; width: 100%; }
-
-      /* 2-Column Native App Product Grid on CP */
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.6rem;
-      }
-      .card { border-radius: 12px; }
-      .card-body { padding: 0.62rem 0.65rem 0.7rem; }
-      .shop-link-row { margin-bottom: 0.28rem; }
-      .shop-tag-btn { font-size: 0.64rem; padding: 0.12rem 0.4rem; }
-      .badge.cat-badge { font-size: 0.61rem; padding: 0.12rem 0.4rem; }
-      .card-title { font-size: 0.86rem; margin-bottom: 0.2rem; }
-      .card-desc { font-size: 0.72rem; margin-bottom: 0.38rem; -webkit-line-clamp: 1; }
-      .card-shop-desc-box { display: none; }
-      .metrics-row { padding: 0.24rem 0.38rem; font-size: 0.68rem; margin-bottom: 0.42rem; }
-      .card-footer-meta { margin-bottom: 0.45rem; }
-      .price { font-size: 0.98rem; }
-      .card-footer-meta button.sm { padding: 0.24rem 0.45rem; font-size: 0.68rem; }
-
-      .card-action-btns {
-        grid-template-columns: 1fr;
-        gap: 0.32rem;
-      }
-      .card-action-btns button {
-        padding: 0.44rem 0.35rem;
-        font-size: 0.74rem;
-      }
-
-      /* Modals & Tables on CP */
-      .modal-backdrop { padding: 0.5rem; align-items: flex-end; }
-      .modal {
-        border-radius: 18px 18px 14px 14px;
-        padding: 1rem 0.95rem calc(1rem + env(safe-area-inset-bottom));
-        max-height: 92dvh;
-      }
-      .detail-layout { grid-template-columns: 1fr; gap: 0.9rem; }
-      .order-stepper { grid-template-columns: 1fr; gap: 0.4rem; }
-      .step-item { flex-direction: row; text-align: left; gap: 0.55rem; }
-      .step-dot { margin-bottom: 0; }
-      table { min-width: 580px; }
+      .header-inner { padding: 0.45rem 0.75rem 0.65rem; }
+      .header-main-row { gap: 0.6rem; }
+      .brand span { display: none; }
+      .hero-title { font-size: 1.22rem; }
+      .hero-visual-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
+      .container { padding: 0 0.65rem; margin-top: 0.8rem; }
+      .pdp-main-card { padding: 0.9rem; }
+      .pdp-cta-row button { flex: 1; min-width: 0; padding: 0.72rem 0.75rem; }
+      .toast-container { left: 0.75rem; right: 0.75rem; max-width: none; }
     }
   </style>
-</head>
+  </head>
 <body>
 
-<header>
-  <div class="brand" onclick="resetMarketplaceFilters(); switchView('shop')">
-    <div class="brand-icon">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-    </div>
-    <div>MarketHub <span class="sub">All-in-One Online Shop</span></div>
-  </div>
+<!-- FRESH GRASS GREEN TOP HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top-links">
+      <div class="top-link-group">
+        <button type="button" class="top-link-btn" onclick="switchView('shop')">🌿 Marketplace</button>
+        <span class="top-sep">|</span>
+        <button type="button" id="btn-header-apply" class="top-link-btn" onclick="handleStartSellingClick()">Seller Centre • Open a Shop</button>
+        <button type="button" id="btn-seller" class="top-link-btn hidden" onclick="switchView('seller')">🏪 My Shop</button>
+        <button type="button" id="btn-install-pwa" class="top-link-btn hidden" onclick="promptInstallPwa()">📲 Install App</button>
+      </div>
 
-  <div class="nav-actions">
-    <div id="user-pill" class="user-pill hidden" onclick="openProfileModal()" title="Edit saved delivery profile">
-      <span id="user-avatar-dot" class="user-avatar-dot">U</span>
-      <span id="user-info">Account Owner</span>
-      <span id="role-badge" class="badge">Buyer</span>
-    </div>
-
-    <button id="btn-install-pwa" class="install-pwa-btn sm hidden" onclick="promptInstallPwa()">📲 Install App</button>
-    <button id="btn-shop" class="secondary active-nav" onclick="switchView('shop')">Marketplace</button>
-    <button id="btn-header-apply" class="shop-cta sm" onclick="handleStartSellingClick()">🏪 Open a Shop</button>
-    <button id="btn-seller" class="secondary hidden" onclick="switchView('seller')">🏪 My Shop</button>
-    <button id="btn-orders" class="secondary hidden" onclick="switchView('orders')">Orders</button>
-    <button id="btn-admin" class="secondary hidden" onclick="switchView('admin')">Platform Admin</button>
-
-    <div id="notif-wrapper" class="notif-wrapper hidden">
-      <button id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)" title="Notifications">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <span id="notif-badge" class="notif-badge hidden">0</span>
-      </button>
-
-      <div id="notif-dropdown" class="notif-dropdown hidden" onclick="event.stopPropagation()">
-        <div class="notif-header">
-          <h4>Notifications</h4>
-          <div style="display:flex; gap:0.35rem;">
-            <button class="secondary sm" onclick="markAllNotificationsRead()">Mark read</button>
-            <button class="danger-outline sm" onclick="clearAllNotifications()">Clear</button>
+      <div class="top-link-group">
+        <div id="notif-wrapper" class="notif-wrapper hidden">
+          <button type="button" id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)">
+            🔔 Notifications <span id="notif-badge" class="notif-badge hidden">0</span>
+          </button>
+          <div id="notif-dropdown" class="notif-dropdown hidden" onclick="event.stopPropagation()">
+            <div class="notif-header">
+              <h4>Notifications</h4>
+              <div style="display:flex; gap:0.35rem;">
+                <button type="button" class="secondary sm" onclick="markAllNotificationsRead()">Mark read</button>
+                <button type="button" class="danger-outline sm" onclick="clearAllNotifications()">Clear</button>
+              </div>
+            </div>
+            <div id="notif-list" class="notif-list"></div>
           </div>
         </div>
-        <div id="notif-list" class="notif-list"></div>
+
+        <button type="button" id="btn-orders" class="top-link-btn hidden" onclick="switchView('orders')">📦 My Orders</button>
+        <button type="button" id="btn-admin" class="top-link-btn hidden" onclick="switchView('admin')">🛡️ Platform Admin</button>
+
+        <div id="user-pill" class="user-pill hidden" onclick="openProfileModal()" title="Edit saved delivery profile">
+          <span id="user-avatar-dot" class="user-avatar-dot">U</span>
+          <span id="user-info">Account</span>
+          <span id="role-badge" class="badge">Buyer</span>
+        </div>
+
+        <button type="button" id="btn-login" class="top-link-btn" style="font-weight:700;" onclick="openAuthModal('signin')">Sign Up / Login</button>
+        <button type="button" id="btn-logout" class="top-link-btn hidden" onclick="logout()">Sign Out</button>
       </div>
     </div>
 
-    <button id="btn-cart" class="hidden" onclick="openCart(false)">
-      🛒 Cart (<span id="cart-count">0</span>)
-    </button>
+    <div class="header-main-row">
+      <div class="brand" onclick="resetMarketplaceFilters(); switchView('shop')">
+        <div class="brand-icon">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span>MarketHub</span>
+      </div>
 
-    <button id="btn-login" onclick="openAuthModal('signin')">Sign In</button>
-    <button id="btn-logout" class="danger hidden" onclick="logout()">Sign Out</button>
+      <div class="header-search-wrap">
+        <div class="header-search-box">
+          <input type="text" id="search-input" placeholder="Search gadgets, fresh market goods, shops, or delivery area..." oninput="resetPaginationAndRender()" onkeydown="if(event.key==='Enter'){ switchView('shop'); resetPaginationAndRender(); }" />
+          <button type="button" class="header-search-btn" onclick="switchView('shop'); resetPaginationAndRender();">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </button>
+        </div>
+        <div class="header-quick-tags">
+          <span onclick="quickSearchKeyword('Free Shipping')">🚚 Free Shipping</span>
+          <span onclick="quickSearchKeyword('Roxas')">📍 Roxas Local</span>
+          <span onclick="quickBrowseCategory('Gadgets & Accessories')">📱 Gadgets</span>
+          <span onclick="quickBrowseCategory('Fruits & Vegetables')">🥬 Fresh Market</span>
+          <span onclick="quickBrowseCategory('Food & Beverages')">🍱 Food &amp; Snacks</span>
+          <span onclick="quickBrowseCategory('Clothing & Apparel')">👕 Apparel</span>
+        </div>
+      </div>
+
+      <div class="header-right-icons">
+        <button type="button" id="btn-cart" class="header-cart-btn" onclick="handleHeaderCartClick()" title="Shopping Cart">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span id="cart-count" class="header-cart-badge">0</span>
+        </button>
+      </div>
+    </div>
   </div>
 </header>
 
 <div class="container">
   <div id="status-error" class="error-box hidden"></div>
 
-  <!-- VIEW 1: VERIFIED MULTI-SHOP MARKETPLACE -->
+  <!-- =========================================================
+       VIEW 1: MARKETPLACE HOME (HERO BANNER + MALL + PURE CARDS)
+       ========================================================= -->
   <section id="view-shop">
-    <div class="hero-banner">
-      <div class="hero-content">
-        <div class="hero-kicker">✨ All-in-One Online Shop • Fashion • Gadgets • Home • Food</div>
-        <h1>Shop Everything You Love — Fast, Easy &amp; Delivered to Your Door</h1>
-        <p>Browse quality clothing, gadgets, beauty essentials, home goods, food, and fresh local finds from trusted stores in one place.</p>
-        <div class="trust-badges">
-          <div class="trust-chip">⚡ Instant Buy Now &amp; Cart</div>
-          <div class="trust-chip">📍 Local Areas (e.g., Roxas Only)</div>
-          <div class="trust-chip">🚚 Free Shipping &amp; Clear Rates</div>
-          <div class="trust-chip">🛡️ 100% Verified Shops</div>
+    <!-- GRASS-GREEN MARKET & GADGET HERO SHOWCASE -->
+    <div class="hero-showcase">
+      <div style="position:relative; z-index:1;">
+        <div class="hero-pill">🌿 FRESH LOCAL MARKET &amp; TECH GADGETS</div>
+        <h1 class="hero-title">Everything You Need — From Daily Market Picks to Smart Gadgets.</h1>
+        <p class="hero-sub">Shop directly from 100% Admin-verified local stores with transparent shipping fees, fast area delivery, and real buyer ratings.</p>
+        <div class="hero-actions">
+          <button type="button" class="hero-btn-light" onclick="document.getElementById('product-grid').scrollIntoView({ behavior: 'smooth' })">
+            🛍️ Browse Products
+          </button>
+          <button type="button" class="hero-btn-glass" onclick="handleStartSellingClick()">
+            🏪 Open Your Shop
+          </button>
         </div>
       </div>
 
-      <div class="hero-showcase">
-        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Clothing & Apparel')">
-          <span class="hero-cat-icon">👕</span>
-          <span class="hero-cat-title">Fashion &amp; Apparel</span>
-          <span class="hero-cat-sub">Trendy clothes &amp; wear</span>
-        </button>
-        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Gadgets & Accessories')">
-          <span class="hero-cat-icon">📱</span>
-          <span class="hero-cat-title">Gadgets &amp; Tech</span>
-          <span class="hero-cat-sub">Phones &amp; accessories</span>
-        </button>
-        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Home & Living')">
-          <span class="hero-cat-icon">🏠</span>
-          <span class="hero-cat-title">Home &amp; Beauty</span>
-          <span class="hero-cat-sub">Daily essentials &amp; care</span>
-        </button>
-        <button type="button" class="hero-cat-card" onclick="quickBrowseCategory('Food & Beverages')">
-          <span class="hero-cat-icon">🍱</span>
-          <span class="hero-cat-title">Food &amp; Fresh Goods</span>
-          <span class="hero-cat-sub">Snacks &amp; local produce</span>
-        </button>
+      <div class="hero-visual-grid">
+        <div class="hero-float-card" onclick="quickBrowseCategory('Gadgets & Accessories')">
+          <div class="hero-float-icon">📱🎧</div>
+          <div class="hero-float-title">Gadgets &amp; Tech</div>
+          <div class="hero-float-desc">Phones, audio &amp; accessories</div>
+        </div>
+        <div class="hero-float-card" onclick="quickBrowseCategory('Fruits & Vegetables')">
+          <div class="hero-float-icon">🥬🍅</div>
+          <div class="hero-float-title">Fresh Market</div>
+          <div class="hero-float-desc">Farm-fresh produce &amp; greens</div>
+        </div>
+        <div class="hero-float-card" onclick="quickBrowseCategory('Food & Beverages')">
+          <div class="hero-float-icon">🍱🥤</div>
+          <div class="hero-float-title">Food &amp; Pantry</div>
+          <div class="hero-float-desc">Local delicacies &amp; snacks</div>
+        </div>
+        <div class="hero-float-card" onclick="quickBrowseCategory('Home & Living')">
+          <div class="hero-float-icon">🏠✨</div>
+          <div class="hero-float-title">Home &amp; Essentials</div>
+          <div class="hero-float-desc">Everyday household finds</div>
+        </div>
       </div>
     </div>
 
-    <!-- ACTIVE APPROVED SHOPS BAR -->
-    <div class="shops-strip">
-      <div class="shops-strip-header">
-        <strong style="font-size:0.82rem; color:var(--text-secondary);">🏪 Verified Active Shops (<span id="shops-count">0</span>)</strong>
-        <button id="btn-clear-shop-filter" class="secondary sm hidden" onclick="setShopFilter('all')">Show All Shops</button>
+    <!-- VERIFIED SHOPS SHOWCASE -->
+    <div class="mall-section">
+      <div class="mall-header">
+        <div class="mall-title">
+          <span>🌿 VERIFIED SHOPS</span>
+          <span style="color:var(--border);">|</span>
+          <span style="font-size:0.78rem; color:var(--text-secondary); font-weight:500;">🛡️ Admin-Verified Stores (<span id="shops-count">0</span>)</span>
+        </div>
+        <button type="button" id="btn-clear-shop-filter" class="secondary sm hidden" onclick="setShopFilter('all')">See All Shops ›</button>
       </div>
-      <div id="shops-list-pills" class="shops-list-pills"></div>
+      <div id="shops-list-pills" class="mall-shops-grid"></div>
     </div>
 
     <!-- SELECTED SHOP BANNER -->
     <div id="selected-shop-banner" class="selected-shop-banner hidden">
       <div>
-        <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.3rem;">
-          <h2 id="banner-shop-name" style="margin:0; font-size:1.15rem;">Shop Name</h2>
-          <span id="banner-shop-category" class="badge" style="background:rgba(255,255,255,0.18); color:#dcfce7;">Category</span>
+        <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.28rem;">
+          <h2 id="banner-shop-name" style="margin:0; font-size:1.1rem; color:var(--primary-dark);">Shop Name</h2>
+          <span id="banner-shop-category" class="badge cat-badge">Category</span>
           <span id="banner-shop-shipping" class="badge ship-free">🚚 Free Shipping</span>
           <span id="banner-shop-area" class="badge area-badge">📍 Roxas Only</span>
         </div>
-        <p id="banner-shop-desc" style="margin:0; font-size:0.82rem; color:#d1fae5;">Shop description</p>
+        <p id="banner-shop-desc" style="margin:0; font-size:0.82rem; color:var(--text-secondary);">Shop description</p>
       </div>
-      <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+      <div style="display:flex; gap:1.15rem; align-items:center; flex-wrap:wrap;">
         <div style="text-align:center;">
-          <div id="banner-shop-products" style="font-size:1.05rem; font-weight:800;">0</div>
-          <div style="font-size:0.7rem; color:#a7f3d0;">Products</div>
+          <div id="banner-shop-products" style="font-size:1.05rem; font-weight:800; color:var(--primary-dark);">0</div>
+          <div style="font-size:0.7rem; color:var(--muted);">Products</div>
         </div>
         <div style="text-align:center;">
-          <div id="banner-shop-sold" style="font-size:1.05rem; font-weight:800;">0</div>
-          <div style="font-size:0.7rem; color:#a7f3d0;">Total Sold</div>
+          <div id="banner-shop-sold" style="font-size:1.05rem; font-weight:800; color:var(--primary-dark);">0</div>
+          <div style="font-size:0.7rem; color:var(--muted);">Total Sold</div>
         </div>
-        <button class="secondary sm" onclick="setShopFilter('all')">← All Shops</button>
+        <button type="button" class="secondary sm" onclick="setShopFilter('all')">← All Shops</button>
       </div>
     </div>
 
-    <!-- CATEGORY & SEARCH TOOLBAR -->
-    <div class="catalog-toolbar">
-      <div class="filter-pills" id="category-pills">
-        <button class="filter-pill active" data-cat="all" onclick="setCategoryFilter('all')">All</button>
-        <button class="filter-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing</button>
-        <button class="filter-pill" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">📱 Gadgets</button>
-        <button class="filter-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home</button>
-        <button class="filter-pill" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">✨ Beauty</button>
-        <button class="filter-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food</button>
-        <button class="filter-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Produce</button>
-      </div>
-
-      <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap; flex:1; justify-content:flex-end;">
-        <button id="filter-instock" class="filter-pill" onclick="toggleStockFilter()">In Stock</button>
-        <div class="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="search-input" placeholder="Search items, shops, areas..." oninput="resetPaginationAndRender()" />
-        </div>
-      </div>
+    <!-- MOBILE HORIZONTAL CATEGORY STRIP -->
+    <div class="mobile-cat-strip" id="mobile-category-pills">
+      <button type="button" class="mobile-cat-pill active" data-cat="all" onclick="setCategoryFilter('all')">All</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">📱 Gadgets</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Produce</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">✨ Beauty</button>
+      <button type="button" class="mobile-cat-pill" data-cat="General Merchandise" onclick="setCategoryFilter('General Merchandise')">📦 General</button>
     </div>
 
-    <div id="product-grid" class="grid"></div>
-    <div id="load-more-wrap" class="hidden" style="text-align:center; margin-top:1.35rem;">
-      <button type="button" class="secondary" onclick="loadMoreProducts()" style="padding:0.65rem 1.35rem;">
-        Load More Products (<span id="remaining-products-count">0</span> more)
-      </button>
+    <!-- 2-COLUMN LAYOUT: LEFT SIDEBAR + RIGHT PURE PRODUCT GRID -->
+    <div class="marketplace-layout">
+      <aside class="category-sidebar">
+        <div class="sidebar-block">
+          <div class="sidebar-heading">☰ All Categories</div>
+          <div class="sidebar-cat-list" id="sidebar-category-pills">
+            <button type="button" class="sidebar-cat-item active" data-cat="all" onclick="setCategoryFilter('all')">All Categories</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">Gadgets &amp; Accessories</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">Fruits &amp; Vegetables</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">Food &amp; Beverages</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">Clothing &amp; Apparel</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">Home &amp; Living</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">Health &amp; Beauty</button>
+            <button type="button" class="sidebar-cat-item" data-cat="General Merchandise" onclick="setCategoryFilter('General Merchandise')">General Merchandise</button>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sidebar-heading">🔍 SEARCH FILTER</div>
+          <label class="sidebar-filter-check">
+            <input type="checkbox" id="filter-instock" onchange="toggleStockFilter()" />
+            <span>In Stock Only</span>
+          </label>
+          <label class="sidebar-filter-check">
+            <input type="checkbox" id="filter-freeship" onchange="toggleFreeShipFilter()" />
+            <span>Free Shipping</span>
+          </label>
+          <label class="sidebar-filter-check">
+            <input type="checkbox" id="filter-roxas" onchange="toggleRoxasFilter()" />
+            <span>Roxas Local Area</span>
+          </label>
+          <button type="button" class="shop-cta sm" style="width:100%; margin-top:0.65rem;" onclick="resetMarketplaceFilters()">CLEAR ALL</button>
+        </div>
+      </aside>
+
+      <div>
+        <!-- SORT BAR -->
+        <div class="sort-bar">
+          <div class="sort-options">
+            <span class="sort-label">Sort by</span>
+            <button type="button" class="sort-btn active" data-sort="popular" onclick="setSortMode('popular')">Popular</button>
+            <button type="button" class="sort-btn" data-sort="latest" onclick="setSortMode('latest')">Latest</button>
+            <button type="button" class="sort-btn" data-sort="topsales" onclick="setSortMode('topsales')">Top Sales</button>
+            <select id="sort-price-select" class="sort-select" onchange="setPriceSort(this.value)">
+              <option value="">Price</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+            </select>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-secondary); font-weight:600;" id="catalog-result-count">0 products</div>
+        </div>
+
+        <!-- PURE PRODUCT CARDS (CLICK TO EXPAND FULL PAGE) -->
+        <div id="product-grid" class="grid"></div>
+
+        <div id="load-more-wrap" class="hidden" style="text-align:center; margin-top:1.35rem;">
+          <button type="button" class="secondary" onclick="loadMoreProducts()" style="padding:0.65rem 1.5rem;">
+            Load More Products (<span id="remaining-products-count">0</span> more)
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS -->
+  <!-- =========================================================
+       VIEW 1B: EXPANDED PRODUCT DETAIL PAGE (WHEN CLICKED)
+       ========================================================= -->
+  <section id="view-product-detail" class="hidden">
+    <div class="pdp-breadcrumb">
+      <div class="pdp-crumb-trail">
+        <span class="pdp-crumb-link" onclick="closeExpandedProduct()">MarketHub</span>
+        <span>›</span>
+        <span class="pdp-crumb-link" id="pdp-crumb-cat" onclick="closeExpandedProduct()">Category</span>
+        <span>›</span>
+        <span id="pdp-crumb-title" style="color:var(--text);">Product Name</span>
+      </div>
+      <button type="button" class="secondary sm" onclick="closeExpandedProduct()">← Back to Products</button>
+    </div>
+
+    <!-- TOP PRODUCT CARD: LARGE IMAGE + PRICE + QTY + ADD TO CART / BUY NOW -->
+    <div class="pdp-main-card">
+      <div>
+        <div class="pdp-gallery-main">
+          <img id="pdp-main-img" src="" alt="Product Photo" />
+        </div>
+        <div id="pdp-thumbs" class="pdp-thumbs"></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div class="pdp-title-row">
+            <span class="pdp-mall-pill">Verified</span>
+            <h1 id="pdp-title" class="pdp-title">Product Title</h1>
+          </div>
+
+          <div class="pdp-stats-bar">
+            <div class="pdp-stat-item">
+              <strong id="pdp-rating-avg" style="color:var(--primary-dark);">0.0</strong>
+              <span style="color:#f59e0b;">★★★★★</span>
+            </div>
+            <div class="pdp-stat-divider"></div>
+            <div class="pdp-stat-item">
+              <strong id="pdp-review-count">0</strong>
+              <span>Ratings</span>
+            </div>
+            <div class="pdp-stat-divider"></div>
+            <div class="pdp-stat-item">
+              <strong id="pdp-sold-count">0</strong>
+              <span>Sold</span>
+            </div>
+          </div>
+
+          <div class="pdp-price-box">
+            <div id="pdp-price" class="pdp-price-val">₱0.00</div>
+            <span id="pdp-ship-pill" class="badge ship-free">🚚 Free Shipping</span>
+            <span id="pdp-area-pill" class="badge area-badge">📍 Roxas Only</span>
+          </div>
+
+          <div class="pdp-meta-table">
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Shipping</span>
+              <span id="pdp-shipping-info" style="font-weight:600; color:var(--green);">Free Shipping</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Delivery Area</span>
+              <span id="pdp-area-info" style="font-weight:600; color:#854d0e;">Roxas Only</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Order Policy</span>
+              <span style="color:#b91c1c; font-weight:600;">⚠️ Strictly NO TO CANCEL once shipped</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Quantity</span>
+              <div style="display:flex; align-items:center; gap:0.85rem; flex-wrap:wrap;">
+                <div class="qty-stepper">
+                  <button type="button" onclick="adjustPdpQty(-1)">−</button>
+                  <input type="number" id="pdp-qty" value="1" min="1" />
+                  <button type="button" onclick="adjustPdpQty(1)">+</button>
+                </div>
+                <span id="pdp-stock-text" style="font-size:0.8rem; color:var(--muted);">0 pieces available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pdp-cta-row">
+          <button type="button" id="pdp-add-btn" class="add-cart-outline">
+            🛒 Add To Cart
+          </button>
+          <button type="button" id="pdp-buy-btn" class="shop-cta">
+            ⚡ Buy Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELLER STORE BAR -->
+    <div class="pdp-shop-bar">
+      <div class="pdp-shop-left">
+        <div id="pdp-shop-avatar" class="pdp-shop-avatar">S</div>
+        <div>
+          <div style="font-weight:700; font-size:0.98rem; color:var(--text);" id="pdp-shop-name">Shop Name</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin:0.15rem 0 0.45rem;" id="pdp-shop-desc-short">Verified MarketHub Seller</div>
+          <button type="button" id="pdp-view-shop-btn" class="secondary sm">🏪 View Shop</button>
+        </div>
+      </div>
+
+      <div class="pdp-shop-stats">
+        <div class="pdp-shop-stat-col"><span>Products</span><strong id="pdp-shop-prod-count">0</strong></div>
+        <div class="pdp-shop-stat-col"><span>Total Sold</span><strong id="pdp-shop-total-sold">0</strong></div>
+        <div class="pdp-shop-stat-col"><span>Coverage</span><strong id="pdp-shop-area-stat">Roxas Only</strong></div>
+        <div class="pdp-shop-stat-col"><span>Shipping</span><strong id="pdp-shop-ship-stat">Free</strong></div>
+      </div>
+    </div>
+
+    <!-- SPECIFICATIONS + FULL DESCRIPTION + RATINGS + TOP PICKS -->
+    <div class="pdp-bottom-grid">
+      <div>
+        <div class="pdp-section-card">
+          <h3 class="pdp-section-heading">Product Specifications</h3>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Category</span>
+            <span id="pdp-spec-cat">General Merchandise</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Stock</span>
+            <span id="pdp-spec-stock">IN STOCK</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Delivery Area</span>
+            <span id="pdp-spec-area">Roxas Only</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Shipping Fee</span>
+            <span id="pdp-spec-ship">Free Shipping</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Store</span>
+            <span id="pdp-spec-shop">MarketHub Official</span>
+          </div>
+
+          <h3 class="pdp-section-heading" style="margin-top:1.35rem;">Product Description</h3>
+          <div id="pdp-description" class="pdp-description-text"></div>
+        </div>
+
+        <!-- PRODUCT RATINGS & REVIEWS -->
+        <div class="pdp-section-card">
+          <h3 style="margin:0 0 0.85rem; font-size:1rem;">Product Ratings</h3>
+
+          <div class="rating-overview-box">
+            <div class="rating-big-score">
+              <div><span class="num" id="pdp-overview-score">0.0</span> out of 5</div>
+              <div style="color:#f59e0b; font-size:1.1rem; margin-top:0.2rem;">★★★★★</div>
+            </div>
+            <div class="rating-filter-pills" id="pdp-rating-filters">
+              <button type="button" class="rating-filter-btn active" data-star="all" onclick="setReviewFilter('all')">All</button>
+              <button type="button" class="rating-filter-btn" data-star="5" onclick="setReviewFilter(5)">5 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="4" onclick="setReviewFilter(4)">4 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="3" onclick="setReviewFilter(3)">3 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="2" onclick="setReviewFilter(2)">2 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="1" onclick="setReviewFilter(1)">1 Star</button>
+            </div>
+          </div>
+
+          <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:var(--primary-soft); border:1px solid #bbf7d0; border-radius:8px; padding:0.85rem; margin-bottom:1rem;">
+            <div class="row-between">
+              <strong style="font-size:0.84rem; color:var(--primary-deep);">Rate this product:</strong>
+              <span id="review-eligibility-note" style="font-size:0.74rem; color:var(--muted);"></span>
+            </div>
+            <div class="star-picker" id="star-picker">
+              <button type="button" class="star-btn selected" onclick="setReviewStar(1)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(2)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(3)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(4)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(5)">★</button>
+            </div>
+            <textarea id="review-comment" rows="2" placeholder="Share your feedback about this item..." required></textarea>
+            <div style="margin-top:0.55rem; text-align:right;">
+              <button type="submit" id="btn-submit-review" class="shop-cta sm">Submit Review</button>
+            </div>
+          </form>
+
+          <div id="pdp-reviews-list"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR: TOP PICKS FROM SHOP -->
+      <aside class="top-picks-card">
+        <div class="top-picks-title">🌿 Top Picks From Shop</div>
+        <div id="pdp-top-picks-list"></div>
+      </aside>
+    </div>
+  </section>
+  <!-- =========================================================
+       VIEW 2: MY SHOP / SELLER VERIFICATION & SHIPPING SETTINGS
+       ========================================================= -->
   <section id="view-seller" class="hidden">
     <div id="create-shop-panel" class="panel hidden" style="max-width:660px; margin:0.5rem auto;">
       <div style="text-align:center; margin-bottom:1.1rem;">
-        <div style="font-size:2.2rem; margin-bottom:0.25rem;">🛡️🏪</div>
-        <h2 style="margin:0 0 0.3rem; font-size:1.25rem;">Apply to Open a Verified Seller Shop</h2>
+        <div style="font-size:2.2rem; margin-bottom:0.25rem;">🌿🏪</div>
+        <h2 style="margin:0 0 0.3rem; font-size:1.25rem; color:var(--primary-deep);">Apply to Open a Verified Seller Shop</h2>
         <p style="margin:0; font-size:0.84rem; color:var(--muted);">All shop applications require valid verification proof and Platform Admin approval before going live.</p>
       </div>
 
@@ -1164,17 +2035,17 @@
         <div class="form-grid">
           <div>
             <label class="field-label">Shop Name *</label>
-            <input type="text" id="new-shop-name" placeholder="e.g., Trendy Apparel PH or Gibo Store" required />
+            <input type="text" id="new-shop-name" placeholder="e.g., GreenTech Gadgets or Roxas Fresh Market" required />
           </div>
           <div>
             <label class="field-label">Main Shop Category *</label>
             <select id="new-shop-category" required>
-              <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-              <option value="Gadgets & Accessories">Gadgets & Accessories</option>
-              <option value="Home & Living">Home & Living</option>
-              <option value="Health & Beauty">Health & Beauty</option>
-              <option value="Food & Beverages">Food & Beverages</option>
-              <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+              <option value="Gadgets & Accessories">Gadgets &amp; Accessories</option>
+              <option value="Fruits & Vegetables">Fruits &amp; Vegetables</option>
+              <option value="Food & Beverages">Food &amp; Beverages</option>
+              <option value="Clothing & Apparel">Clothing &amp; Apparel (Mga Damit)</option>
+              <option value="Home & Living">Home &amp; Living</option>
+              <option value="Health & Beauty">Health &amp; Beauty</option>
               <option value="General Merchandise">General Merchandise</option>
             </select>
           </div>
@@ -1197,7 +2068,7 @@
         </div>
 
         <div class="shipping-config-box">
-          <label class="field-label" style="color:var(--primary-dark);">🚚 Shop Shipping Fee & Allowed Delivery Location *</label>
+          <label class="field-label" style="color:var(--green);">🚚 Shop Shipping Fee &amp; Allowed Delivery Location *</label>
           <div class="form-grid">
             <div>
               <label class="field-label">Shipping Fee Option</label>
@@ -1228,7 +2099,7 @@
           <small style="display:block; margin-top:0.35rem; color:var(--text-secondary);">Buyers outside your set delivery location (e.g., outside Roxas) will be blocked from checking out.</small>
         </div>
 
-        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:11px; padding:0.85rem 1rem;">
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem 1rem;">
           <label class="field-label" style="color:#92400e;">🪪 Seller Verification Proof (Valid ID or Physical Store/Inventory Photo) *</label>
           <input type="file" id="new-shop-id-file" accept="image/*" required />
           <small style="display:block; margin-top:0.35rem; color:#92400e;">Automatically compressed for mobile upload. Only visible to the Platform Admin.</small>
@@ -1247,12 +2118,12 @@
 
     <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:0.5rem auto; text-align:center;">
       <div id="gate-icon" style="font-size:2.5rem; margin-bottom:0.35rem;">⏳</div>
-      <h2 id="gate-title" style="margin:0 0 0.4rem;">Shop Application Pending Approval</h2>
+      <h2 id="gate-title" style="margin:0 0 0.4rem; color:var(--primary-deep);">Shop Application Pending Approval</h2>
       <p id="gate-message" style="margin:0 auto 1rem; max-width:500px; font-size:0.86rem; color:var(--text-secondary); line-height:1.5;"></p>
       <div id="gate-admin-note" class="error-box hidden" style="text-align:left;"></div>
 
       <form id="resubmit-shop-form" class="hidden" onsubmit="resubmitRejectedShop(event)" style="text-align:left; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:0.75rem;">
-        <h4 style="margin:0;">Update & Re-submit Shop Verification</h4>
+        <h4 style="margin:0; color:var(--primary-deep);">Update &amp; Re-submit Shop Verification</h4>
         <div class="form-grid">
           <div>
             <label class="field-label">Shop Name</label>
@@ -1280,11 +2151,11 @@
     </div>
 
     <div id="seller-dashboard-panel" class="hidden">
-      <div class="panel" style="background:linear-gradient(135deg, #f0fdf4, #ffffff); border-color:#bbf7d0;">
+      <div class="panel" style="border-left:4px solid var(--primary);">
         <div class="row-between">
           <div>
             <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
-              <h2 id="my-shop-title" style="margin:0; font-size:1.2rem;">My Shop</h2>
+              <h2 id="my-shop-title" style="margin:0; font-size:1.2rem; color:var(--primary-deep);">My Shop</h2>
               <span class="badge status-approved">✓ Verified</span>
               <span id="my-shop-cat-badge" class="badge seller">Category</span>
               <span id="my-shop-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
@@ -1293,8 +2164,8 @@
             <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.84rem; color:var(--text-secondary);"></p>
           </div>
           <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
-            <button class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop, Shipping & Area</button>
-            <button class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Orders (<span id="seller-pending-count">0</span>)</button>
+            <button type="button" class="secondary sm" onclick="toggleEditShopBox()">⚙️ Edit Shop, Shipping &amp; Area</button>
+            <button type="button" class="secondary sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Orders (<span id="seller-pending-count">0</span>)</button>
           </div>
         </div>
 
@@ -1307,12 +2178,12 @@
             <div>
               <label class="field-label">Shop Category</label>
               <select id="edit-shop-category">
-                <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-                <option value="Gadgets & Accessories">Gadgets & Accessories</option>
-                <option value="Home & Living">Home & Living</option>
-                <option value="Health & Beauty">Health & Beauty</option>
-                <option value="Food & Beverages">Food & Beverages</option>
-                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+                <option value="Gadgets & Accessories">Gadgets &amp; Accessories</option>
+                <option value="Fruits & Vegetables">Fruits &amp; Vegetables</option>
+                <option value="Food & Beverages">Food &amp; Beverages</option>
+                <option value="Clothing & Apparel">Clothing &amp; Apparel (Mga Damit)</option>
+                <option value="Home & Living">Home &amp; Living</option>
+                <option value="Health & Beauty">Health &amp; Beauty</option>
                 <option value="General Merchandise">General Merchandise</option>
               </select>
             </div>
@@ -1355,7 +2226,7 @@
           </div>
 
           <div style="margin-top:0.8rem;">
-            <button type="submit" class="sm">Save Shop, Shipping & Delivery Area</button>
+            <button type="submit" class="sm">Save Shop, Shipping &amp; Delivery Area</button>
           </div>
         </form>
       </div>
@@ -1363,7 +2234,7 @@
       <!-- Add / Edit Product Form (2 Square Photos Max + Auto WebP Compression) -->
       <div class="panel">
         <div class="row-between" style="margin-bottom:0.75rem;">
-          <h3 style="margin:0; font-size:1.05rem;" id="product-form-heading">➕ Add Product (Up to 2 Photos)</h3>
+          <h3 style="margin:0; font-size:1.05rem; color:var(--primary-deep);" id="product-form-heading">➕ Add Product (Up to 2 Photos)</h3>
           <button type="button" id="btn-cancel-edit-prod" class="secondary sm hidden" onclick="resetProductForm()">Cancel Edit</button>
         </div>
 
@@ -1372,17 +2243,17 @@
           <div class="form-grid">
             <div>
               <label class="field-label">Product Name *</label>
-              <input type="text" id="p-name" placeholder="e.g., Oversized Cotton T-Shirt" required />
+              <input type="text" id="p-name" placeholder="e.g., Wireless Earbuds Pro or Fresh Harvest Pack" required />
             </div>
             <div>
               <label class="field-label">Product Category *</label>
               <select id="p-category" required>
-                <option value="Clothing & Apparel">Clothing & Apparel (Mga Damit)</option>
-                <option value="Gadgets & Accessories">Gadgets & Accessories</option>
-                <option value="Home & Living">Home & Living</option>
-                <option value="Health & Beauty">Health & Beauty</option>
-                <option value="Food & Beverages">Food & Beverages</option>
-                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+                <option value="Gadgets & Accessories">Gadgets &amp; Accessories</option>
+                <option value="Fruits & Vegetables">Fruits &amp; Vegetables</option>
+                <option value="Food & Beverages">Food &amp; Beverages</option>
+                <option value="Clothing & Apparel">Clothing &amp; Apparel (Mga Damit)</option>
+                <option value="Home & Living">Home &amp; Living</option>
+                <option value="Health & Beauty">Health &amp; Beauty</option>
                 <option value="General Merchandise">General Merchandise</option>
               </select>
             </div>
@@ -1397,14 +2268,14 @@
           </div>
 
           <div style="margin-top:0.8rem;">
-            <label class="field-label">Product Description (Sizes, material, weight, harvest info, etc.)</label>
-            <textarea id="p-desc" rows="2" placeholder="Describe your item clearly for buyers..."></textarea>
+            <label class="field-label">Product Description (Specs, warranty, sizes, weight, harvest info, etc.)</label>
+            <textarea id="p-desc" rows="3" placeholder="Describe your item clearly for buyers (this will appear when buyers click your product)..."></textarea>
           </div>
 
           <div style="margin-top:0.9rem;">
             <div class="row-between">
               <label class="field-label" style="margin:0;">Product Photos (Max 2 • Square 1:1 Auto-WebP)</label>
-              <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; border:1px solid var(--border); border-radius:8px; font-size:0.76rem; font-weight:600;">
+              <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; border:1px solid var(--border); border-radius:6px; font-size:0.76rem; font-weight:600; background:#fff;">
                 📁 Select Photos (Max 2)
                 <input type="file" id="multi-photo-input" accept="image/*" multiple class="hidden" onchange="handleMultiPhotoSelect(event)" />
               </label>
@@ -1414,14 +2285,14 @@
           </div>
 
           <div style="margin-top: 1rem;">
-            <button type="submit" id="btn-save-product" class="success-btn">Publish Product</button>
+            <button type="submit" id="btn-save-product" class="shop-cta">Publish Product</button>
           </div>
         </form>
       </div>
 
       <!-- Inventory Table -->
       <div class="panel">
-        <h3 style="margin-top:0; font-size:1.05rem;">📦 My Shop Inventory & Sales</h3>
+        <h3 style="margin-top:0; font-size:1.05rem; color:var(--primary-deep);">📦 My Shop Inventory &amp; Sales</h3>
         <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
           <table>
             <thead>
@@ -1442,14 +2313,16 @@
     </div>
   </section>
 
-  <!-- VIEW 3: ORDERS -->
+  <!-- =========================================================
+       VIEW 3: ORDERS & LIVE TRACKING
+       ========================================================= -->
   <section id="view-orders" class="hidden">
     <div class="row-between" style="margin-bottom: 0.8rem;">
       <div>
-        <h2 style="margin:0; font-size:1.25rem;">Orders & Live Tracking</h2>
+        <h2 style="margin:0; font-size:1.25rem; color:var(--primary-deep);">Orders &amp; Live Tracking</h2>
         <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">⚠️ Policy: Cancellation is allowed only while <strong>Pending</strong>. Strictly <strong>No to Cancel after Shipping</strong>.</p>
       </div>
-      <button class="secondary sm" onclick="loadOrders()">↻ Refresh</button>
+      <button type="button" class="secondary sm" onclick="loadOrders()">↻ Refresh</button>
     </div>
 
     <div class="auth-tabs" style="max-width:460px; margin-bottom:1rem;">
@@ -1460,12 +2333,14 @@
     <div id="orders-list"></div>
   </section>
 
-  <!-- VIEW 4: PLATFORM ADMIN -->
+  <!-- =========================================================
+       VIEW 4: PLATFORM ADMIN
+       ========================================================= -->
   <section id="view-admin" class="hidden">
-    <div class="panel" style="border-color:#fde68a;">
+    <div class="panel" style="border-color:#86efac;">
       <div class="row-between">
         <div>
-          <h3 style="margin:0; color:#92400e; font-size:1.05rem;">🛡️ Shop Applications & Anti-Troll Verification</h3>
+          <h3 style="margin:0; color:var(--primary-deep); font-size:1.05rem;">🛡️ Shop Applications &amp; Anti-Troll Verification</h3>
           <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">Inspect seller ID/store proof before approving shops.</p>
         </div>
         <span id="admin-pending-shops-badge" class="badge status-pending">0 Pending Review</span>
@@ -1475,9 +2350,9 @@
         <table>
           <thead>
             <tr>
-              <th>Shop & Description</th>
-              <th>Contact & Pickup Address</th>
-              <th>Shipping & Delivery Area</th>
+              <th>Shop &amp; Description</th>
+              <th>Contact &amp; Pickup Address</th>
+              <th>Shipping &amp; Delivery Area</th>
               <th>ID / Store Proof</th>
               <th>Status</th>
               <th>Admin Action</th>
@@ -1488,10 +2363,10 @@
       </div>
     </div>
 
-    <div class="panel" style="border-color:#c7d2fe;">
+    <div class="panel" style="border-color:#99f6e4;">
       <div class="row-between">
         <div>
-          <h3 style="margin:0; color:var(--indigo); font-size:1.05rem;">💰 Admin 10% Commission & Monthly Billing</h3>
+          <h3 style="margin:0; color:var(--indigo); font-size:1.05rem;">💰 Admin 10% Commission &amp; Monthly Billing</h3>
           <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">10% commission on product sales (shipping fees go 100% to sellers).</p>
         </div>
         <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
@@ -1513,8 +2388,8 @@
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Uncollected vs. Collected</div>
-          <div class="kpi-value" id="kpi-uncollected" style="color:var(--accent);">₱0.00</div>
-          <div class="kpi-sub">Collected: <strong id="kpi-collected" style="color:var(--primary-dark);">₱0.00</strong></div>
+          <div class="kpi-value" id="kpi-uncollected" style="color:var(--primary-dark);">₱0.00</div>
+          <div class="kpi-sub">Collected: <strong id="kpi-collected" style="color:var(--green);">₱0.00</strong></div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Seller Net + Shipping Fees</div>
@@ -1543,7 +2418,7 @@
     </div>
 
     <div class="panel">
-      <h3 style="margin-top:0; font-size:1.05rem;">📦 All Marketplace Products Moderation</h3>
+      <h3 style="margin-top:0; font-size:1.05rem; color:var(--primary-deep);">📦 All Marketplace Products Moderation</h3>
       <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table>
           <thead>
@@ -1568,8 +2443,8 @@
 <div id="ios-install-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeIosInstallModal()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">📲 Install MarketHub on iPhone / iPad</h3>
-      <button class="secondary sm" onclick="closeIosInstallModal()">✕</button>
+      <h3 style="margin:0; color:var(--primary-deep);">📲 Install MarketHub on iPhone / iPad</h3>
+      <button type="button" class="secondary sm" onclick="closeIosInstallModal()">✕</button>
     </div>
     <p style="font-size:0.86rem; color:var(--text-secondary); line-height:1.55; margin:0.75rem 0;">
       Para maging full-screen mobile app sa iOS Safari:
@@ -1579,88 +2454,7 @@
       <li>Mag-scroll pababa at pindutin ang <strong>"Add to Home Screen"</strong>.</li>
       <li>I-tap ang <strong>"Add"</strong> sa kanang itaas.</li>
     </ol>
-    <button type="button" class="success-btn" style="width:100%;" onclick="closeIosInstallModal()">Naintindihan</button>
-  </div>
-</div>
-
-<!-- PRODUCT DETAIL MODAL -->
-<div id="product-detail-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProductModal()">
-  <div class="modal product-modal-wide">
-    <div class="row-between">
-      <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
-        <span id="detail-shop-badge" class="shop-tag-btn">🏪 Shop Name</span>
-        <span id="detail-cat-badge" class="badge cat-badge">Category</span>
-        <span id="detail-ship-badge" class="badge ship-free">🚚 Free Shipping</span>
-        <span id="detail-area-badge" class="badge area-badge">📍 Roxas Only</span>
-      </div>
-      <button class="secondary sm" onclick="closeProductModal()">✕</button>
-    </div>
-
-    <div class="detail-layout">
-      <div>
-        <div class="gallery-main"><img id="detail-main-img" src="" alt="Product View" loading="lazy" decoding="async" /></div>
-        <div id="detail-thumbs" class="gallery-thumbs"></div>
-      </div>
-
-      <div style="display:flex; flex-direction:column; justify-content:space-between;">
-        <div>
-          <h2 id="detail-title" style="margin:0 0 0.45rem; font-size:1.25rem;">Product Title</h2>
-
-          <div class="metrics-row" style="margin-bottom:0.75rem;">
-            <span class="rating-pill"><span class="star-icon">★</span> <span id="detail-rating-avg">0.0</span> (<span id="detail-review-count">0</span>)</span>
-            <span class="sold-pill">🛍️ <strong id="detail-sold-count">0</strong> sold</span>
-            <span style="font-size:0.75rem; color:var(--muted);" id="detail-stock-text">Stock: 0</span>
-          </div>
-
-          <div id="detail-price" class="price" style="font-size:1.45rem; margin-bottom:0.55rem;">₱0.00</div>
-          <p id="detail-desc" style="font-size:0.86rem; color:var(--text-secondary); line-height:1.48; margin:0 0 0.7rem;"></p>
-
-          <div class="shop-about-card">
-            <div class="row-between" style="margin-bottom:0.3rem;">
-              <strong id="detail-shop-card-name" style="font-size:0.84rem; color:var(--primary-dark);">🏪 Shop Name</strong>
-              <button type="button" id="detail-visit-shop-btn" class="secondary sm">Visit Shop →</button>
-            </div>
-            <p id="detail-shop-card-desc" style="margin:0 0 0.3rem; font-size:0.78rem; color:var(--text-secondary); line-height:1.42;"></p>
-            <div id="detail-shop-ship-note" style="font-size:0.74rem; font-weight:700; color:var(--primary-dark);"></div>
-            <div id="detail-shop-area-note" style="font-size:0.74rem; font-weight:700; color:#92400e; margin-top:0.2rem;"></div>
-          </div>
-
-          <div class="policy-notice-box" style="margin-bottom:0.6rem; padding:0.52rem 0.7rem;">
-            ⚠️ <strong>Strict Policy:</strong> <strong>NO TO CANCEL</strong> once order is already Shipped / Out for Delivery.
-          </div>
-        </div>
-
-        <div style="padding-top:0.75rem; border-top:1px solid var(--border); display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
-          <input type="number" id="detail-qty" value="1" min="1" style="width:70px; text-align:center; font-weight:700;" />
-          <button id="detail-add-btn" class="secondary" style="flex:1; padding:0.65rem;">+ Add to Cart</button>
-          <button id="detail-buy-btn" class="shop-cta" style="flex:1; padding:0.65rem;">⚡ Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <hr style="border:0; border-top:1px solid var(--border); margin:1.2rem 0 0.9rem;" />
-
-    <div>
-      <h3 style="margin:0 0 0.65rem; font-size:1rem;">⭐ Customer Ratings & Reviews</h3>
-      <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:#f8fbf9; border:1px solid var(--border); border-radius:12px; padding:0.85rem; margin-bottom:0.9rem;">
-        <div class="row-between">
-          <strong style="font-size:0.84rem;">Rate this product:</strong>
-          <span id="review-eligibility-note" style="font-size:0.74rem; color:var(--muted);"></span>
-        </div>
-        <div class="star-picker" id="star-picker">
-          <button type="button" class="star-btn selected" onclick="setReviewStar(1)">★</button>
-          <button type="button" class="star-btn selected" onclick="setReviewStar(2)">★</button>
-          <button type="button" class="star-btn selected" onclick="setReviewStar(3)">★</button>
-          <button type="button" class="star-btn selected" onclick="setReviewStar(4)">★</button>
-          <button type="button" class="star-btn selected" onclick="setReviewStar(5)">★</button>
-        </div>
-        <textarea id="review-comment" rows="2" placeholder="Share your feedback..." required></textarea>
-        <div style="margin-top:0.55rem; text-align:right;">
-          <button type="submit" id="btn-submit-review" class="sm">Submit Review</button>
-        </div>
-      </form>
-      <div id="detail-reviews-list"></div>
-    </div>
+    <button type="button" class="shop-cta" style="width:100%;" onclick="closeIosInstallModal()">Naintindihan</button>
   </div>
 </div>
 
@@ -1668,8 +2462,8 @@
 <div id="auth-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeAuthModal()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;" id="auth-modal-title">Welcome to MarketHub</h3>
-      <button class="secondary sm" onclick="closeAuthModal()">✕</button>
+      <h3 style="margin:0; color:var(--primary-deep);" id="auth-modal-title">Welcome to MarketHub</h3>
+      <button type="button" class="secondary sm" onclick="closeAuthModal()">✕</button>
     </div>
 
     <div id="auth-tabs-bar" class="auth-tabs">
@@ -1687,7 +2481,7 @@
         </svg>
         Continue with Google (Gmail)
       </button>
-      <div class="auth-divider">or continue with email & password</div>
+      <div class="auth-divider">or continue with email &amp; password</div>
     </div>
 
     <form id="form-signin" onsubmit="signIn(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
@@ -1702,18 +2496,18 @@
         </div>
         <input type="password" id="login-password" placeholder="Enter your password" required />
       </div>
-      <button type="submit" id="btn-submit-signin">Sign In</button>
+      <button type="submit" id="btn-submit-signin" class="shop-cta">Sign In</button>
     </form>
 
     <form id="form-forgot" class="hidden" onsubmit="sendPasswordReset(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
-      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:0.75rem 0.9rem; font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">
+      <div style="background:var(--primary-soft); border:1px solid #bbf7d0; border-radius:6px; padding:0.75rem 0.9rem; font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">
         Enter the Gmail / email address registered to your account or shop. We will send a secure password reset link to your inbox.
       </div>
       <div>
         <label class="field-label">Registered Email Address *</label>
         <input type="email" id="forgot-email" placeholder="you@gmail.com" required />
       </div>
-      <button type="submit" id="btn-submit-forgot" class="success-btn">Send Password Reset Link</button>
+      <button type="submit" id="btn-submit-forgot" class="shop-cta">Send Password Reset Link</button>
       <div style="text-align:center;">
         <button type="button" class="text-link-btn" onclick="switchAuthTab('signin')">← Back to Sign In</button>
       </div>
@@ -1729,7 +2523,7 @@
         <input type="tel" id="reg-phone" placeholder="e.g., 0917 123 4567" required />
       </div>
       <div>
-        <label class="field-label">Complete Delivery Address (Include Barangay & Municipality, e.g., Roxas) *</label>
+        <label class="field-label">Complete Delivery Address (Include Barangay &amp; Municipality, e.g., Roxas) *</label>
         <textarea id="reg-address" rows="2" placeholder="House/Street, Barangay, Roxas, Oriental Mindoro" required></textarea>
       </div>
       <div class="form-grid" style="gap:0.75rem;">
@@ -1742,7 +2536,7 @@
           <input type="password" id="reg-password" minlength="6" placeholder="Min. 6 characters" required />
         </div>
       </div>
-      <button type="submit" id="btn-submit-register" class="success-btn">Complete Registration</button>
+      <button type="submit" id="btn-submit-register" class="shop-cta">Complete Registration</button>
     </form>
   </div>
 </div>
@@ -1751,8 +2545,8 @@
 <div id="recovery-modal" class="modal-backdrop hidden">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">🔐 Set Your New Password</h3>
-      <button class="secondary sm" onclick="closeRecoveryModal()">✕</button>
+      <h3 style="margin:0; color:var(--primary-deep);">🔐 Set Your New Password</h3>
+      <button type="button" class="secondary sm" onclick="closeRecoveryModal()">✕</button>
     </div>
     <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 0.9rem;">
       Your reset link is verified. Enter a new password below to regain access to your account and shop.
@@ -1766,7 +2560,7 @@
         <label class="field-label">Confirm New Password *</label>
         <input type="password" id="recovery-confirm-password" minlength="6" placeholder="Re-type new password" required />
       </div>
-      <button type="submit" id="btn-save-new-password" class="success-btn">Update Password & Sign In</button>
+      <button type="submit" id="btn-save-new-password" class="shop-cta">Update Password &amp; Sign In</button>
     </form>
   </div>
 </div>
@@ -1775,8 +2569,8 @@
 <div id="profile-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal">
     <div class="row-between">
-      <h3 style="margin:0;">👤 Account & Saved Delivery Profile</h3>
-      <button class="secondary sm" onclick="closeProfileModal()">✕</button>
+      <h3 style="margin:0; color:var(--primary-deep);">👤 Account &amp; Saved Delivery Profile</h3>
+      <button type="button" class="secondary sm" onclick="closeProfileModal()">✕</button>
     </div>
     <form onsubmit="saveUserProfile(event)" style="display:flex; flex-direction:column; gap:0.8rem; margin-top:0.85rem;">
       <div>
@@ -1795,7 +2589,7 @@
         <label class="field-label">Account Email</label>
         <input type="email" id="prof-email" disabled style="background:#f8fafc; color:var(--muted);" />
       </div>
-      <button type="submit" class="success-btn">Save Profile Details</button>
+      <button type="submit" class="shop-cta">Save Profile Details</button>
     </form>
   </div>
 </div>
@@ -1805,16 +2599,16 @@
   <div class="modal">
     <div class="row-between">
       <div style="display:flex; align-items:center; gap:0.5rem;">
-        <h3 style="margin:0;" id="cart-modal-title">🛒 Shopping Cart</h3>
+        <h3 style="margin:0; color:var(--primary-deep);" id="cart-modal-title">🛒 Shopping Cart</h3>
         <span id="express-buy-badge" class="badge seller hidden">⚡ Buy Now</span>
       </div>
-      <button class="secondary sm" onclick="closeCart()">✕</button>
+      <button type="button" class="secondary sm" onclick="closeCart()">✕</button>
     </div>
     <div id="cart-items-container" style="margin: 0.9rem 0;"></div>
     <div id="checkout-section" class="hidden">
       <hr style="border:0; border-top:1px solid var(--border); margin:0.9rem 0;" />
       <div class="row-between" style="margin-bottom:0.55rem;">
-        <h4 style="margin:0;">Customer Info & Delivery Address *</h4>
+        <h4 style="margin:0; color:var(--primary-deep);">Customer Info &amp; Delivery Address *</h4>
         <button type="button" id="btn-toggle-checkout-edit" class="secondary sm" onclick="toggleCheckoutEdit()">Edit Details</button>
       </div>
 
@@ -1824,8 +2618,8 @@
 
       <div id="checkout-autofill-card" class="delivery-summary-card">
         <div class="row-between">
-          <strong style="color:var(--primary-dark);">✓ Saved Customer Info & Address</strong>
-          <span class="badge">Auto-Filled</span>
+          <strong style="color:var(--green);">✓ Saved Customer Info &amp; Address</strong>
+          <span class="badge seller">Auto-Filled</span>
         </div>
         <div style="margin-top:0.4rem; font-size:0.83rem; color:var(--text-secondary);">
           <div><strong>Recipient:</strong> <span id="display-checkout-name">—</span></div>
@@ -1860,7 +2654,7 @@
         <span>I confirm my delivery address is within the seller's delivery area and I agree to the <strong>No to Cancel after Shipping</strong> policy.</span>
       </label>
 
-      <button id="btn-place-order" onclick="checkout()" class="success-btn" style="width:100%; padding:0.75rem; font-size:0.95rem;">
+      <button type="button" id="btn-place-order" onclick="checkout()" class="shop-cta" style="width:100%; padding:0.75rem; font-size:0.95rem;">
         Place Order Now
       </button>
     </div>
@@ -1877,7 +2671,7 @@
   const STORAGE_BUCKET = "product-images";
   const CACHE_ONE_YEAR = "31536000";
   const MAX_PRODUCT_PHOTOS = 2;
-  const PRODUCTS_PAGE_SIZE = 24;
+  const PRODUCTS_PAGE_SIZE = 25;
 
   let deferredInstallPrompt = null;
 
@@ -1898,6 +2692,9 @@
   let selectedCategory = "all";
   let selectedShopId = "all";
   let onlyInStock = false;
+  let onlyFreeShipping = false;
+  let onlyRoxasArea = false;
+  let sortMode = "popular";
   let visibleProductLimit = PRODUCTS_PAGE_SIZE;
   let ordersSubTab = "purchases";
   let adminSelectedMonth = getCurrentYearMonth();
@@ -1912,6 +2709,7 @@
 
   let activeDetailProductId = null;
   let selectedReviewStars = 5;
+  let selectedReviewFilter = "all";
 
   let ordersChannel = null;
   let pollIntervalId = null;
@@ -1926,7 +2724,7 @@
     { key: "Delivered", label: "Delivered" }
   ];
 
-  const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=75";
+  const DEFAULT_PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=75";
 
   /* =========================================================
      PWA REGISTRATION & ANDROID / IOS INSTALL PROMPT
@@ -2157,7 +2955,7 @@
     const container = document.getElementById("toast-container");
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
-    toast.innerHTML = `<span>${escapeHtml(message)}</span><button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#bbf7d0;">✕</button>`;
+    toast.innerHTML = `<span>${escapeHtml(message)}</span><button onclick="this.parentElement.remove()" style="background:transparent; padding:0 4px; color:#fff;">✕</button>`;
     container.appendChild(toast);
     setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5500);
   }
@@ -2265,18 +3063,18 @@
 
   function applyOwnerHeaderDisplay() {
     if (!currentUser) return;
-    const displayName = (userProfileData.full_name || "").trim() || currentUser.email;
+    const displayName = (userProfileData.full_name || "").trim() || currentUser.email.split("@")[0];
     document.getElementById("user-info").textContent = displayName;
     document.getElementById("user-avatar-dot").textContent = displayName.charAt(0).toUpperCase() || "U";
     document.getElementById("user-pill").classList.remove("hidden");
 
     const badge = document.getElementById("role-badge");
     if (currentRole === "admin") {
-      badge.textContent = myShop ? `Admin • ${myShop.name}` : "Platform Admin";
+      badge.textContent = "Admin";
       badge.className = "badge admin";
     } else if (myShop) {
       const st = myShop.status || "pending";
-      badge.textContent = st === "approved" ? `Seller • ${myShop.name}` : `Shop (${st.toUpperCase()})`;
+      badge.textContent = st === "approved" ? "Seller" : st.toUpperCase();
       badge.className = st === "approved" ? "badge seller" : "badge status-pending";
     } else {
       badge.textContent = "Buyer";
@@ -2343,7 +3141,6 @@
       }
 
       document.getElementById("btn-orders").classList.remove("hidden");
-      document.getElementById("btn-cart").classList.remove("hidden");
       document.getElementById("notif-wrapper").classList.remove("hidden");
 
       if (currentRole === "admin") {
@@ -2368,7 +3165,7 @@
       notifications = [];
       updateCartBadge();
       updateNotifBadge();
-      ["user-pill", "btn-logout", "btn-seller", "btn-orders", "btn-admin", "btn-cart", "notif-wrapper"].forEach(id => {
+      ["user-pill", "btn-logout", "btn-seller", "btn-orders", "btn-admin", "notif-wrapper"].forEach(id => {
         document.getElementById(id).classList.add("hidden");
       });
       headerApplyBtn.classList.remove("hidden");
@@ -2377,6 +3174,15 @@
       switchView("shop");
     }
     renderProducts();
+  }
+
+  function handleHeaderCartClick() {
+    if (!currentUser) {
+      openAuthModal("signin");
+      showToast("Please sign in first to view your shopping cart.", "info");
+      return;
+    }
+    openCart(false);
   }
 
   function handleStartSellingClick() {
@@ -2388,17 +3194,21 @@
     switchView("seller");
   }
 
+  function quickSearchKeyword(keyword) {
+    document.getElementById("search-input").value = keyword;
+    switchView("shop");
+    resetPaginationAndRender();
+  }
+
   function quickBrowseCategory(cat) {
+    switchView("shop");
     setCategoryFilter(cat);
-    const toolbar = document.querySelector(".catalog-toolbar");
-    if (toolbar) toolbar.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function switchView(view) {
-    ["shop", "seller", "orders", "admin"].forEach(v => {
-      document.getElementById("view-" + v).classList.toggle("hidden", v !== view);
-      const navBtn = document.getElementById("btn-" + v);
-      if (navBtn) navBtn.classList.toggle("active-nav", v === view);
+    ["shop", "product-detail", "seller", "orders", "admin"].forEach(v => {
+      const el = document.getElementById("view-" + v);
+      if (el) el.classList.toggle("hidden", v !== view);
     });
     if (view === "seller") {
       loadMyShop(true).then(() => renderSellerWorkspace());
@@ -2414,7 +3224,7 @@
   }
 
   /* =========================================================
-     SHOPS, DELIVERY AREA (E.G. ROXAS ONLY) & SHIPPING FEE
+     VERIFIED SHOPS SHOWCASE, DELIVERY AREA & SHIPPING FEE
      ========================================================= */
   async function loadShops() {
     const { data, error } = await db
@@ -2449,24 +3259,28 @@
     const container = document.getElementById("shops-list-pills");
     document.getElementById("shops-count").textContent = approvedShops.length;
 
-    const allBtn = `
-      <button class="shop-chip ${selectedShopId === "all" ? "active" : ""}" onclick="setShopFilter('all')">
-        🌐 All Verified Shops
-      </button>
+    const allTile = `
+      <div class="mall-shop-tile ${selectedShopId === "all" ? "active" : ""}" onclick="setShopFilter('all')">
+        <div class="mall-shop-logo">🌿</div>
+        <div class="mall-shop-name">All Verified Shops</div>
+        <div class="mall-shop-meta">${approvedShops.length} Active Stores</div>
+      </div>
     `;
 
-    const shopBtns = approvedShops.map(s => {
+    const shopTiles = approvedShops.map(s => {
       const ship = getShopShippingInfo(s);
       const area = getShopDeliveryArea(s);
+      const initial = (s.name || "S").charAt(0).toUpperCase();
       return `
-        <button class="shop-chip ${String(selectedShopId) === String(s.id) ? "active" : ""}" onclick="setShopFilter(${s.id})">
-          🏪 ${escapeHtml(s.name)}
-          <span class="cat-mini">${ship.isFree ? "Free Ship" : `₱${ship.fee.toFixed(0)}`} • ${escapeHtml(area.raw)}</span>
-        </button>
+        <div class="mall-shop-tile ${String(selectedShopId) === String(s.id) ? "active" : ""}" onclick="setShopFilter(${s.id})">
+          <div class="mall-shop-logo">${escapeHtml(initial)}</div>
+          <div class="mall-shop-name">${escapeHtml(s.name)}</div>
+          <div class="mall-shop-meta">${ship.isFree ? "Free Ship" : `Ship ₱${ship.fee.toFixed(0)}`} • ${escapeHtml(area.raw)}</div>
+        </div>
       `;
     }).join("");
 
-    container.innerHTML = allBtn + shopBtns;
+    container.innerHTML = allTile + shopTiles;
   }
 
   function toggleNewShopShippingInput() {
@@ -2854,7 +3668,7 @@
 
     document.getElementById("edit-prod-id").value = p.id;
     document.getElementById("p-name").value = p.name;
-    document.getElementById("p-category").value = p.category || (myShop ? myShop.category : "Clothing & Apparel");
+    document.getElementById("p-category").value = p.category || (myShop ? myShop.category : "Gadgets & Accessories");
     document.getElementById("p-price").value = p.price;
     document.getElementById("p-stock").value = p.stock;
     document.getElementById("p-desc").value = p.description || "";
@@ -2958,7 +3772,7 @@
         <tr>
           <td>
             <div style="display:flex; align-items:center; gap:0.55rem;">
-              <img src="${escapeHtml(imgs[0])}" loading="lazy" decoding="async" style="width:42px; height:42px; aspect-ratio:1/1; border-radius:8px; object-fit:cover; border:1px solid var(--border); flex-shrink:0;" />
+              <img src="${escapeHtml(imgs[0])}" loading="lazy" decoding="async" style="width:42px; height:42px; aspect-ratio:1/1; border-radius:6px; object-fit:cover; border:1px solid var(--border); flex-shrink:0;" />
               <div><strong>${escapeHtml(p.name)}</strong><br/><small style="color:var(--muted);">📷 ${imgs.length} photo(s)</small></div>
             </div>
           </td>
@@ -3278,7 +4092,7 @@
   }
 
   /* =========================================================
-     MARKETPLACE CATALOG, FILTERS & LAZY PAGINATION
+     MARKETPLACE CATALOG (PURE PRODUCTS + SORT + FILTERS)
      ========================================================= */
   function resetPaginationAndRender() {
     visibleProductLimit = PRODUCTS_PAGE_SIZE;
@@ -3294,8 +4108,19 @@
     selectedCategory = "all";
     selectedShopId = "all";
     onlyInStock = false;
+    onlyFreeShipping = false;
+    onlyRoxasArea = false;
+    sortMode = "popular";
     visibleProductLimit = PRODUCTS_PAGE_SIZE;
     document.getElementById("search-input").value = "";
+    const inStockEl = document.getElementById("filter-instock");
+    const freeShipEl = document.getElementById("filter-freeship");
+    const roxasEl = document.getElementById("filter-roxas");
+    const priceSelectEl = document.getElementById("sort-price-select");
+    if (inStockEl) inStockEl.checked = false;
+    if (freeShipEl) freeShipEl.checked = false;
+    if (roxasEl) roxasEl.checked = false;
+    if (priceSelectEl) priceSelectEl.value = "";
     updateFilterUI();
     renderProducts();
   }
@@ -3315,17 +4140,50 @@
   }
 
   function toggleStockFilter() {
-    onlyInStock = !onlyInStock;
+    onlyInStock = document.getElementById("filter-instock").checked;
     visibleProductLimit = PRODUCTS_PAGE_SIZE;
+    renderProducts();
+  }
+
+  function toggleFreeShipFilter() {
+    onlyFreeShipping = document.getElementById("filter-freeship").checked;
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
+    renderProducts();
+  }
+
+  function toggleRoxasFilter() {
+    onlyRoxasArea = document.getElementById("filter-roxas").checked;
+    visibleProductLimit = PRODUCTS_PAGE_SIZE;
+    renderProducts();
+  }
+
+  function setSortMode(mode) {
+    sortMode = mode;
+    const priceSelect = document.getElementById("sort-price-select");
+    if (priceSelect && !mode.startsWith("price_")) {
+      priceSelect.value = "";
+    }
+    updateFilterUI();
+    renderProducts();
+  }
+
+  function setPriceSort(val) {
+    sortMode = val || "popular";
     updateFilterUI();
     renderProducts();
   }
 
   function updateFilterUI() {
-    document.querySelectorAll("#category-pills .filter-pill").forEach(btn => {
+    document.querySelectorAll("#sidebar-category-pills .sidebar-cat-item").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.cat === selectedCategory);
     });
-    document.getElementById("filter-instock").classList.toggle("active", onlyInStock);
+    document.querySelectorAll("#mobile-category-pills .mobile-cat-pill").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.cat === selectedCategory);
+    });
+    document.querySelectorAll(".sort-bar .sort-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.sort === sortMode);
+    });
+
     document.getElementById("btn-clear-shop-filter").classList.toggle("hidden", selectedShopId === "all");
     renderShopsStrip();
 
@@ -3386,15 +4244,15 @@
     const query = document.getElementById("search-input").value.toLowerCase().trim();
     const approvedShops = getApprovedShops();
 
-    const filtered = products.filter(p => {
+    let filtered = products.filter(p => {
       if (p.shop_id != null && !approvedShops.some(s => String(s.id) === String(p.shop_id))) {
         return false;
       }
 
       const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
       const shopName = shop ? shop.name.toLowerCase() : "markethub official";
-      const shopDesc = shop ? (shop.description || "").toLowerCase() : "";
       const areaText = getShopDeliveryArea(shop).raw.toLowerCase();
+      const ship = getShopShippingInfo(shop);
       const cat = p.category || (shop ? shop.category : "General Merchandise");
 
       const matchesQuery =
@@ -3402,22 +4260,42 @@
         p.name.toLowerCase().includes(query) ||
         (p.description || "").toLowerCase().includes(query) ||
         shopName.includes(query) ||
-        shopDesc.includes(query) ||
         areaText.includes(query) ||
-        cat.toLowerCase().includes(query);
+        cat.toLowerCase().includes(query) ||
+        (query.includes("free") && ship.isFree);
 
       const matchesCat = selectedCategory === "all" || cat === selectedCategory;
       const matchesShop = selectedShopId === "all" || String(p.shop_id) === String(selectedShopId);
       const matchesStock = !onlyInStock || Number(p.stock) > 0;
+      const matchesFreeShip = !onlyFreeShipping || ship.isFree;
+      const matchesRoxas = !onlyRoxasArea || areaText.includes("roxas") || areaText === "all areas";
 
-      return matchesQuery && matchesCat && matchesShop && matchesStock;
+      return matchesQuery && matchesCat && matchesShop && matchesStock && matchesFreeShip && matchesRoxas;
     });
+
+    if (sortMode === "latest") {
+      filtered.sort((a, b) => Number(b.id) - Number(a.id));
+    } else if (sortMode === "topsales") {
+      filtered.sort((a, b) => Number(b.sold_count || 0) - Number(a.sold_count || 0));
+    } else if (sortMode === "price_asc") {
+      filtered.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortMode === "price_desc") {
+      filtered.sort((a, b) => Number(b.price) - Number(a.price));
+    } else {
+      filtered.sort((a, b) => {
+        const scoreA = Number(a.sold_count || 0) * 2 + (reviewsByProduct.get(a.id)?.length || 0);
+        const scoreB = Number(b.sold_count || 0) * 2 + (reviewsByProduct.get(b.id)?.length || 0);
+        return scoreB - scoreA || Number(b.id) - Number(a.id);
+      });
+    }
+
+    document.getElementById("catalog-result-count").textContent = `${filtered.length} product(s)`;
 
     const grid = document.getElementById("product-grid");
     const loadMoreWrap = document.getElementById("load-more-wrap");
 
     if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No verified items found in this shop or category.</div>`;
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No verified products match your filter.</div>`;
       loadMoreWrap.classList.add("hidden");
       return;
     }
@@ -3431,69 +4309,37 @@
       loadMoreWrap.classList.add("hidden");
     }
 
+    /* PURE PRODUCT CARDS: Image + Title + Tags + Price + Sold (Expands on Click) */
     grid.innerHTML = visibleItems.map(p => {
       const stockNum = Number(p.stock || 0);
       const soldNum = Number(p.sold_count || 0);
       const imgs = getProductImages(p);
-      const rating = getProductRatingStats(p.id);
       const shop = approvedShops.find(s => String(s.id) === String(p.shop_id));
       const shopLabel = shop ? shop.name : "MarketHub Official";
       const ship = getShopShippingInfo(shop);
       const area = getShopDeliveryArea(shop);
-      const shopDescText = shop?.description || "Admin-verified MarketHub storefront.";
-      const catLabel = p.category || (shop ? shop.category : "General Merchandise");
 
-      let stockTagClass = "";
-      let stockTagText = `${stockNum} left`;
-      if (stockNum <= 0) {
-        stockTagClass = "out";
-        stockTagText = "Sold Out";
-      } else if (stockNum <= 5) {
-        stockTagClass = "low";
-        stockTagText = `${stockNum} left`;
-      }
+      const topBadgeHtml = stockNum <= 0
+        ? `<span class="card-top-badge soldout">Sold Out</span>`
+        : (ship.isFree ? `<span class="card-top-badge">FREE SHIP</span>` : "");
 
       return `
-        <div class="card">
-          <div class="card-img-wrap" onclick="openProductModal(${p.id})">
+        <div class="card" onclick="openExpandedProduct(${p.id})" title="Click to view full details & description">
+          <div class="card-img-wrap">
             <img src="${escapeHtml(imgs[0])}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async" />
-            <span class="stock-tag ${stockTagClass}">${stockTagText}</span>
-            <span class="ship-tag-overlay ${ship.isFree ? "free" : ""}">${ship.isFree ? "Free Ship" : `Ship ₱${ship.fee.toFixed(0)}`}</span>
-            <span class="area-tag-overlay">${escapeHtml(area.label)}</span>
-            ${imgs.length > 1 ? `<span class="photo-count-pill">📷 ${imgs.length}</span>` : ""}
+            <span class="card-mall-tag">Verified</span>
+            ${topBadgeHtml}
+            <div class="card-bottom-overlay">🏪 ${escapeHtml(shopLabel)} • ${escapeHtml(area.raw)}</div>
           </div>
-          <div class="card-body">
-            <div class="shop-link-row">
-              <button type="button" class="shop-tag-btn" onclick="${shop ? `setShopFilter(${shop.id})` : `setShopFilter('all')`}">
-                🏪 ${escapeHtml(shopLabel)}
-              </button>
-              <span class="badge cat-badge">${escapeHtml(catLabel)}</span>
+          <div class="card-pure-body">
+            <h3 class="card-pure-title">${escapeHtml(p.name)}</h3>
+            <div class="card-pure-tags">
+              ${ship.isFree ? `<span class="mini-tag-green">Free Shipping</span>` : `<span class="mini-tag-outline">Ship ₱${ship.fee.toFixed(0)}</span>`}
+              <span class="mini-tag-outline">${escapeHtml(area.raw)}</span>
             </div>
-
-            <h3 class="card-title" onclick="openProductModal(${p.id})">${escapeHtml(p.name)}</h3>
-            <p class="card-desc">${escapeHtml(p.description || "Tap to inspect views and details.")}</p>
-
-            <div class="card-shop-desc-box" title="${escapeHtml(shopDescText)}">
-              <strong>🏪 ${escapeHtml(shopLabel)}:</strong> ${escapeHtml(shopDescText)}
-            </div>
-
-            <div class="metrics-row">
-              <span class="rating-pill"><span class="star-icon">★</span> ${rating.count > 0 ? `${rating.avg} (${rating.count})` : "New"}</span>
-              <span class="sold-pill">${soldNum} sold</span>
-            </div>
-
-            <div class="card-footer-meta">
-              <div class="price">₱${Number(p.price).toFixed(2)}</div>
-              <button class="secondary sm" onclick="openProductModal(${p.id})">Details</button>
-            </div>
-
-            <div class="card-action-btns">
-              <button class="secondary" onclick="addToCart(${p.id}, 1)" ${stockNum <= 0 ? "disabled" : ""}>
-                ${stockNum <= 0 ? "Sold Out" : "+ Add to Cart"}
-              </button>
-              <button class="shop-cta" onclick="buyNow(${p.id}, 1)" ${stockNum <= 0 ? "disabled" : ""}>
-                ${stockNum <= 0 ? "Unavailable" : "⚡ Buy Now"}
-              </button>
+            <div class="card-pure-footer">
+              <div class="card-pure-price">₱${Number(p.price).toFixed(2)}</div>
+              <div class="card-pure-sold">${soldNum} sold</div>
             </div>
           </div>
         </div>
@@ -3502,77 +4348,113 @@
   }
 
   /* =========================================================
-     PRODUCT DETAIL MODAL
+     EXPANDED PRODUCT DETAIL PAGE (WHEN USER CLICKS A PRODUCT)
      ========================================================= */
-  function openProductModal(productId) {
+  function openExpandedProduct(productId) {
     const p = products.find(item => item.id === productId);
     if (!p) return;
 
     activeDetailProductId = productId;
+    selectedReviewFilter = "all";
+
     const imgs = getProductImages(p);
     const shop = getApprovedShops().find(s => String(s.id) === String(p.shop_id));
+    const shopName = shop ? shop.name : "MarketHub Official";
     const ship = getShopShippingInfo(shop);
     const area = getShopDeliveryArea(shop);
     const rating = getProductRatingStats(p.id);
     const stockNum = Number(p.stock || 0);
+    const soldNum = Number(p.sold_count || 0);
+    const catLabel = p.category || (shop ? shop.category : "General Merchandise");
 
-    document.getElementById("detail-shop-badge").textContent = `🏪 ${shop ? shop.name : "MarketHub Official"}`;
-    document.getElementById("detail-shop-badge").onclick = () => { closeProductModal(); if (shop) setShopFilter(shop.id); };
-    document.getElementById("detail-cat-badge").textContent = p.category || (shop ? shop.category : "General Merchandise");
+    // Breadcrumb
+    document.getElementById("pdp-crumb-cat").textContent = catLabel;
+    document.getElementById("pdp-crumb-cat").onclick = () => {
+      closeExpandedProduct();
+      setCategoryFilter(catLabel);
+    };
+    document.getElementById("pdp-crumb-title").textContent = p.name;
 
-    const detailShipBadge = document.getElementById("detail-ship-badge");
-    detailShipBadge.textContent = ship.label;
-    detailShipBadge.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
+    // Gallery
+    document.getElementById("pdp-main-img").src = imgs[0];
+    document.getElementById("pdp-thumbs").innerHTML = imgs.map((url, idx) => `
+      <div class="pdp-thumb ${idx === 0 ? "active" : ""}" onclick="selectPdpImage(${idx}, '${escapeHtml(url)}')">
+        <img src="${escapeHtml(url)}" alt="View ${idx + 1}" />
+      </div>
+    `).join("");
 
-    document.getElementById("detail-area-badge").textContent = area.label;
+    // Main Info
+    document.getElementById("pdp-title").textContent = p.name;
+    document.getElementById("pdp-rating-avg").textContent = rating.count > 0 ? rating.avg : "0.0";
+    document.getElementById("pdp-review-count").textContent = rating.count;
+    document.getElementById("pdp-sold-count").textContent = soldNum;
+    document.getElementById("pdp-price").textContent = `₱${Number(p.price).toFixed(2)}`;
 
-    document.getElementById("detail-title").textContent = p.name;
-    document.getElementById("detail-rating-avg").textContent = rating.count > 0 ? rating.avg : "0.0";
-    document.getElementById("detail-review-count").textContent = rating.count;
-    document.getElementById("detail-sold-count").textContent = Number(p.sold_count || 0);
-    document.getElementById("detail-stock-text").textContent = `Available: ${stockNum}`;
-    document.getElementById("detail-price").textContent = `₱${Number(p.price).toFixed(2)}`;
-    document.getElementById("detail-desc").textContent = p.description || "No additional product description provided.";
+    const shipPill = document.getElementById("pdp-ship-pill");
+    shipPill.textContent = ship.label;
+    shipPill.className = ship.isFree ? "badge ship-free" : "badge ship-paid";
 
-    document.getElementById("detail-shop-card-name").textContent = `🏪 ${shop ? shop.name : "MarketHub Official"}`;
-    document.getElementById("detail-shop-card-desc").textContent = shop?.description || "Verified MarketHub Seller.";
-    document.getElementById("detail-shop-ship-note").textContent = ship.isFree
-      ? "✓ This shop offers FREE SHIPPING on orders."
-      : `Delivery Rate: ₱${ship.fee.toFixed(2)} flat shipping fee per shop order.`;
-    document.getElementById("detail-shop-area-note").textContent = area.isRestricted
-      ? `📍 Delivery Coverage: ${area.raw} (Orders outside this area are not accepted)`
-      : "📍 Delivery Coverage: All Areas";
-    document.getElementById("detail-visit-shop-btn").onclick = () => { closeProductModal(); if (shop) setShopFilter(shop.id); };
+    document.getElementById("pdp-area-pill").textContent = area.label;
+    document.getElementById("pdp-shipping-info").textContent = ship.isFree
+      ? "Free Shipping (₱0.00)"
+      : `₱${ship.fee.toFixed(2)} flat rate per shop order`;
+    document.getElementById("pdp-area-info").textContent = area.isRestricted
+      ? `${area.raw} (Buyers outside this area cannot checkout)`
+      : "All Areas / Province-Wide";
 
-    const qtyInput = document.getElementById("detail-qty");
+    // Quantity & Buttons
+    const qtyInput = document.getElementById("pdp-qty");
     qtyInput.value = 1;
     qtyInput.max = Math.max(1, stockNum);
+    document.getElementById("pdp-stock-text").textContent = stockNum > 0
+      ? `${stockNum} pieces available`
+      : "Out of stock";
 
-    const addBtn = document.getElementById("detail-add-btn");
-    const buyBtn = document.getElementById("detail-buy-btn");
+    const addBtn = document.getElementById("pdp-add-btn");
+    const buyBtn = document.getElementById("pdp-buy-btn");
     addBtn.disabled = stockNum <= 0;
     buyBtn.disabled = stockNum <= 0;
-    addBtn.textContent = stockNum <= 0 ? "Sold Out" : "+ Add to Cart";
+    addBtn.textContent = stockNum <= 0 ? "Sold Out" : "🛒 Add To Cart";
     buyBtn.textContent = stockNum <= 0 ? "Unavailable" : "⚡ Buy Now";
 
     addBtn.onclick = () => {
       const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
       addToCart(p.id, qty);
-      closeProductModal();
     };
-
     buyBtn.onclick = () => {
       const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
-      closeProductModal();
       buyNow(p.id, qty);
     };
 
-    document.getElementById("detail-main-img").src = imgs[0];
-    document.getElementById("detail-thumbs").innerHTML = imgs.map((url, idx) => `
-      <div class="gallery-thumb ${idx === 0 ? "active" : ""}" onclick="selectGalleryImage(${idx}, '${escapeHtml(url)}')">
-        <img src="${escapeHtml(url)}" alt="View ${idx + 1}" loading="lazy" decoding="async" />
-      </div>
-    `).join("");
+    // Seller Store Bar
+    const shopProds = products.filter(item => String(item.shop_id) === String(p.shop_id));
+    const shopTotalSold = shopProds.reduce((sum, item) => sum + Number(item.sold_count || 0), 0);
+
+    document.getElementById("pdp-shop-avatar").textContent = shopName.charAt(0).toUpperCase();
+    document.getElementById("pdp-shop-name").textContent = shopName;
+    document.getElementById("pdp-shop-desc-short").textContent = shop?.description || "100% Admin-Verified MarketHub Store";
+    document.getElementById("pdp-shop-prod-count").textContent = shopProds.length;
+    document.getElementById("pdp-shop-total-sold").textContent = shopTotalSold;
+    document.getElementById("pdp-shop-area-stat").textContent = area.raw;
+    document.getElementById("pdp-shop-ship-stat").textContent = ship.isFree ? "Free" : `₱${ship.fee.toFixed(0)}`;
+    document.getElementById("pdp-view-shop-btn").onclick = () => {
+      closeExpandedProduct();
+      if (shop) setShopFilter(shop.id);
+    };
+
+    // Specifications & Full Description
+    document.getElementById("pdp-spec-cat").textContent = catLabel;
+    document.getElementById("pdp-spec-stock").textContent = stockNum > 0 ? `IN STOCK (${stockNum})` : "SOLD OUT";
+    document.getElementById("pdp-spec-area").textContent = area.raw;
+    document.getElementById("pdp-spec-ship").textContent = ship.isFree ? "Free Shipping" : `₱${ship.fee.toFixed(2)}`;
+    document.getElementById("pdp-spec-shop").textContent = shopName;
+    document.getElementById("pdp-description").textContent = p.description || "No additional description provided by the seller.";
+
+    // Ratings Overview & Review Form
+    document.getElementById("pdp-overview-score").textContent = rating.count > 0 ? rating.avg : "0.0";
+    document.querySelectorAll("#pdp-rating-filters .rating-filter-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.star === "all");
+    });
 
     const reviewForm = document.getElementById("review-form");
     if (currentUser) {
@@ -3590,17 +4472,38 @@
     }
 
     renderProductReviewsList(productId);
-    document.getElementById("product-detail-modal").classList.remove("hidden");
+    renderTopPicksFromShop(p);
+
+    switchView("product-detail");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function closeProductModal() {
-    document.getElementById("product-detail-modal").classList.add("hidden");
+  function closeExpandedProduct() {
     activeDetailProductId = null;
+    switchView("shop");
   }
 
-  function selectGalleryImage(idx, url) {
-    document.getElementById("detail-main-img").src = url;
-    document.querySelectorAll("#detail-thumbs .gallery-thumb").forEach((el, i) => el.classList.toggle("active", i === idx));
+  function selectPdpImage(idx, url) {
+    document.getElementById("pdp-main-img").src = url;
+    document.querySelectorAll("#pdp-thumbs .pdp-thumb").forEach((el, i) => el.classList.toggle("active", i === idx));
+  }
+
+  function adjustPdpQty(delta) {
+    const input = document.getElementById("pdp-qty");
+    const maxVal = parseInt(input.max, 10) || 99;
+    const current = parseInt(input.value, 10) || 1;
+    const next = Math.min(maxVal, Math.max(1, current + delta));
+    input.value = next;
+  }
+
+  function setReviewFilter(starVal) {
+    selectedReviewFilter = starVal;
+    document.querySelectorAll("#pdp-rating-filters .rating-filter-btn").forEach(btn => {
+      btn.classList.toggle("active", String(btn.dataset.star) === String(starVal));
+    });
+    if (activeDetailProductId) {
+      renderProductReviewsList(activeDetailProductId);
+    }
   }
 
   function setReviewStar(val) {
@@ -3624,26 +4527,67 @@
       if (error) return showToast("Review failed: " + error.message, "error");
       showToast("Review posted!", "success");
       await loadAllReviews();
-      openProductModal(activeDetailProductId);
+      openExpandedProduct(activeDetailProductId);
     } finally {
       btn.disabled = false;
     }
   }
 
   function renderProductReviewsList(productId) {
-    const list = reviewsByProduct.get(productId) || [];
-    const container = document.getElementById("detail-reviews-list");
+    let list = reviewsByProduct.get(productId) || [];
+    if (selectedReviewFilter !== "all") {
+      list = list.filter(r => Number(r.rating) === Number(selectedReviewFilter));
+    }
+
+    const container = document.getElementById("pdp-reviews-list");
     if (!list.length) {
-      container.innerHTML = `<p style="font-size:0.84rem; color:var(--muted); text-align:center;">No reviews yet.</p>`;
+      container.innerHTML = `<p style="font-size:0.84rem; color:var(--muted); text-align:center; padding:1.25rem 0;">No ratings or reviews yet for this filter.</p>`;
       return;
     }
+
     container.innerHTML = list.map(r => {
       const stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+      const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString("en-US", { dateStyle: "medium" }) : "";
       return `
         <div class="review-card">
-          <div class="row-between"><strong>${escapeHtml(r.reviewer_name)}</strong></div>
-          <div style="color:var(--star); font-size:0.9rem;">${stars}</div>
-          <div style="font-size:0.84rem; color:var(--text-secondary);">${escapeHtml(r.comment || "")}</div>
+          <div class="row-between">
+            <strong style="font-size:0.85rem;">${escapeHtml(r.reviewer_name)}</strong>
+            <span style="font-size:0.74rem; color:var(--muted);">${escapeHtml(dateStr)}</span>
+          </div>
+          <div style="color:#f59e0b; font-size:0.92rem; margin:0.15rem 0;">${stars}</div>
+          <div style="font-size:0.85rem; color:var(--text-secondary); line-height:1.45;">${escapeHtml(r.comment || "")}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderTopPicksFromShop(currentProduct) {
+    const approvedShops = getApprovedShops();
+    let sameShopItems = products.filter(
+      item => item.id !== currentProduct.id && String(item.shop_id) === String(currentProduct.shop_id)
+    );
+
+    if (!sameShopItems.length) {
+      sameShopItems = products.filter(
+        item => item.id !== currentProduct.id && (item.shop_id == null || approvedShops.some(s => String(s.id) === String(item.shop_id)))
+      );
+    }
+
+    const picks = sameShopItems.slice(0, 4);
+    const container = document.getElementById("pdp-top-picks-list");
+
+    if (!picks.length) {
+      container.innerHTML = `<p style="font-size:0.78rem; color:var(--muted);">No other items listed yet.</p>`;
+      return;
+    }
+
+    container.innerHTML = picks.map(item => {
+      const imgs = getProductImages(item);
+      return `
+        <div class="top-pick-item" onclick="openExpandedProduct(${item.id})">
+          <img src="${escapeHtml(imgs[0])}" alt="${escapeHtml(item.name)}" loading="lazy" />
+          <div class="top-pick-name">${escapeHtml(item.name)}</div>
+          <div class="top-pick-price">₱${Number(item.price).toFixed(2)}</div>
         </div>
       `;
     }).join("");
@@ -3804,9 +4748,9 @@
       totalShippingCost += ship.fee;
 
       return `
-        <div style="border:1px solid var(--border); border-radius:11px; padding:0.75rem; margin-bottom:0.75rem; background:#fbfdfb;">
+        <div style="border:1px solid var(--border); border-radius:8px; padding:0.75rem; margin-bottom:0.75rem; background:var(--primary-soft);">
           <div class="row-between" style="margin-bottom:0.45rem; padding-bottom:0.35rem; border-bottom:1px dashed var(--border);">
-            <strong style="font-size:0.82rem; color:var(--primary-dark);">🏪 ${escapeHtml(g.shop ? g.shop.name : "MarketHub Official")}</strong>
+            <strong style="font-size:0.82rem; color:var(--primary-deep);">🏪 ${escapeHtml(g.shop ? g.shop.name : "MarketHub Official")}</strong>
             <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
               <span class="badge area-badge">${escapeHtml(area.label)}</span>
               <span class="badge ${ship.isFree ? "ship-free" : "ship-paid"}">${ship.label}</span>
@@ -3819,9 +4763,9 @@
                 <small style="color:var(--muted);">₱${Number(item.products.price).toFixed(2)} × ${item.quantity} = <strong>₱${(item.products.price * item.quantity).toFixed(2)}</strong></small>
               </div>
               <div style="display:flex; gap:0.35rem; align-items:center;">
-                <button class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity - 1}, ${item.products.stock})">−</button>
+                <button type="button" class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity - 1}, ${item.products.stock})">−</button>
                 <span style="min-width:20px; text-align:center; font-weight:600;">${item.quantity}</span>
-                <button class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity + 1}, ${item.products.stock})">+</button>
+                <button type="button" class="secondary sm" onclick="changeCartQty(${item.id}, ${item.quantity + 1}, ${item.products.stock})">+</button>
               </div>
             </div>
           `).join("")}
@@ -3837,7 +4781,7 @@
       <div style="text-align:right; font-size:0.86rem; color:var(--text-secondary);">
         <div>Items Total: ₱${totalItemsCost.toFixed(2)}</div>
         <div>Total Shipping Fee: ₱${totalShippingCost.toFixed(2)}</div>
-        <h4 style="margin:0.35rem 0 0; font-size:1.1rem; color:var(--text);">Grand Total: ₱${grandTotal.toFixed(2)}</h4>
+        <h4 style="margin:0.35rem 0 0; font-size:1.15rem; color:var(--primary-dark);">Grand Total: ₱${grandTotal.toFixed(2)}</h4>
       </div>
     `;
 
@@ -4030,7 +4974,7 @@
             <div>
               <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
                 <strong style="font-size:1.05rem;">Order #${o.id} — ${escapeHtml(o.customer_name)}</strong>
-                <span class="shop-tag-btn">🏪 ${escapeHtml(shopName)}</span>
+                <span class="badge seller">🏪 ${escapeHtml(shopName)}</span>
               </div>
               <div style="font-size:0.78rem; color:var(--muted); margin-top:0.2rem;">Placed: ${escapeHtml(placedDate)}</div>
             </div>
@@ -4046,7 +4990,7 @@
             ${(o.order_items || []).map(i => `
               <li style="margin-bottom:0.35rem;">
                 ${escapeHtml(i.product_name)} (${i.quantity}×) — <strong>₱${Number(i.unit_price * i.quantity).toFixed(2)}</strong>
-                ${isBuyerOrder && o.status !== "Cancelled" && i.product_id ? `<button class="secondary sm" style="margin-left:0.5rem;" onclick="openProductModal(${i.product_id})">⭐ Rate Item</button>` : ""}
+                ${isBuyerOrder && o.status !== "Cancelled" && i.product_id ? `<button type="button" class="secondary sm" style="margin-left:0.5rem;" onclick="openExpandedProduct(${i.product_id})">⭐ Rate Item</button>` : ""}
               </li>
             `).join("")}
           </ul>
@@ -4054,15 +4998,15 @@
           <div class="row-between" style="margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid var(--border);">
             <div>
               <div style="font-size:0.8rem; color:var(--muted);">Items: ₱${prodSubtotal.toFixed(2)} • Shipping Fee: <strong>${shipFee <= 0 ? "FREE" : `₱${shipFee.toFixed(2)}`}</strong></div>
-              <strong style="font-size:1.05rem;">Total Paid: ₱${grossAmt.toFixed(2)}</strong>
+              <strong style="font-size:1.05rem; color:var(--primary-dark);">Total Paid: ₱${grossAmt.toFixed(2)}</strong>
               ${ordersSubTab === "sales" && o.shop_id && o.status !== "Cancelled" ? `
                 <div style="font-size:0.77rem; color:var(--muted); margin-top:0.2rem;">
-                  Admin Fee (10% on items): <span style="color:var(--accent); font-weight:600;">−₱${commAmt.toFixed(2)}</span> • Your Net + Shipping: <strong style="color:var(--primary-dark);">₱${sellerNet.toFixed(2)}</strong>
+                  Admin Fee (10% on items): <span style="color:var(--primary-dark); font-weight:600;">−₱${commAmt.toFixed(2)}</span> • Your Net + Shipping: <strong style="color:var(--green);">₱${sellerNet.toFixed(2)}</strong>
                 </div>
               ` : ""}
             </div>
 
-            ${canBuyerCancel ? `<button class="danger-outline sm" onclick="cancelOrderByBuyer(${o.id})">✕ Cancel Order</button>` : ""}
+            ${canBuyerCancel ? `<button type="button" class="danger-outline sm" onclick="cancelOrderByBuyer(${o.id})">✕ Cancel Order</button>` : ""}
 
             ${isBuyerOrder && !canBuyerCancel && o.status !== "Cancelled" ? `
               <span class="badge status-cancelled" style="text-transform:none;">🚫 No to Cancel (${escapeHtml(o.status)})</span>
@@ -4070,7 +5014,7 @@
 
             ${canManageOrder && ordersSubTab === "sales" ? `
               <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                ${o.status === "Pending" ? `<button class="success-btn sm" onclick="updateOrderStatus(${o.id}, 'Order Received', true)">✓ Acknowledge Order</button>` : ""}
+                ${o.status === "Pending" ? `<button type="button" class="success-btn sm" onclick="updateOrderStatus(${o.id}, 'Order Received', true)">✓ Acknowledge Order</button>` : ""}
                 <select onchange="updateOrderStatus(${o.id}, this.value)" style="width:auto; padding:0.4rem 0.65rem; font-size:0.84rem;" ${o.status === "Cancelled" ? "disabled" : ""}>
                   <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
                   <option value="Order Received" ${o.status === "Order Received" ? "selected" : ""}>Order Received</option>
@@ -4079,7 +5023,7 @@
                   <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
                   ${o.status === "Cancelled" ? `<option value="Cancelled" selected>Cancelled</option>` : ""}
                 </select>
-                <button class="danger-outline sm" onclick="deleteOrder(${o.id})">🗑️ Delete</button>
+                <button type="button" class="danger-outline sm" onclick="deleteOrder(${o.id})">🗑️ Delete</button>
               </div>
             ` : ""}
           </div>
@@ -4201,8 +5145,8 @@
         <div class="notif-item-top"><span class="notif-title">${escapeHtml(n.title)}</span><span class="notif-time">${escapeHtml(n.time)}</span></div>
         <div class="notif-desc">${escapeHtml(n.desc)}</div>
         <div class="notif-actions" onclick="event.stopPropagation()">
-          <button class="secondary sm" onclick="openOrderFromNotification(${n.orderId}, '${escapeHtml(n.id)}', '${n.targetTab}')">Open</button>
-          <button class="danger-outline sm" onclick="deleteNotification('${escapeHtml(n.id)}')">🗑️</button>
+          <button type="button" class="secondary sm" onclick="openOrderFromNotification(${n.orderId}, '${escapeHtml(n.id)}', '${n.targetTab}')">Open</button>
+          <button type="button" class="danger-outline sm" onclick="deleteNotification('${escapeHtml(n.id)}')">🗑️</button>
         </div>
       </div>
     `).join("");
