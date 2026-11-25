@@ -1,3 +1,3371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MarketHub — Fresh Local Market &amp; Gadgets</title>
+
+  <!-- PWA & Mobile App Manifest + Theme -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MarketHub" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #16a34a;
+      --primary-dark: #15803d;
+      --primary-deep: #14532d;
+      --primary-light: #22c55e;
+      --primary-soft: #f0fdf4;
+      --primary-tint: #dcfce7;
+      --accent-amber: #f59e0b;
+      --bg: #f1f7f3;
+      --card: #ffffff;
+      --text: #14261c;
+      --text-secondary: #3f5749;
+      --muted: #647c6e;
+      --border: #d9e7de;
+      --danger: #dc2626;
+      --green: #059669;
+      --indigo: #0f766e;
+      --shadow-xs: 0 1px 2px rgba(20, 83, 45, 0.05);
+      --shadow-sm: 0 2px 6px rgba(20, 83, 45, 0.08);
+      --shadow-md: 0 8px 20px rgba(20, 83, 45, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2316a34a' stroke-width='1.2' stroke-opacity='0.065' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='18' y='16' width='22' height='34' rx='4'/%3E%3Cline x1='26' y1='20' x2='32' y2='20'/%3E%3Ccircle cx='29' cy='45' r='1.3'/%3E%3Cpath d='M92 38c0-11 9-18 20-18 0 11-9 18-20 18z'/%3E%3Cpath d='M92 38l-5 5'/%3E%3Cpath d='M22 106a14 14 0 0 1 28 0v8'/%3E%3Crect x='19' y='106' width='6' height='11' rx='2'/%3E%3Crect x='47' y='106' width='6' height='11' rx='2'/%3E%3Cpath d='M96 98h24l-3 19H99z'/%3E%3Cpath d='M102 98v-4a6 6 0 0 1 12 0v4'/%3E%3Ccircle cx='138' cy='76' r='8'/%3E%3Cpath d='M138 64v4M138 84v4M126 76h4M146 76h4'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 160px 160px;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================================================
+       FRESH GRASS GREEN TOP NAVIGATION HEADER
+       ========================================================= */
+    .site-header {
+      background: linear-gradient(180deg, #15803d 0%, #16a34a 60%, #22c55e 100%);
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      box-shadow: 0 3px 12px rgba(20, 83, 45, 0.2);
+    }
+
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .header-top-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.42rem 0;
+      font-size: 0.77rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .top-link-group {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .top-link-btn {
+      background: transparent;
+      color: #ffffff;
+      border: none;
+      padding: 0.18rem 0.35rem;
+      font-size: 0.77rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .top-link-btn:hover { background: rgba(255, 255, 255, 0.16); }
+    .top-sep { color: rgba(255, 255, 255, 0.38); font-size: 0.72rem; }
+
+    .header-main-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 0.75rem 0 0.85rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.52rem;
+      font-weight: 800;
+      font-size: 1.42rem;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      color: #ffffff;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: #ffffff;
+      color: var(--primary-dark);
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+    }
+
+    .header-search-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.32rem;
+      min-width: 0;
+    }
+
+    .header-search-box {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 3px;
+      box-shadow: 0 2px 8px rgba(15, 60, 30, 0.16);
+    }
+
+    .header-search-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.88rem;
+      color: var(--text);
+      background: transparent;
+      min-width: 0;
+    }
+
+    .header-search-btn {
+      background: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.48rem 1.15rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+
+    .header-search-btn:hover { background: var(--primary-deep); }
+
+    .header-quick-tags {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.94);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .header-quick-tags::-webkit-scrollbar { display: none; }
+    .header-quick-tags span { cursor: pointer; opacity: 0.92; transition: opacity 0.15s; }
+    .header-quick-tags span:hover { opacity: 1; text-decoration: underline; }
+
+    .header-right-icons {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-shrink: 0;
+    }
+
+    .header-cart-btn {
+      position: relative;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      padding: 0.4rem 0.5rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .header-cart-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+    .header-cart-badge {
+      position: absolute;
+      top: -1px;
+      right: -3px;
+      background: #ffffff;
+      color: var(--primary-dark);
+      border: 2px solid var(--primary);
+      font-size: 0.68rem;
+      font-weight: 800;
+      min-width: 21px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      background: rgba(255, 255, 255, 0.16);
+      padding: 0.2rem 0.55rem 0.2rem 0.25rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .user-pill:hover { background: rgba(255, 255, 255, 0.25); }
+
+    .user-avatar-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Buttons */
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.52rem 0.95rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+    }
+    button:hover { background: var(--primary-dark); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    button.secondary { background: #ffffff; color: var(--text); border: 1px solid var(--border); }
+    button.secondary:hover { background: var(--primary-soft); border-color: #86efac; }
+    button.danger { background: var(--danger); color: #fff; }
+    button.danger:hover { background: #b91c1c; }
+    button.danger-outline { background: #fff; color: var(--danger); border: 1px solid #fecaca; }
+    button.danger-outline:hover { background: #fef2f2; }
+    button.success-btn { background: var(--green); color: #fff; }
+    button.success-btn:hover { background: #047857; }
+    button.shop-cta { background: var(--primary); color: #fff; }
+    button.shop-cta:hover { background: var(--primary-dark); }
+    button.add-cart-outline {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border: 1px solid var(--primary);
+    }
+    button.add-cart-outline:hover { background: var(--primary-tint); }
+    button.sm { padding: 0.34rem 0.65rem; font-size: 0.78rem; }
+
+    /* Badges */
+    .badge {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .badge.admin { background: #fef3c7; color: #92400e; }
+    .badge.seller { background: var(--primary-tint); color: var(--primary-deep); }
+    .badge.cat-badge { background: #f3f6f4; color: #3f5749; text-transform: none; font-weight: 600; }
+    .badge.ship-free { background: #dcfce7; color: #166534; text-transform: none; }
+    .badge.ship-paid { background: #e0f2fe; color: #075985; text-transform: none; }
+    .badge.area-badge { background: #fef9c3; color: #854d0e; text-transform: none; }
+
+    .badge.status-pending { background: #fef3c7; color: #b45309; }
+    .badge.status-received { background: #e0e7ff; color: #3730a3; }
+    .badge.status-confirmed { background: #dbeafe; color: #1d4ed8; }
+    .badge.status-shipped { background: #f3e8ff; color: #7e22ce; }
+    .badge.status-delivered, .badge.status-approved { background: #dcfce7; color: #15803d; }
+    .badge.status-cancelled, .badge.status-rejected, .badge.status-suspended { background: #fee2e2; color: #b91c1c; }
+
+    /* Notifications */
+    .notif-wrapper { position: relative; display: inline-block; }
+    .notif-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.2rem 0.55rem;
+      font-size: 0.75rem;
+      border-radius: 4px;
+    }
+    .notif-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .notif-badge {
+      background: #facc15;
+      color: #14532d;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 999px;
+      line-height: 1.2;
+    }
+    .notif-dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 350px;
+      max-width: 92vw;
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.2);
+      z-index: 120;
+      overflow: hidden;
+    }
+    .notif-header {
+      padding: 0.72rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary-soft);
+    }
+    .notif-header h4 { margin: 0; font-size: 0.86rem; color: var(--primary-deep); }
+    .notif-list { max-height: 360px; overflow-y: auto; }
+    .notif-item {
+      padding: 0.72rem 0.9rem;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.81rem;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .notif-item:hover { background: #f8fafc; }
+    .notif-item.unread { background: #f0fdf4; border-left: 3px solid var(--primary); }
+    .notif-item-top { display: flex; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.2rem; }
+    .notif-title { font-weight: 700; color: var(--text); }
+    .notif-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+    .notif-desc { color: var(--text-secondary); line-height: 1.35; }
+    .notif-actions { display: flex; gap: 0.4rem; margin-top: 0.45rem; }
+
+    /* Container */
+    .container { max-width: 1240px; margin: 1rem auto; padding: 0 1rem 2.5rem; }
+    .hidden { display: none !important; }
+
+    /* =========================================================
+       GRASS-GREEN MARKET & GADGET HERO BANNER
+       ========================================================= */
+    .hero-showcase {
+      background: linear-gradient(125deg, #14532d 0%, #166534 42%, #16a34a 100%);
+      border-radius: 12px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 1.25rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-showcase::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(134, 239, 172, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.55rem;
+    }
+
+    .hero-title {
+      margin: 0 0 0.4rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-sub {
+      margin: 0 0 0.9rem;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.45;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn-light {
+      background: #ffffff;
+      color: var(--primary-deep);
+      font-weight: 700;
+      padding: 0.55rem 1.05rem;
+      border-radius: 6px;
+    }
+    .hero-btn-light:hover { background: #dcfce7; }
+
+    .hero-btn-glass {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+    }
+    .hero-btn-glass:hover { background: rgba(255, 255, 255, 0.26); }
+
+    .hero-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-float-card {
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 10px;
+      padding: 0.72rem 0.8rem;
+      cursor: pointer;
+      transition: transform 0.16s, background 0.16s;
+    }
+    .hero-float-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.22);
+    }
+    .hero-float-icon { font-size: 1.35rem; margin-bottom: 0.2rem; }
+    .hero-float-title { font-size: 0.82rem; font-weight: 700; color: #ffffff; }
+    .hero-float-desc { font-size: 0.7rem; color: rgba(255, 255, 255, 0.85); margin-top: 0.1rem; }
+
+    /* =========================================================
+       VERIFIED SHOPS SHOWCASE (MALL STRIP)
+       ========================================================= */
+    .mall-section {
+      background: var(--card);
+      border-radius: 10px;
+      box-shadow: var(--shadow-xs);
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .mall-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: #fafdfb;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .mall-title {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: var(--primary-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .mall-shops-grid {
+      display: flex;
+      gap: 0.65rem;
+      padding: 0.8rem 1rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .mall-shop-tile {
+      min-width: 150px;
+      max-width: 175px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.68rem 0.6rem;
+      text-align: center;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.16s ease;
+      flex-shrink: 0;
+    }
+
+    .mall-shop-tile:hover {
+      border-color: var(--primary);
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .mall-shop-tile.active {
+      border: 1.5px solid var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .mall-shop-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 auto 0.4rem;
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      color: var(--primary-deep);
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #86efac;
+    }
+
+    .mall-shop-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mall-shop-meta {
+      font-size: 0.68rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    /* =========================================================
+       2-COLUMN MARKETPLACE LAYOUT (LEFT SIDEBAR + RIGHT GRID)
+       ========================================================= */
+    .marketplace-layout {
+      display: grid;
+      grid-template-columns: 205px 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .category-sidebar {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      padding: 0.9rem 0.85rem;
+      position: sticky;
+      top: 108px;
+    }
+
+    .sidebar-block { margin-bottom: 1.15rem; }
+    .sidebar-block:last-child { margin-bottom: 0; }
+
+    .sidebar-heading {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--primary-deep);
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.55rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .sidebar-cat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.22rem;
+    }
+
+    .sidebar-cat-item {
+      background: transparent;
+      color: var(--text-secondary);
+      border: none;
+      text-align: left;
+      padding: 0.42rem 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .sidebar-cat-item:hover { color: var(--primary-dark); background: var(--primary-soft); }
+
+    .sidebar-cat-item.active {
+      color: var(--primary-dark);
+      font-weight: 700;
+      background: var(--primary-tint);
+    }
+
+    .sidebar-cat-item.active::before {
+      content: "▸";
+      color: var(--primary);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-filter-check {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      padding: 0.34rem 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .sidebar-filter-check input { width: auto; accent-color: var(--primary); cursor: pointer; }
+
+    .mobile-cat-strip {
+      display: none;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.65rem;
+      scrollbar-width: none;
+    }
+    .mobile-cat-strip::-webkit-scrollbar { display: none; }
+    .mobile-cat-pill {
+      background: #ffffff;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .mobile-cat-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Sort Bar */
+    .sort-bar {
+      background: #e7f3ec;
+      border: 1px solid #cce3d5;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .sort-options {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .sort-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    .sort-btn {
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.42rem 0.82rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .sort-btn:hover { border-color: var(--primary); color: var(--primary-dark); background: #fff; }
+    .sort-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .sort-select {
+      width: auto;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .selected-shop-banner {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 1px solid #86efac;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* =========================================================
+       PURE PRODUCT CARDS
+       ========================================================= */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #f4f8f5;
+      overflow: hidden;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+
+    .card:hover .card-img-wrap img { transform: scale(1.04); }
+
+    .card-mall-tag {
+      position: absolute;
+      top: 7px;
+      left: 0;
+      background: var(--primary-dark);
+      color: #ffffff;
+      font-size: 0.64rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 0 4px 4px 0;
+      letter-spacing: 0.03em;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-top-badge {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      background: rgba(254, 249, 195, 0.96);
+      color: #854d0e;
+      font-size: 0.64rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .card-top-badge.soldout {
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffffff;
+    }
+
+    .card-bottom-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(90deg, rgba(20, 83, 45, 0.92), rgba(22, 163, 74, 0.86));
+      color: #ffffff;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-pure-body {
+      padding: 0.58rem 0.62rem 0.68rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 0.38rem;
+    }
+
+    .card-pure-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin: 0;
+      line-height: 1.35;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.2em;
+    }
+
+    .card-pure-tags {
+      display: flex;
+      gap: 0.28rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .mini-tag-green {
+      font-size: 0.63rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      border: 1px solid #86efac;
+      background: var(--primary-soft);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .mini-tag-outline {
+      font-size: 0.63rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .card-pure-footer {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.35rem;
+      margin-top: 0.15rem;
+    }
+
+    .card-pure-price {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .card-pure-sold {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* =========================================================
+       EXPANDED PRODUCT DETAIL PAGE
+       ========================================================= */
+    .pdp-breadcrumb {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .pdp-crumb-trail {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .pdp-crumb-link {
+      color: var(--primary-dark);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pdp-crumb-link:hover { text-decoration: underline; }
+
+    .pdp-main-card {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .pdp-gallery-main {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #f4f8f5;
+    }
+
+    .pdp-gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pdp-thumbs {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .pdp-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: #f8fafc;
+    }
+    .pdp-thumb.active { border-color: var(--primary); }
+    .pdp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .pdp-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .pdp-mall-pill {
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .pdp-title {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.32;
+      color: var(--text);
+    }
+
+    .pdp-stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.95rem;
+    }
+
+    .pdp-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.32rem;
+    }
+
+    .pdp-stat-divider {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+    }
+
+    .pdp-price-box {
+      background: var(--primary-soft);
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 0.95rem 1.15rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .pdp-price-val {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      line-height: 1;
+    }
+
+    .pdp-meta-table {
+      display: flex;
+      flex-direction: column;
+      gap: 0.72rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .pdp-meta-row {
+      display: grid;
+      grid-template-columns: 125px 1fr;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .pdp-meta-label { color: var(--muted); font-weight: 600; }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .qty-stepper button {
+      background: #f8fafc;
+      color: var(--text);
+      border: none;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border-radius: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .qty-stepper button:hover { background: var(--primary-soft); color: var(--primary-dark); }
+
+    .qty-stepper input {
+      width: 50px;
+      height: 34px;
+      border: none;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-radius: 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0;
+    }
+
+    .pdp-cta-row {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .pdp-cta-row button {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.94rem;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-width: 165px;
+    }
+
+    .pdp-shop-bar {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pdp-shop-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .pdp-shop-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pdp-shop-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+    }
+
+    .pdp-shop-stat-col span { color: var(--muted); display: block; font-size: 0.74rem; }
+    .pdp-shop-stat-col strong { color: var(--primary-dark); font-size: 0.95rem; }
+
+    .pdp-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 0.9rem;
+      align-items: start;
+    }
+
+    .pdp-section-card {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      padding: 1.2rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .pdp-section-heading {
+      background: var(--primary-soft);
+      padding: 0.62rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary-deep);
+      margin: 0 0 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .pdp-spec-row {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 0.75rem;
+      padding: 0.42rem 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    .pdp-spec-label { color: var(--muted); }
+
+    .pdp-description-text {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      white-space: pre-line;
+      padding: 0 0.4rem;
+    }
+
+    .rating-overview-box {
+      background: var(--primary-soft);
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .rating-big-score {
+      text-align: center;
+      color: var(--primary-dark);
+    }
+    .rating-big-score .num { font-size: 1.85rem; font-weight: 800; line-height: 1; }
+
+    .rating-filter-pills {
+      display: flex;
+      gap: 0.42rem;
+      flex-wrap: wrap;
+    }
+
+    .rating-filter-btn {
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .rating-filter-btn.active {
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      background: var(--primary-tint);
+    }
+
+    .top-picks-card {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      padding: 0.9rem;
+    }
+
+    .top-picks-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--primary-deep);
+      margin-bottom: 0.75rem;
+    }
+
+    .top-pick-item {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45rem;
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .top-pick-item:hover { border-color: var(--primary); }
+    .top-pick-item img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 4px; display: block; margin-bottom: 0.35rem; }
+    .top-pick-name { font-size: 0.76rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-pick-price { font-size: 0.84rem; font-weight: 800; color: var(--primary-dark); margin-top: 0.15rem; }
+
+    /* =========================================================
+       SELLER CENTRE NAVIGATION MENU (MY HOME, INCOME, PRODUCTS, SHIPPING)
+       ========================================================= */
+    .seller-menu-bar {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .seller-menu-btn {
+      background: #f8fbf9;
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0.72rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: all 0.16s ease;
+    }
+
+    .seller-menu-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border-color: #bbf7d0;
+    }
+
+    .seller-menu-btn.active {
+      background: linear-gradient(135deg, #15803d, #16a34a);
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.22);
+    }
+
+    /* =========================================================
+       INCOME MONITORING & PIE CHART + PROFIT LEDGER
+       ========================================================= */
+    .income-split-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.25rem;
+      align-items: center;
+      background: #f8fbf9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.15rem;
+      margin-bottom: 1rem;
+    }
+
+    .pie-chart-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 275px;
+      margin: 0 auto;
+    }
+
+    .deduction-ledger {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+    }
+
+    .deduction-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.48rem 0;
+      font-size: 0.87rem;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .deduction-row:last-child { border-bottom: none; }
+
+    .deduction-row.total-profit-row {
+      margin-top: 0.45rem;
+      padding-top: 0.7rem;
+      border-top: 2px solid var(--primary);
+      border-bottom: none;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      margin-right: 0.45rem;
+      vertical-align: middle;
+    }
+
+    /* =========================================================
+       BARANGAY / LOCATION SHIPPING RULES CARDS
+       ========================================================= */
+    .brgy-rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.85rem;
+    }
+
+    .brgy-rule-card {
+      background: #f8fbf9;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .profit-preview-pill {
+      background: var(--primary-soft);
+      border: 1px solid #86efac;
+      border-radius: 6px;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.82rem;
+      color: var(--primary-deep);
+      margin-top: 0.65rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* =========================================================
+       PANELS, FORMS, KPI CARDS, TABLES, AND MODALS
+       ========================================================= */
+    .panel {
+      background: var(--card);
+      padding: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+      margin-bottom: 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.85rem;
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 0.79rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: var(--text-secondary);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.56rem 0.72rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background: #fff;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 0.85rem;
+      margin: 0.9rem 0 1.1rem;
+    }
+    .kpi-card {
+      background: #f8fbf9;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+    }
+    .kpi-card.highlight { background: var(--primary-soft); border-color: #86efac; }
+    .kpi-card.amber-highlight { background: #fffbeb; border-color: #fde68a; }
+    .kpi-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .kpi-value { font-size: 1.35rem; font-weight: 800; color: var(--text); margin-top: 0.25rem; }
+    .kpi-card.highlight .kpi-value { color: var(--primary-dark); }
+    .kpi-card.amber-highlight .kpi-value { color: #b45309; }
+    .kpi-sub { font-size: 0.74rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* Photo Slots (Max 2) */
+    .photo-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.45rem;
+      max-width: 340px;
+    }
+    .photo-slot {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      background: #f8fbf9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      text-align: center;
+      padding: 0.4rem;
+    }
+    .photo-slot:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .photo-slot .slot-label { font-size: 0.74rem; color: var(--muted); font-weight: 600; }
+    .photo-slot .remove-slot-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      border-radius: 999px;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      font-size: 0.74rem;
+      z-index: 3;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 0.7rem; font-size: 0.84rem; }
+    th, td { text-align: left; padding: 0.68rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th { color: var(--muted); font-weight: 700; background: #f8fbf9; font-size: 0.75rem; text-transform: uppercase; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+    .modal {
+      background: var(--card);
+      width: 100%;
+      max-width: 560px;
+      max-height: 92vh;
+      overflow-y: auto;
+      border-radius: 10px;
+      padding: 1.35rem;
+      box-shadow: 0 22px 45px rgba(15, 23, 42, 0.25);
+    }
+
+    .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--muted); font-size: 0.9rem; background: #fff; border-radius: 8px; border: 1px solid var(--border); }
+    .error-box { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.86rem; }
+
+    .auth-tabs { display: flex; background: #e8f3ec; padding: 4px; border-radius: 6px; margin: 0.85rem 0 1rem; gap: 4px; }
+    .auth-tab { flex: 1; background: transparent; color: var(--text-secondary); padding: 0.45rem; font-size: 0.83rem; border-radius: 4px; }
+    .auth-tab.active { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+
+    .google-btn {
+      width: 100%;
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      border-radius: 6px;
+    }
+    .google-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+    .auth-divider { display: flex; align-items: center; text-align: center; color: var(--muted); font-size: 0.75rem; margin: 0.85rem 0; }
+    .auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
+    .auth-divider:not(:empty)::before { margin-right: .65em; }
+    .auth-divider:not(:empty)::after { margin-left: .65em; }
+
+    .text-link-btn {
+      background: transparent;
+      color: var(--primary-dark);
+      padding: 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    /* Order Stepper & Policy Notice */
+    .order-stepper { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.25rem; margin: 0.9rem 0 0.75rem; padding: 0.8rem 0.6rem; background: #f8fbf9; border: 1px solid var(--border); border-radius: 8px; }
+    .step-item { flex: 1; text-align: center; position: relative; font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+    .step-dot { width: 22px; height: 22px; border-radius: 999px; background: #e2e8f0; color: #64748b; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .step-item.done .step-dot { background: var(--green); color: #fff; }
+    .step-item.done { color: var(--green); }
+    .step-item.current .step-dot { background: var(--primary); color: #fff; box-shadow: 0 0 0 3px #bbf7d0; }
+    .step-item.current { color: var(--primary-dark); }
+    .cancelled-banner { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 0.6rem 0.85rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; margin: 0.75rem 0; }
+
+    .policy-notice-box { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.78rem; line-height: 1.45; margin-bottom: 0.75rem; }
+    .policy-notice-box.strict-shipped { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+
+    .delivery-summary-card { background: var(--primary-soft); border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.75rem 0.9rem; margin-bottom: 0.75rem; font-size: 0.84rem; line-height: 1.45; }
+    .shipping-config-box { background: var(--primary-soft); border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.85rem 1rem; margin-top: 0.6rem; }
+
+    /* Payment Method Cards */
+    .payment-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      margin: 0.45rem 0 0.75rem;
+    }
+
+    .payment-choice-card {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.68rem 0.75rem;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .payment-choice-card:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .payment-choice-card.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.16);
+    }
+
+    .qr-payment-panel {
+      background: #ffffff;
+      border: 1.5px solid #86efac;
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .qr-preview-box {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+      flex-wrap: wrap;
+      background: var(--primary-soft);
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px dashed #4ade80;
+    }
+
+    .qr-preview-box img {
+      width: 128px;
+      height: 128px;
+      object-fit: contain;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
+      cursor: zoom-in;
+      flex-shrink: 0;
+    }
+
+    /* Printable Delivery Receipt */
+    .receipt-sheet {
+      background: #ffffff;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 1.25rem;
+      color: #0f172a;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .receipt-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      padding: 0.65rem;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .receipt-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.6rem 0;
+    }
+    .receipt-table th, .receipt-table td {
+      border-bottom: 1px dashed #cbd5e1;
+      padding: 0.45rem 0.35rem;
+      font-size: 0.82rem;
+    }
+
+    .receipt-total-box {
+      background: #f1f5f9;
+      border: 1.5px solid #0f172a;
+      border-radius: 6px;
+      padding: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    @media print {
+      body * { visibility: hidden !important; }
+      #receipt-modal, #receipt-modal * { visibility: visible !important; }
+      #receipt-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        display: block !important;
+      }
+      #receipt-modal .modal {
+        box-shadow: none !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        padding: 0.5rem !important;
+      }
+      .no-print { display: none !important; }
+    }
+
+    /* Live Chat Modal */
+    .chat-modal-box {
+      max-width: 720px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 82vh;
+      max-height: 620px;
+    }
+
+    .chat-header-bar {
+      background: linear-gradient(135deg, #14532d, #16a34a);
+      color: #ffffff;
+      padding: 0.85rem 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .chat-body-split {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .chat-threads-col {
+      border-right: 1px solid var(--border);
+      background: #f8fbf9;
+      overflow-y: auto;
+    }
+
+    .chat-thread-item {
+      padding: 0.75rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .chat-thread-item:hover { background: var(--primary-soft); }
+    .chat-thread-item.active {
+      background: var(--primary-tint);
+      border-left: 3px solid var(--primary);
+    }
+
+    .chat-messages-col {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #ffffff;
+    }
+
+    .chat-messages-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      background: #f4f9f6;
+    }
+
+    .chat-bubble {
+      max-width: 78%;
+      padding: 0.58rem 0.82rem;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      line-height: 1.42;
+      word-break: break-word;
+    }
+
+    .chat-bubble.mine {
+      align-self: flex-end;
+      background: var(--primary);
+      color: #ffffff;
+      border-bottom-right-radius: 3px;
+    }
+
+    .chat-bubble.theirs {
+      align-self: flex-start;
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 3px;
+    }
+
+    .chat-bubble-meta {
+      font-size: 0.67rem;
+      opacity: 0.78;
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.7rem 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    /* Star Rating & Reviews */
+    .star-picker { display: flex; gap: 0.25rem; margin: 0.35rem 0 0.6rem; }
+    .star-btn { background: transparent; border: 1px solid var(--border); color: #cbd5e1; font-size: 1.25rem; padding: 0.25rem 0.55rem; border-radius: 6px; }
+    .star-btn.selected { color: #f59e0b; border-color: #fde68a; background: #fffbeb; }
+    .review-card { border-bottom: 1px solid var(--border); padding: 0.75rem 0; }
+    .review-card:last-child { border-bottom: none; }
+
+    /* Toast */
+    .toast-container { position: fixed; bottom: 1rem; right: 1rem; z-index: 250; display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; }
+    .toast { background: #14532d; color: #fff; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.84rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; animation: slideIn 0.2s ease; }
+    .toast.success { border-left: 4px solid #4ade80; }
+    .toast.error { background: #7f1d1d; border-left: 4px solid #f87171; }
+    .toast.warning { background: #78350f; border-left: 4px solid #fbbf24; }
+    @keyframes slideIn { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Responsive Rules */
+    @media (max-width: 960px) {
+      .hero-showcase { grid-template-columns: 1fr; }
+      .marketplace-layout { grid-template-columns: 1fr; }
+      .category-sidebar { display: none; }
+      .mobile-cat-strip { display: flex; }
+      .pdp-main-card { grid-template-columns: 1fr; }
+      .pdp-bottom-grid { grid-template-columns: 1fr; }
+      .income-split-grid { grid-template-columns: 1fr; }
+      .chat-body-split { grid-template-columns: 1fr; }
+      .chat-threads-col { max-height: 130px; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    @media (max-width: 640px) {
+      .header-main-row { gap: 0.65rem; padding: 0.6rem 0 0.7rem; }
+      .brand { font-size: 1.15rem; }
+      .brand-icon { width: 30px; height: 30px; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
+      .seller-menu-bar { grid-template-columns: repeat(2, 1fr); }
+      .pdp-cta-row button { flex: 1; min-width: 0; padding: 0.75rem 0.65rem; }
+      .payment-choice-grid { grid-template-columns: 1fr; }
+      .receipt-grid-2 { grid-template-columns: 1fr; }
+      .toast-container { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
+    }
+  </style>
+  </head>
+<body>
+
+<!-- FRESH GRASS GREEN TOP HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top-links">
+      <div class="top-link-group">
+        <button type="button" class="top-link-btn" onclick="switchView('shop')">🌿 Marketplace</button>
+        <span class="top-sep">|</span>
+        <button type="button" id="btn-header-apply" class="top-link-btn" onclick="handleStartSellingClick()">Seller Centre • Open a Shop</button>
+        <button type="button" id="btn-seller" class="top-link-btn hidden" onclick="switchView('seller')">🏪 Seller Centre</button>
+        <button type="button" id="btn-install-pwa" class="top-link-btn hidden" onclick="promptInstallPwa()">📲 Install App</button>
+      </div>
+
+      <div class="top-link-group">
+        <button type="button" id="btn-live-chat" class="top-link-btn hidden" onclick="openChatModal()">
+          💬 Live Chat <span id="chat-unread-badge" class="notif-badge hidden">0</span>
+        </button>
+
+        <div id="notif-wrapper" class="notif-wrapper hidden">
+          <button type="button" id="btn-notif" class="notif-btn" onclick="toggleNotifDropdown(event)">
+            🔔 Notifications <span id="notif-badge" class="notif-badge hidden">0</span>
+          </button>
+          <div id="notif-dropdown" class="notif-dropdown hidden" onclick="event.stopPropagation()">
+            <div class="notif-header">
+              <h4>Notifications</h4>
+              <div style="display:flex; gap:0.35rem;">
+                <button type="button" class="secondary sm" onclick="markAllNotificationsRead()">Mark read</button>
+                <button type="button" class="danger-outline sm" onclick="clearAllNotifications()">Clear</button>
+              </div>
+            </div>
+            <div id="notif-list" class="notif-list"></div>
+          </div>
+        </div>
+
+        <button type="button" id="btn-orders" class="top-link-btn hidden" onclick="switchView('orders')">📦 My Orders</button>
+        <button type="button" id="btn-admin" class="top-link-btn hidden" onclick="switchView('admin')">🛡️ Platform Admin</button>
+
+        <div id="user-pill" class="user-pill hidden" onclick="openProfileModal()" title="Profile, Shipping Address & Password Settings">
+          <span id="user-avatar-dot" class="user-avatar-dot">U</span>
+          <span id="user-info">Account</span>
+          <span id="role-badge" class="badge">Buyer</span>
+          <span style="font-size:0.72rem; opacity:0.9;">⚙️</span>
+        </div>
+
+        <button type="button" id="btn-login" class="top-link-btn" style="font-weight:700;" onclick="openAuthModal('signin')">Sign Up / Login</button>
+        <button type="button" id="btn-logout" class="top-link-btn hidden" onclick="logout()">Sign Out</button>
+      </div>
+    </div>
+
+    <div class="header-main-row">
+      <div class="brand" onclick="resetMarketplaceFilters(); switchView('shop')">
+        <div class="brand-icon">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span>MarketHub</span>
+      </div>
+
+      <div class="header-search-wrap">
+        <div class="header-search-box">
+          <input type="text" id="search-input" placeholder="Search gadgets, fresh market goods, shops, or barangay (e.g., Dangay)..." oninput="resetPaginationAndRender()" onkeydown="if(event.key==='Enter'){ switchView('shop'); resetPaginationAndRender(); }" />
+          <button type="button" class="header-search-btn" onclick="switchView('shop'); resetPaginationAndRender();">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </button>
+        </div>
+        <div class="header-quick-tags">
+          <span onclick="quickSearchKeyword('Free Shipping')">🚚 Free Shipping</span>
+          <span onclick="quickSearchKeyword('Dangay')">📍 Dangay</span>
+          <span onclick="quickSearchKeyword('Roxas')">📍 Roxas Local</span>
+          <span onclick="quickBrowseCategory('Gadgets & Accessories')">📱 Gadgets</span>
+          <span onclick="quickBrowseCategory('Fruits & Vegetables')">🥬 Fresh Market</span>
+          <span onclick="quickBrowseCategory('Food & Beverages')">🍱 Food &amp; Snacks</span>
+          <span onclick="quickBrowseCategory('Clothing & Apparel')">👕 Apparel</span>
+        </div>
+      </div>
+
+      <div class="header-right-icons">
+        <button type="button" id="btn-cart" class="header-cart-btn" onclick="handleHeaderCartClick()" title="Shopping Cart">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span id="cart-count" class="header-cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div id="status-error" class="error-box hidden"></div>
+
+  <!-- =========================================================
+       VIEW 1: MARKETPLACE HOME (HERO BANNER + MALL + PURE CARDS)
+       ========================================================= -->
+  <section id="view-shop">
+    <!-- GRASS-GREEN MARKET & GADGET HERO SHOWCASE -->
+    <div class="hero-showcase">
+      <div style="position:relative; z-index:1;">
+        <div class="hero-pill">🌿 FRESH LOCAL MARKET &amp; TECH GADGETS</div>
+        <h1 class="hero-title">Everything You Need — From Daily Market Picks to Smart Gadgets.</h1>
+        <p class="hero-sub">Shop directly from 100% Admin-verified local stores with COD or E-Wallet QR payment, barangay-based delivery rates, and live seller chat.</p>
+        <div class="hero-actions">
+          <button type="button" class="hero-btn-light" onclick="document.getElementById('product-grid').scrollIntoView({ behavior: 'smooth' })">
+            🛍️ Browse Products
+          </button>
+          <button type="button" class="hero-btn-glass" onclick="handleStartSellingClick()">
+            🏪 Open Your Shop
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-visual-grid">
+        <div class="hero-float-card" onclick="quickBrowseCategory('Gadgets & Accessories')">
+          <div class="hero-float-icon">📱🎧</div>
+          <div class="hero-float-title">Gadgets &amp; Tech</div>
+          <div class="hero-float-desc">Phones, audio &amp; accessories</div>
+        </div>
+        <div class="hero-float-card" onclick="quickBrowseCategory('Fruits & Vegetables')">
+          <div class="hero-float-icon">🥬🍅</div>
+          <div class="hero-float-title">Fresh Market</div>
+          <div class="hero-float-desc">Farm-fresh produce &amp; greens</div>
+        </div>
+        <div class="hero-float-card" onclick="quickBrowseCategory('Food & Beverages')">
+          <div class="hero-float-icon">🍱🥤</div>
+          <div class="hero-float-title">Food &amp; Pantry</div>
+          <div class="hero-float-desc">Local delicacies &amp; snacks</div>
+        </div>
+        <div class="hero-float-card" onclick="quickBrowseCategory('Home & Living')">
+          <div class="hero-float-icon">🏠✨</div>
+          <div class="hero-float-title">Home &amp; Essentials</div>
+          <div class="hero-float-desc">Everyday household finds</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VERIFIED SHOPS SHOWCASE -->
+    <div class="mall-section">
+      <div class="mall-header">
+        <div class="mall-title">
+          <span>🌿 VERIFIED SHOPS</span>
+          <span style="color:var(--border);">|</span>
+          <span style="font-size:0.78rem; color:var(--text-secondary); font-weight:500;">🛡️ Admin-Verified Stores (<span id="shops-count">0</span>)</span>
+        </div>
+        <button type="button" id="btn-clear-shop-filter" class="secondary sm hidden" onclick="setShopFilter('all')">See All Shops ›</button>
+      </div>
+      <div id="shops-list-pills" class="mall-shops-grid"></div>
+    </div>
+
+    <!-- SELECTED SHOP BANNER -->
+    <div id="selected-shop-banner" class="selected-shop-banner hidden">
+      <div>
+        <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.28rem;">
+          <h2 id="banner-shop-name" style="margin:0; font-size:1.1rem; color:var(--primary-dark);">Shop Name</h2>
+          <span id="banner-shop-category" class="badge cat-badge">Category</span>
+          <span id="banner-shop-shipping" class="badge ship-free">🚚 Free Shipping</span>
+          <span id="banner-shop-area" class="badge area-badge">📍 Roxas Only</span>
+        </div>
+        <p id="banner-shop-desc" style="margin:0; font-size:0.82rem; color:var(--text-secondary);">Shop description</p>
+      </div>
+      <div style="display:flex; gap:0.85rem; align-items:center; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div id="banner-shop-products" style="font-size:1.05rem; font-weight:800; color:var(--primary-dark);">0</div>
+          <div style="font-size:0.7rem; color:var(--muted);">Products</div>
+        </div>
+        <div style="text-align:center;">
+          <div id="banner-shop-sold" style="font-size:1.05rem; font-weight:800; color:var(--primary-dark);">0</div>
+          <div style="font-size:0.7rem; color:var(--muted);">Total Sold</div>
+        </div>
+        <button type="button" id="btn-banner-chat-shop" class="shop-cta sm">💬 Chat Seller</button>
+        <button type="button" class="secondary sm" onclick="setShopFilter('all')">← All Shops</button>
+      </div>
+    </div>
+
+    <!-- MOBILE HORIZONTAL CATEGORY STRIP -->
+    <div class="mobile-cat-strip" id="mobile-category-pills">
+      <button type="button" class="mobile-cat-pill active" data-cat="all" onclick="setCategoryFilter('all')">All</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">📱 Gadgets</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">🥬 Produce</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">🍱 Food</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">👕 Clothing</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">🏠 Home</button>
+      <button type="button" class="mobile-cat-pill" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">✨ Beauty</button>
+      <button type="button" class="mobile-cat-pill" data-cat="General Merchandise" onclick="setCategoryFilter('General Merchandise')">📦 General</button>
+    </div>
+
+    <!-- 2-COLUMN LAYOUT: LEFT SIDEBAR + RIGHT PURE PRODUCT GRID -->
+    <div class="marketplace-layout">
+      <aside class="category-sidebar">
+        <div class="sidebar-block">
+          <div class="sidebar-heading">☰ All Categories</div>
+          <div class="sidebar-cat-list" id="sidebar-category-pills">
+            <button type="button" class="sidebar-cat-item active" data-cat="all" onclick="setCategoryFilter('all')">All Categories</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Gadgets & Accessories" onclick="setCategoryFilter('Gadgets & Accessories')">Gadgets &amp; Accessories</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Fruits & Vegetables" onclick="setCategoryFilter('Fruits & Vegetables')">Fruits &amp; Vegetables</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Food & Beverages" onclick="setCategoryFilter('Food & Beverages')">Food &amp; Beverages</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Clothing & Apparel" onclick="setCategoryFilter('Clothing & Apparel')">Clothing &amp; Apparel</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Home & Living" onclick="setCategoryFilter('Home & Living')">Home &amp; Living</button>
+            <button type="button" class="sidebar-cat-item" data-cat="Health & Beauty" onclick="setCategoryFilter('Health & Beauty')">Health &amp; Beauty</button>
+            <button type="button" class="sidebar-cat-item" data-cat="General Merchandise" onclick="setCategoryFilter('General Merchandise')">General Merchandise</button>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sidebar-heading">🔍 SEARCH FILTER</div>
+          <label class="sidebar-filter-check">
+            <input type="checkbox" id="filter-instock" onchange="toggleStockFilter()" />
+            <span>In Stock Only</span>
+          </label>
+          <label class="sidebar-filter-check">
+            <input type="checkbox" id="filter-freeship" onchange="toggleFreeShipFilter()" />
+            <span>Free Shipping</span>
+          </label>
+          <label class="sidebar-filter-check">
+            <input type="checkbox" id="filter-roxas" onchange="toggleRoxasFilter()" />
+            <span>Roxas Local Area</span>
+          </label>
+          <button type="button" class="shop-cta sm" style="width:100%; margin-top:0.65rem;" onclick="resetMarketplaceFilters()">CLEAR ALL</button>
+        </div>
+      </aside>
+
+      <div>
+        <!-- SORT BAR -->
+        <div class="sort-bar">
+          <div class="sort-options">
+            <span class="sort-label">Sort by</span>
+            <button type="button" class="sort-btn active" data-sort="popular" onclick="setSortMode('popular')">Popular</button>
+            <button type="button" class="sort-btn" data-sort="latest" onclick="setSortMode('latest')">Latest</button>
+            <button type="button" class="sort-btn" data-sort="topsales" onclick="setSortMode('topsales')">Top Sales</button>
+            <select id="sort-price-select" class="sort-select" onchange="setPriceSort(this.value)">
+              <option value="">Price</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+            </select>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-secondary); font-weight:600;" id="catalog-result-count">0 products</div>
+        </div>
+
+        <!-- PURE PRODUCT CARDS -->
+        <div id="product-grid" class="grid"></div>
+
+        <div id="load-more-wrap" class="hidden" style="text-align:center; margin-top:1.35rem;">
+          <button type="button" class="secondary" onclick="loadMoreProducts()" style="padding:0.65rem 1.5rem;">
+            Load More Products (<span id="remaining-products-count">0</span> more)
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       VIEW 1B: EXPANDED PRODUCT DETAIL PAGE
+       ========================================================= -->
+  <section id="view-product-detail" class="hidden">
+    <div class="pdp-breadcrumb">
+      <div class="pdp-crumb-trail">
+        <span class="pdp-crumb-link" onclick="closeExpandedProduct()">MarketHub</span>
+        <span>›</span>
+        <span class="pdp-crumb-link" id="pdp-crumb-cat" onclick="closeExpandedProduct()">Category</span>
+        <span>›</span>
+        <span id="pdp-crumb-title" style="color:var(--text);">Product Name</span>
+      </div>
+      <button type="button" class="secondary sm" onclick="closeExpandedProduct()">← Back to Products</button>
+    </div>
+
+    <!-- TOP PRODUCT CARD -->
+    <div class="pdp-main-card">
+      <div>
+        <div class="pdp-gallery-main">
+          <img id="pdp-main-img" src="" alt="Product Photo" />
+        </div>
+        <div id="pdp-thumbs" class="pdp-thumbs"></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div class="pdp-title-row">
+            <span class="pdp-mall-pill">Verified</span>
+            <h1 id="pdp-title" class="pdp-title">Product Title</h1>
+          </div>
+
+          <div class="pdp-stats-bar">
+            <div class="pdp-stat-item">
+              <strong id="pdp-rating-avg" style="color:var(--primary-dark);">0.0</strong>
+              <span style="color:#f59e0b;">★★★★★</span>
+            </div>
+            <div class="pdp-stat-divider"></div>
+            <div class="pdp-stat-item">
+              <strong id="pdp-review-count">0</strong>
+              <span>Ratings</span>
+            </div>
+            <div class="pdp-stat-divider"></div>
+            <div class="pdp-stat-item">
+              <strong id="pdp-sold-count">0</strong>
+              <span>Sold</span>
+            </div>
+          </div>
+
+          <div class="pdp-price-box">
+            <div id="pdp-price" class="pdp-price-val">₱0.00</div>
+            <span id="pdp-ship-pill" class="badge ship-free">🚚 Free Shipping</span>
+            <span id="pdp-area-pill" class="badge area-badge">📍 Roxas Only</span>
+          </div>
+
+          <div class="pdp-meta-table">
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Payment Options</span>
+              <span id="pdp-payment-info" style="font-weight:600; color:var(--primary-deep);">💵 Cash on Delivery (COD)</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Shipping Rates</span>
+              <span id="pdp-shipping-info" style="font-weight:600; color:var(--green);">Free Shipping</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Delivery Coverage</span>
+              <span id="pdp-area-info" style="font-weight:600; color:#854d0e;">Roxas Only</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Order Policy</span>
+              <span style="color:#b91c1c; font-weight:600;">⚠️ Strictly NO TO CANCEL once shipped</span>
+            </div>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-label">Quantity</span>
+              <div style="display:flex; align-items:center; gap:0.85rem; flex-wrap:wrap;">
+                <div class="qty-stepper">
+                  <button type="button" onclick="adjustPdpQty(-1)">−</button>
+                  <input type="number" id="pdp-qty" value="1" min="1" />
+                  <button type="button" onclick="adjustPdpQty(1)">+</button>
+                </div>
+                <span id="pdp-stock-text" style="font-size:0.8rem; color:var(--muted);">0 pieces available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pdp-cta-row">
+          <button type="button" id="pdp-add-btn" class="add-cart-outline">
+            🛒 Add To Cart
+          </button>
+          <button type="button" id="pdp-buy-btn" class="shop-cta">
+            ⚡ Buy Now
+          </button>
+          <button type="button" id="pdp-chat-btn" class="secondary" style="min-width:130px;">
+            💬 Chat Seller
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELLER STORE BAR -->
+    <div class="pdp-shop-bar">
+      <div class="pdp-shop-left">
+        <div id="pdp-shop-avatar" class="pdp-shop-avatar">S</div>
+        <div>
+          <div style="font-weight:700; font-size:0.98rem; color:var(--text);" id="pdp-shop-name">Shop Name</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin:0.15rem 0 0.45rem;" id="pdp-shop-desc-short">Verified MarketHub Seller</div>
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+            <button type="button" id="pdp-shop-chat-btn" class="shop-cta sm">💬 Chat Now</button>
+            <button type="button" id="pdp-view-shop-btn" class="secondary sm">🏪 View Shop</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-shop-stats">
+        <div class="pdp-shop-stat-col"><span>Products</span><strong id="pdp-shop-prod-count">0</strong></div>
+        <div class="pdp-shop-stat-col"><span>Total Sold</span><strong id="pdp-shop-total-sold">0</strong></div>
+        <div class="pdp-shop-stat-col"><span>Coverage</span><strong id="pdp-shop-area-stat">Roxas Only</strong></div>
+        <div class="pdp-shop-stat-col"><span>Shipping</span><strong id="pdp-shop-ship-stat">Free</strong></div>
+      </div>
+    </div>
+
+    <!-- SPECIFICATIONS + FULL DESCRIPTION + RATINGS + TOP PICKS -->
+    <div class="pdp-bottom-grid">
+      <div>
+        <div class="pdp-section-card">
+          <h3 class="pdp-section-heading">Product Specifications</h3>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Category</span>
+            <span id="pdp-spec-cat">General Merchandise</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Stock</span>
+            <span id="pdp-spec-stock">IN STOCK</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Delivery Area</span>
+            <span id="pdp-spec-area">Roxas Only</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Shipping Fee</span>
+            <span id="pdp-spec-ship">Free Shipping</span>
+          </div>
+          <div class="pdp-spec-row">
+            <span class="pdp-spec-label">Store</span>
+            <span id="pdp-spec-shop">MarketHub Official</span>
+          </div>
+
+          <h3 class="pdp-section-heading" style="margin-top:1.35rem;">Product Description</h3>
+          <div id="pdp-description" class="pdp-description-text"></div>
+        </div>
+
+        <!-- PRODUCT RATINGS & REVIEWS -->
+        <div class="pdp-section-card">
+          <h3 style="margin:0 0 0.85rem; font-size:1rem;">Product Ratings</h3>
+
+          <div class="rating-overview-box">
+            <div class="rating-big-score">
+              <div><span class="num" id="pdp-overview-score">0.0</span> out of 5</div>
+              <div style="color:#f59e0b; font-size:1.1rem; margin-top:0.2rem;">★★★★★</div>
+            </div>
+            <div class="rating-filter-pills" id="pdp-rating-filters">
+              <button type="button" class="rating-filter-btn active" data-star="all" onclick="setReviewFilter('all')">All</button>
+              <button type="button" class="rating-filter-btn" data-star="5" onclick="setReviewFilter(5)">5 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="4" onclick="setReviewFilter(4)">4 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="3" onclick="setReviewFilter(3)">3 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="2" onclick="setReviewFilter(2)">2 Star</button>
+              <button type="button" class="rating-filter-btn" data-star="1" onclick="setReviewFilter(1)">1 Star</button>
+            </div>
+          </div>
+
+          <form id="review-form" class="hidden" onsubmit="submitProductReview(event)" style="background:var(--primary-soft); border:1px solid #bbf7d0; border-radius:8px; padding:0.85rem; margin-bottom:1rem;">
+            <div class="row-between">
+              <strong style="font-size:0.84rem; color:var(--primary-deep);">Rate this product:</strong>
+              <span id="review-eligibility-note" style="font-size:0.74rem; color:var(--muted);"></span>
+            </div>
+            <div class="star-picker" id="star-picker">
+              <button type="button" class="star-btn selected" onclick="setReviewStar(1)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(2)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(3)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(4)">★</button>
+              <button type="button" class="star-btn selected" onclick="setReviewStar(5)">★</button>
+            </div>
+            <textarea id="review-comment" rows="2" placeholder="Share your feedback about this item..." required></textarea>
+            <div style="margin-top:0.55rem; text-align:right;">
+              <button type="submit" id="btn-submit-review" class="shop-cta sm">Submit Review</button>
+            </div>
+          </form>
+
+          <div id="pdp-reviews-list"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR: TOP PICKS FROM SHOP -->
+      <aside class="top-picks-card">
+        <div class="top-picks-title">🌿 Top Picks From Shop</div>
+        <div id="pdp-top-picks-list"></div>
+      </aside>
+    </div>
+  </section>
+  <!-- =========================================================
+       VIEW 2: SELLER CENTRE (MENU: MY HOME, INCOME MONITORING,
+       PRODUCT SETUP, & BARANGAY SHIPPING SETTINGS)
+       ========================================================= -->
+  <section id="view-seller" class="hidden">
+    <!-- STEP A: APPLY TO OPEN A VERIFIED SHOP -->
+    <div id="create-shop-panel" class="panel hidden" style="max-width:680px; margin:0.5rem auto;">
+      <div style="text-align:center; margin-bottom:1.1rem;">
+        <div style="font-size:2.2rem; margin-bottom:0.25rem;">🌿🏪</div>
+        <h2 style="margin:0 0 0.3rem; font-size:1.25rem; color:var(--primary-deep);">Apply to Open a Verified Seller Shop</h2>
+        <p style="margin:0; font-size:0.84rem; color:var(--muted);">All shop applications require valid verification proof and Platform Admin approval before going live.</p>
+      </div>
+
+      <form onsubmit="submitShopApplication(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Shop Name *</label>
+            <input type="text" id="new-shop-name" placeholder="e.g., GreenTech Gadgets or Roxas Fresh Market" required />
+          </div>
+          <div>
+            <label class="field-label">Main Shop Category *</label>
+            <select id="new-shop-category" required>
+              <option value="Gadgets & Accessories">Gadgets &amp; Accessories</option>
+              <option value="Fruits & Vegetables">Fruits &amp; Vegetables</option>
+              <option value="Food & Beverages">Food &amp; Beverages</option>
+              <option value="Clothing & Apparel">Clothing &amp; Apparel (Mga Damit)</option>
+              <option value="Home & Living">Home &amp; Living</option>
+              <option value="Health & Beauty">Health &amp; Beauty</option>
+              <option value="General Merchandise">General Merchandise</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Active Seller Contact Number *</label>
+            <input type="tel" id="new-shop-phone" placeholder="e.g., 0917 123 4567" required />
+          </div>
+          <div>
+            <label class="field-label">Pickup / Store Address *</label>
+            <input type="text" id="new-shop-address" placeholder="Barangay, Roxas, Oriental Mindoro" required />
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label">Shop Description *</label>
+          <textarea id="new-shop-desc" rows="2" placeholder="Describe your shop, return policy, or delivery schedule..." required></textarea>
+        </div>
+
+        <!-- INITIAL SHIPPING FEE & DELIVERY AREA -->
+        <div class="shipping-config-box">
+          <label class="field-label" style="color:var(--green);">🚚 Default Shipping Fee &amp; Delivery Location *</label>
+          <div class="form-grid">
+            <div>
+              <label class="field-label">Default Shipping Fee Option</label>
+              <select id="new-shop-ship-mode" onchange="toggleNewShopShippingInput()">
+                <option value="paid">Customized Shipping Fee (Seller sets amount)</option>
+                <option value="free">Free Shipping (₱0.00 for buyers)</option>
+              </select>
+            </div>
+            <div id="new-shop-ship-amount-wrap">
+              <label class="field-label">Default Shipping Fee Amount (₱)</label>
+              <input type="number" id="new-shop-ship-fee" step="0.01" min="0" value="50" placeholder="Enter shipping fee (₱)" required />
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-top:0.65rem;">
+            <div>
+              <label class="field-label">Delivery Location Coverage</label>
+              <select id="new-shop-area-mode" onchange="toggleNewShopAreaInput()">
+                <option value="specific">Specific Area / Municipality Only (e.g., Roxas Only)</option>
+                <option value="all">All Areas / Province-Wide</option>
+              </select>
+            </div>
+            <div id="new-shop-area-text-wrap">
+              <label class="field-label">Allowed Delivery Area *</label>
+              <input type="text" id="new-shop-area-text" value="Roxas Only" placeholder="e.g., Roxas Only" required />
+            </div>
+          </div>
+          <small style="display:block; margin-top:0.45rem; color:var(--primary-deep);">💡 Once approved, you can configure per-barangay rates (e.g., Dangay = Free or ₱30) inside <strong>Shipping Settings</strong>.</small>
+        </div>
+
+        <!-- OPTIONAL E-WALLET QR PAYMENT SETUP -->
+        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:0.85rem 1rem;">
+          <label class="field-label" style="color:#0369a1;">📱 E-Wallet Scan QR Payment Option (Optional — GCash, Maya, MariBank, etc.)</label>
+          <div class="form-grid">
+            <div>
+              <label class="field-label">Upload E-Wallet QR Code Image</label>
+              <input type="file" id="new-shop-qr-file" accept="image/*" />
+            </div>
+            <div>
+              <label class="field-label">QR Description (E-Wallet Type &amp; Account Name/No.)</label>
+              <input type="text" id="new-shop-qr-desc" placeholder="e.g., GCash / Maya / MariBank — Juan D. (0917-XXX-XXXX)" />
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem 1rem;">
+          <label class="field-label" style="color:#92400e;">🪪 Seller Verification Proof (Valid ID or Physical Store/Inventory Photo) *</label>
+          <input type="file" id="new-shop-id-file" accept="image/*" required />
+          <small style="display:block; margin-top:0.35rem; color:#92400e;">Automatically compressed for mobile upload. Only visible to the Platform Admin.</small>
+        </div>
+
+        <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.82rem; color:var(--text-secondary); cursor:pointer;">
+          <input type="checkbox" id="new-shop-agree" required style="width:auto; margin-top:2px;" />
+          <span>I confirm that my shop details are legitimate and I agree to the <strong>10% platform commission</strong> on product sales.</span>
+        </label>
+
+        <button type="submit" id="btn-create-shop" class="shop-cta" style="padding:0.75rem; font-size:0.94rem;">
+          Submit Shop Application for Admin Approval
+        </button>
+      </form>
+    </div>
+
+    <!-- STEP B: PENDING / REJECTED GATE -->
+    <div id="shop-status-gate-panel" class="panel hidden" style="max-width:640px; margin:0.5rem auto; text-align:center;">
+      <div id="gate-icon" style="font-size:2.5rem; margin-bottom:0.35rem;">⏳</div>
+      <h2 id="gate-title" style="margin:0 0 0.4rem; color:var(--primary-deep);">Shop Application Pending Approval</h2>
+      <p id="gate-message" style="margin:0 auto 1rem; max-width:500px; font-size:0.86rem; color:var(--text-secondary); line-height:1.5;"></p>
+      <div id="gate-admin-note" class="error-box hidden" style="text-align:left;"></div>
+
+      <form id="resubmit-shop-form" class="hidden" onsubmit="resubmitRejectedShop(event)" style="text-align:left; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:0.75rem;">
+        <h4 style="margin:0; color:var(--primary-deep);">Update &amp; Re-submit Shop Verification</h4>
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Shop Name</label>
+            <input type="text" id="resub-shop-name" required />
+          </div>
+          <div>
+            <label class="field-label">Contact Number</label>
+            <input type="tel" id="resub-shop-phone" required />
+          </div>
+        </div>
+        <div>
+          <label class="field-label">Pickup / Store Address</label>
+          <input type="text" id="resub-shop-address" required />
+        </div>
+        <div>
+          <label class="field-label">Shop Description</label>
+          <textarea id="resub-shop-desc" rows="2" required></textarea>
+        </div>
+        <div>
+          <label class="field-label">Upload Updated Valid ID / Store Proof (Optional)</label>
+          <input type="file" id="resub-shop-id-file" accept="image/*" />
+        </div>
+        <button type="submit" class="shop-cta">Re-submit for Admin Review</button>
+      </form>
+    </div>
+
+    <!-- STEP C: APPROVED SELLER CENTRE (4 CLEAN SEPARATED MENU TABS) -->
+    <div id="seller-dashboard-panel" class="hidden">
+      <!-- SELLER TOP MENU NAVIGATION -->
+      <nav class="seller-menu-bar" aria-label="Seller Centre Navigation">
+        <button type="button" id="seller-nav-home" class="seller-menu-btn active" onclick="switchSellerTab('home')">
+          🏠 My Home
+        </button>
+        <button type="button" id="seller-nav-income" class="seller-menu-btn" onclick="switchSellerTab('income')">
+          📊 Income Monitoring
+        </button>
+        <button type="button" id="seller-nav-products" class="seller-menu-btn" onclick="switchSellerTab('products')">
+          📦 Product Setup
+        </button>
+        <button type="button" id="seller-nav-shipping" class="seller-menu-btn" onclick="switchSellerTab('shipping')">
+          🚚 Shipping Settings
+        </button>
+      </nav>
+
+      <!-- =====================================================
+           SELLER TAB 1: MY HOME (STORE PROFILE, QR & QUICK STATUS)
+           ===================================================== -->
+      <div id="seller-tab-home">
+        <div class="panel" style="border-left:4px solid var(--primary);">
+          <div class="row-between">
+            <div>
+              <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
+                <h2 id="my-shop-title" style="margin:0; font-size:1.25rem; color:var(--primary-deep);">My Shop</h2>
+                <span class="badge status-approved">✓ Verified Store</span>
+                <span id="my-shop-cat-badge" class="badge seller">Category</span>
+                <span id="my-shop-qr-badge" class="badge cat-badge">💵 COD Only</span>
+              </div>
+              <p id="my-shop-desc-text" style="margin:0.35rem 0 0; font-size:0.85rem; color:var(--text-secondary);"></p>
+            </div>
+            <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+              <button type="button" class="secondary sm" onclick="openChatModal()">💬 Buyer Messages</button>
+              <button type="button" class="shop-cta sm" onclick="switchOrdersSubTab('sales'); switchView('orders');">📦 Incoming Orders (<span id="seller-pending-count">0</span>)</button>
+            </div>
+          </div>
+
+          <div class="kpi-grid" style="margin-top:1rem;">
+            <div class="kpi-card highlight" style="cursor:pointer;" onclick="switchSellerTab('income')">
+              <div class="kpi-label">This Month Net Profit</div>
+              <div class="kpi-value" id="home-kpi-net-profit">₱0.00</div>
+              <div class="kpi-sub">Click to open Income &amp; Pie Chart →</div>
+            </div>
+            <div class="kpi-card" style="cursor:pointer;" onclick="switchSellerTab('products')">
+              <div class="kpi-label">Active Products</div>
+              <div class="kpi-value" id="home-kpi-products">0</div>
+              <div class="kpi-sub">Manage Puhunan &amp; Retail Price →</div>
+            </div>
+            <div class="kpi-card" style="cursor:pointer;" onclick="switchSellerTab('shipping')">
+              <div class="kpi-label">Barangay Shipping Rules</div>
+              <div class="kpi-value" id="home-kpi-brgy-count">0 Locations</div>
+              <div class="kpi-sub" id="home-kpi-default-ship">Default: Free Shipping →</div>
+            </div>
+            <div class="kpi-card amber-highlight" style="cursor:pointer;" onclick="switchSellerTab('income')">
+              <div class="kpi-label">10% Admin Fee Payable</div>
+              <div class="kpi-value" id="home-kpi-admin-fee">₱0.00</div>
+              <div class="kpi-sub">Deducted from product sales</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STORE DETAILS & E-WALLET SCAN QR SETUP -->
+        <div class="panel">
+          <h3 style="margin-top:0; font-size:1.05rem; color:var(--primary-deep);">🏪 Store Profile &amp; E-Wallet Scan QR Setup</h3>
+          <form onsubmit="updateShopHomeProfile(event)">
+            <div class="form-grid">
+              <div>
+                <label class="field-label">Shop Name *</label>
+                <input type="text" id="edit-shop-name" required />
+              </div>
+              <div>
+                <label class="field-label">Main Shop Category *</label>
+                <select id="edit-shop-category">
+                  <option value="Gadgets & Accessories">Gadgets &amp; Accessories</option>
+                  <option value="Fruits & Vegetables">Fruits &amp; Vegetables</option>
+                  <option value="Food & Beverages">Food &amp; Beverages</option>
+                  <option value="Clothing & Apparel">Clothing &amp; Apparel (Mga Damit)</option>
+                  <option value="Home & Living">Home &amp; Living</option>
+                  <option value="Health & Beauty">Health &amp; Beauty</option>
+                  <option value="General Merchandise">General Merchandise</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Contact Number *</label>
+                <input type="tel" id="edit-shop-phone" required />
+              </div>
+            </div>
+
+            <div style="margin-top:0.75rem;">
+              <label class="field-label">Shop Description *</label>
+              <input type="text" id="edit-shop-desc" required />
+            </div>
+
+            <!-- E-WALLET SCAN QR SETTINGS -->
+            <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:0.9rem 1rem; margin-top:0.9rem;">
+              <div class="row-between" style="margin-bottom:0.45rem;">
+                <label class="field-label" style="color:#0369a1; margin:0;">📱 E-Wallet Scan QR Payment Setup (GCash, Maya, MariBank, etc.)</label>
+                <button type="button" id="btn-remove-shop-qr" class="danger-outline sm hidden" onclick="removeShopQrCode()">🗑️ Remove QR</button>
+              </div>
+              <div class="form-grid" style="align-items:center;">
+                <div>
+                  <label class="field-label">Upload / Replace QR Code Image</label>
+                  <input type="file" id="edit-shop-qr-file" accept="image/*" />
+                </div>
+                <div>
+                  <label class="field-label">QR Description (E-Wallet Name, Account Name &amp; Number)</label>
+                  <input type="text" id="edit-shop-qr-desc" placeholder="e.g., GCash / Maya / MariBank — Juan Dela Cruz (0917-123-4567)" />
+                </div>
+              </div>
+              <div id="edit-shop-qr-preview-wrap" class="hidden" style="margin-top:0.65rem; display:flex; align-items:center; gap:0.75rem;">
+                <img id="edit-shop-qr-preview" src="" alt="Shop QR" style="width:74px; height:74px; object-fit:contain; background:#fff; border:1px solid #cbd5e1; border-radius:6px; padding:3px;" />
+                <div style="font-size:0.78rem; color:#0c4a6e;">
+                  <strong>Active QR Code Ready for Buyers</strong><br/>
+                  <span id="edit-shop-qr-desc-preview"></span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:0.9rem;">
+              <button type="submit" id="btn-save-shop-home" class="shop-cta">Save Store Profile &amp; QR</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SELLER TAB 2: INCOME MONITORING (PROFIT, PUHUNAN,
+           DEDUCTED ADMIN FEE, SHIPPING FEE & PIE CHART)
+           ===================================================== -->
+      <div id="seller-tab-income" class="hidden">
+        <div class="panel" style="border-color:#86efac;">
+          <div class="row-between" style="margin-bottom:0.85rem;">
+            <div>
+              <h2 style="margin:0; color:var(--primary-deep); font-size:1.18rem;">📊 Shop Income &amp; Net Profit Monitoring</h2>
+              <p style="margin:0.2rem 0 0; font-size:0.81rem; color:var(--muted);">Computes your exact <strong>Net Profit</strong> after deducting <strong>Puhunan (Capital)</strong>, <strong>10% Admin Fee</strong>, and separating <strong>Shipping Fees</strong>.</p>
+            </div>
+            <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
+              <input type="month" id="seller-finance-month" onchange="onSellerMonthChange()" style="width:auto; font-weight:600;" />
+              <button type="button" id="btn-seller-all-months" class="secondary sm" onclick="toggleSellerAllMonths()">All Months</button>
+            </div>
+          </div>
+
+          <!-- TOP KPI SUMMARY -->
+          <div class="kpi-grid">
+            <div class="kpi-card highlight">
+              <div class="kpi-label">Total Net Profit (Pure Kita)</div>
+              <div class="kpi-value" id="seller-kpi-net-profit">₱0.00</div>
+              <div class="kpi-sub">After Puhunan, Admin Fee &amp; Shipping</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Gross Product Sales</div>
+              <div class="kpi-value" id="seller-kpi-prod-sales">₱0.00</div>
+              <div class="kpi-sub" id="seller-kpi-order-count">0 valid orders this period</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Total Puhunan (Capital)</div>
+              <div class="kpi-value" id="seller-kpi-puhunan" style="color:#0369a1;">₱0.00</div>
+              <div class="kpi-sub">Recovered capital from sold items</div>
+            </div>
+            <div class="kpi-card amber-highlight">
+              <div class="kpi-label">10% Admin Fee Payable</div>
+              <div class="kpi-value" id="seller-kpi-admin-unpaid">₱0.00</div>
+              <div class="kpi-sub">Total 10% fee: <strong id="seller-kpi-admin-total">₱0.00</strong></div>
+            </div>
+          </div>
+
+          <!-- PIE CHART + COMPLETE DEDUCTION BREAKDOWN LEDGER -->
+          <div class="income-split-grid">
+            <div>
+              <div style="text-align:center; font-size:0.82rem; font-weight:800; color:var(--primary-deep); margin-bottom:0.55rem;">
+                🥧 Revenue &amp; Deduction Breakdown
+              </div>
+              <div class="pie-chart-wrap">
+                <canvas id="seller-income-pie-chart"></canvas>
+              </div>
+            </div>
+
+            <div class="deduction-ledger">
+              <h4 style="margin:0 0 0.65rem; color:var(--primary-deep); font-size:0.95rem;">🧾 Complete Profit &amp; Deduction Computation</h4>
+
+              <div class="deduction-row">
+                <span><strong>Total Order Collections (Gross):</strong></span>
+                <strong id="ledger-gross-total">₱0.00</strong>
+              </div>
+              <div class="deduction-row">
+                <span><span class="legend-dot" style="background:#0ea5e9;"></span>Less: Shipping Fee Collected (Pass-through Delivery):</span>
+                <span style="color:#0369a1; font-weight:600;" id="ledger-less-shipping">−₱0.00</span>
+              </div>
+              <div class="deduction-row">
+                <span><strong>Product Retail Sales (Items Only):</strong></span>
+                <strong id="ledger-product-sales">₱0.00</strong>
+              </div>
+              <div class="deduction-row">
+                <span><span class="legend-dot" style="background:#64748b;"></span>Less: Total Puhunan (Cost of Goods Sold):</span>
+                <span style="color:#475569; font-weight:600;" id="ledger-less-puhunan">−₱0.00</span>
+              </div>
+              <div class="deduction-row">
+                <span><span class="legend-dot" style="background:#f59e0b;"></span>Less: 10% Platform Admin Fee:</span>
+                <span style="color:#b45309; font-weight:600;" id="ledger-less-admin">−₱0.00</span>
+              </div>
+              <div class="deduction-row total-profit-row">
+                <span><span class="legend-dot" style="background:#16a34a;"></span>TOTAL NET PROFIT (PURE KITA):</span>
+                <span id="ledger-net-profit">₱0.00</span>
+              </div>
+              <div style="margin-top:0.55rem; font-size:0.76rem; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.4rem;">
+                <span>Admin Fee Already Settled: <strong style="color:var(--green);" id="seller-kpi-admin-paid">₱0.00</strong></span>
+                <span id="seller-kpi-fee-status">Up to date</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MONTHLY PROFIT HISTORY TABLE -->
+          <h4 style="margin:0.5rem 0 0.35rem; color:var(--primary-deep); font-size:0.95rem;">📅 Monthly Profit &amp; Deduction History</h4>
+          <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Orders</th>
+                  <th>Product Sales</th>
+                  <th>− Puhunan</th>
+                  <th>− 10% Admin Fee</th>
+                  <th>Shipping (Separate)</th>
+                  <th>Net Profit (Kita)</th>
+                  <th>Admin Fee Status</th>
+                </tr>
+              </thead>
+              <tbody id="seller-monthly-history-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SELLER TAB 3: PRODUCT SETUP (PUHUNAN, RETAIL PRICE,
+           SEPARATE SHIPPING & LIVE PROFIT CALCULATOR)
+           ===================================================== -->
+      <div id="seller-tab-products" class="hidden">
+        <div class="panel">
+          <div class="row-between" style="margin-bottom:0.75rem;">
+            <div>
+              <h3 style="margin:0; font-size:1.08rem; color:var(--primary-deep);" id="product-form-heading">➕ Product Setup (Puhunan &amp; Retail Price)</h3>
+              <p style="margin:0.2rem 0 0; font-size:0.79rem; color:var(--muted);">Enter your <strong>Puhunan (Capital)</strong> and <strong>Retail Price</strong>. Shipping fees are managed separately in <strong>Shipping Settings</strong>.</p>
+            </div>
+            <button type="button" id="btn-cancel-edit-prod" class="secondary sm hidden" onclick="resetProductForm()">Cancel Edit</button>
+          </div>
+
+          <form id="seller-product-form" onsubmit="saveProduct(event)">
+            <input type="hidden" id="edit-prod-id" value="" />
+            <div class="form-grid">
+              <div>
+                <label class="field-label">Product Name *</label>
+                <input type="text" id="p-name" placeholder="e.g., Fresh Cucumber 1kg or Wireless Earbuds" required />
+              </div>
+              <div>
+                <label class="field-label">Product Category *</label>
+                <select id="p-category" required>
+                  <option value="Gadgets & Accessories">Gadgets &amp; Accessories</option>
+                  <option value="Fruits & Vegetables">Fruits &amp; Vegetables</option>
+                  <option value="Food & Beverages">Food &amp; Beverages</option>
+                  <option value="Clothing & Apparel">Clothing &amp; Apparel (Mga Damit)</option>
+                  <option value="Home & Living">Home &amp; Living</option>
+                  <option value="Health & Beauty">Health &amp; Beauty</option>
+                  <option value="General Merchandise">General Merchandise</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Available Stock *</label>
+                <input type="number" id="p-stock" min="0" placeholder="10" required />
+              </div>
+            </div>
+
+            <!-- PUHUNAN (COST) + RETAIL PRICE + SEPARATED SHIPPING NOTICE -->
+            <div class="form-grid" style="margin-top:0.8rem;">
+              <div>
+                <label class="field-label" style="color:#0369a1;">💰 Puhunan / Capital Cost per Unit (₱) *</label>
+                <input type="number" id="p-cost" step="0.01" min="0" value="0" placeholder="0.00" oninput="updateLiveProductProfitPreview()" required />
+              </div>
+              <div>
+                <label class="field-label" style="color:var(--primary-deep);">🏷️ Retail Selling Price per Unit (₱) *</label>
+                <input type="number" id="p-price" step="0.01" min="0" placeholder="0.00" oninput="updateLiveProductProfitPreview()" required />
+              </div>
+              <div>
+                <label class="field-label">🚚 Shipping Fee Handling</label>
+                <div style="background:#f8fbf9; border:1px solid var(--border); border-radius:6px; padding:0.52rem 0.72rem; font-size:0.8rem; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center;">
+                  <span>Separated (Per Barangay)</span>
+                  <button type="button" class="text-link-btn" onclick="switchSellerTab('shipping')">Edit Rates →</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- LIVE UNIT PROFIT PREVIEW -->
+            <div class="profit-preview-pill" id="product-profit-preview-box">
+              <span>📈 <strong>Unit Profit Preview:</strong> Retail ₱0.00 − Puhunan ₱0.00 − 10% Admin Fee (₱0.00)</span>
+              <strong style="font-size:0.95rem; color:var(--primary-dark);">Net Profit / Unit: ₱0.00</strong>
+            </div>
+
+            <div style="margin-top:0.8rem;">
+              <label class="field-label">Product Description (Specs, warranty, sizes, weight, harvest info, etc.)</label>
+              <textarea id="p-desc" rows="3" placeholder="Describe your item clearly for buyers..."></textarea>
+            </div>
+
+            <div style="margin-top:0.9rem;">
+              <div class="row-between">
+                <label class="field-label" style="margin:0;">Product Photos (Max 2 • Square 1:1 Auto-WebP)</label>
+                <label class="secondary sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; border:1px solid var(--border); border-radius:6px; font-size:0.76rem; font-weight:600; background:#fff;">
+                  📁 Select Photos (Max 2)
+                  <input type="file" id="multi-photo-input" accept="image/*" multiple class="hidden" onchange="handleMultiPhotoSelect(event)" />
+                </label>
+              </div>
+              <div class="photo-slots-grid" id="photo-slots-grid"></div>
+              <input type="file" id="single-slot-file-input" accept="image/*" class="hidden" onchange="handleSingleSlotFile(event)" />
+            </div>
+
+            <div style="margin-top: 1rem;">
+              <button type="submit" id="btn-save-product" class="shop-cta">Publish Product</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- INVENTORY TABLE WITH PUHUNAN, RETAIL PRICE & PROFIT -->
+        <div class="panel">
+          <h3 style="margin-top:0; font-size:1.05rem; color:var(--primary-deep);">📦 My Shop Inventory &amp; Profit per Item</h3>
+          <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Puhunan (₱)</th>
+                  <th>Retail Price (₱)</th>
+                  <th>Net Profit / Unit</th>
+                  <th>Stock</th>
+                  <th>Sold</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="seller-products-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           SELLER TAB 4: SHIPPING SETTINGS (BARANGAY / LOCATION
+           BASED — FREE SHIPPING OR CUSTOMIZED FEE PER BARANGAY)
+           ===================================================== -->
+      <div id="seller-tab-shipping" class="hidden">
+        <div class="panel" style="border-left:4px solid var(--primary);">
+          <h3 style="margin-top:0; font-size:1.1rem; color:var(--primary-deep);">🚚 Barangay &amp; Location Shipping Settings</h3>
+          <p style="margin:0 0 1rem; font-size:0.83rem; color:var(--text-secondary); line-height:1.45;">
+            Configure custom delivery rates per Barangay or Location (e.g., <strong>Dangay</strong> = Free Shipping, <strong>Bagumbayan</strong> = ₱30.00, <strong>Paclasan</strong> = ₱40.00). When a customer checks out, their delivery address is automatically matched to your Barangay shipping rates!
+          </p>
+
+          <!-- ADD BARANGAY / LOCATION SHIPPING RULE FORM -->
+          <div style="background:var(--primary-soft); border:1px solid #86efac; border-radius:8px; padding:0.95rem 1rem; margin-bottom:1.1rem;">
+            <strong style="font-size:0.88rem; color:var(--primary-deep); display:block; margin-bottom:0.6rem;">➕ Add Barangay / Location Shipping Rate</strong>
+            <div class="form-grid" style="align-items:end;">
+              <div>
+                <label class="field-label">Barangay / Location Name *</label>
+                <input type="text" id="brgy-rule-name" placeholder="e.g., Dangay, Bagumbayan, Poblacion, Paclasan" />
+              </div>
+              <div>
+                <label class="field-label">Shipping Rate Type *</label>
+                <select id="brgy-rule-mode" onchange="toggleBrgyRuleFeeInput()">
+                  <option value="free">Free Shipping (₱0.00)</option>
+                  <option value="paid">Customized Amount (₱)</option>
+                </select>
+              </div>
+              <div id="brgy-rule-fee-wrap" class="hidden">
+                <label class="field-label">Customized Shipping Fee (₱) *</label>
+                <input type="number" id="brgy-rule-fee" step="0.01" min="0" value="30" placeholder="30.00" />
+              </div>
+              <div>
+                <button type="button" class="shop-cta" style="width:100%;" onclick="addBarangayShippingRule()">+ Add Location Rate</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LIST OF CONFIGURED BARANGAY SHIPPING RULES -->
+          <div style="margin-bottom:1.25rem;">
+            <div class="row-between">
+              <strong style="font-size:0.9rem; color:var(--primary-deep);">📍 Configured Barangay / Location Rates (<span id="brgy-rules-count">0</span>)</strong>
+              <small style="color:var(--muted);">Click Save Shipping Settings below after adding or removing locations.</small>
+            </div>
+            <div id="brgy-rules-list" class="brgy-rules-grid"></div>
+          </div>
+
+          <hr style="border:0; border-top:1px solid var(--border); margin:1rem 0;" />
+
+          <!-- DEFAULT / FALLBACK COVERAGE FOR OTHER BARANGAYS -->
+          <form onsubmit="saveShippingSettings(event)">
+            <strong style="font-size:0.92rem; color:var(--primary-deep); display:block; margin-bottom:0.65rem;">🌐 Default Coverage &amp; Other Locations Policy</strong>
+            <div class="form-grid">
+              <div>
+                <label class="field-label">Coverage Mode for Unlisted Locations</label>
+                <select id="edit-shop-area-mode" onchange="toggleEditShopAreaInput()">
+                  <option value="specific">Only Deliver to Configured Barangays / Allowed Area</option>
+                  <option value="all">Deliver to All Areas (Use Default Rate Below)</option>
+                </select>
+              </div>
+              <div id="edit-shop-area-text-wrap">
+                <label class="field-label">Allowed Municipality / Area Label *</label>
+                <input type="text" id="edit-shop-area-text" placeholder="e.g., Roxas Only" />
+              </div>
+            </div>
+
+            <div class="form-grid" style="margin-top:0.75rem;">
+              <div>
+                <label class="field-label">Default / Fallback Shipping Fee Mode</label>
+                <select id="edit-shop-ship-mode" onchange="toggleEditShopShippingInput()">
+                  <option value="paid">Customized Default Fee (₱)</option>
+                  <option value="free">Free Shipping (₱0.00)</option>
+                </select>
+              </div>
+              <div id="edit-shop-ship-amount-wrap">
+                <label class="field-label">Default Shipping Fee Amount (₱)</label>
+                <input type="number" id="edit-shop-ship-fee" step="0.01" min="0" value="50" />
+              </div>
+            </div>
+
+            <div style="margin-top:1rem;">
+              <button type="submit" id="btn-save-shipping-settings" class="shop-cta">Save Shipping Settings</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       VIEW 3: ORDERS, PRINT RECEIPT & LIVE TRACKING
+       ========================================================= -->
+  <section id="view-orders" class="hidden">
+    <div class="row-between" style="margin-bottom: 0.8rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; color:var(--primary-deep);">Orders &amp; Live Tracking</h2>
+        <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">⚠️ Policy: Cancellation is allowed only while <strong>Pending</strong>. Strictly <strong>No to Cancel after Shipping</strong>.</p>
+      </div>
+      <div style="display:flex; gap:0.45rem;">
+        <button type="button" class="secondary sm" onclick="openChatModal()">💬 Live Chat</button>
+        <button type="button" class="secondary sm" onclick="loadOrders()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="auth-tabs" style="max-width:460px; margin-bottom:1rem;">
+      <button type="button" id="orders-tab-purchases" class="auth-tab active" onclick="switchOrdersSubTab('purchases')">🛍️ My Purchases</button>
+      <button type="button" id="orders-tab-sales" class="auth-tab" onclick="switchOrdersSubTab('sales')">🏪 Shop Sales (<span id="tab-sales-badge">0</span>)</button>
+    </div>
+
+    <div id="orders-list"></div>
+  </section>
+
+  <!-- =========================================================
+       VIEW 4: PLATFORM ADMIN
+       ========================================================= -->
+  <section id="view-admin" class="hidden">
+    <div class="panel" style="border-color:#86efac;">
+      <div class="row-between">
+        <div>
+          <h3 style="margin:0; color:var(--primary-deep); font-size:1.05rem;">🛡️ Shop Applications &amp; Anti-Troll Verification</h3>
+          <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">Inspect seller ID/store proof before approving shops.</p>
+        </div>
+        <span id="admin-pending-shops-badge" class="badge status-pending">0 Pending Review</span>
+      </div>
+
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table>
+          <thead>
+            <tr>
+              <th>Shop &amp; Description</th>
+              <th>Contact &amp; Pickup Address</th>
+              <th>Shipping, Area &amp; QR</th>
+              <th>ID / Store Proof</th>
+              <th>Status</th>
+              <th>Admin Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-shops-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel" style="border-color:#99f6e4;">
+      <div class="row-between">
+        <div>
+          <h3 style="margin:0; color:var(--indigo); font-size:1.05rem;">💰 Admin 10% Commission &amp; Monthly Billing</h3>
+          <p style="margin:0.2rem 0 0; font-size:0.82rem; color:var(--muted);">10% commission on product sales (shipping fees go 100% to sellers).</p>
+        </div>
+        <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
+          <input type="month" id="admin-commission-month" onchange="onAdminMonthChange()" style="width:auto; font-weight:600;" />
+          <button type="button" id="btn-admin-all-months" class="secondary sm" onclick="toggleAdminAllMonths()">Show All Months</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Product Sales (Commissionable)</div>
+          <div class="kpi-value" id="kpi-gross-sales">₱0.00</div>
+          <div class="kpi-sub" id="kpi-orders-count">0 valid shop orders</div>
+        </div>
+        <div class="kpi-card highlight">
+          <div class="kpi-label">Admin 10% Commission (Masisingil)</div>
+          <div class="kpi-value" id="kpi-total-commission">₱0.00</div>
+          <div class="kpi-sub">10% rate on product sales</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Uncollected vs. Collected</div>
+          <div class="kpi-value" id="kpi-uncollected" style="color:var(--primary-dark);">₱0.00</div>
+          <div class="kpi-sub">Collected: <strong id="kpi-collected" style="color:var(--green);">₱0.00</strong></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Seller Net + Shipping Fees</div>
+          <div class="kpi-value" id="kpi-seller-net">₱0.00</div>
+          <div class="kpi-sub">90% product sales + shipping</div>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table>
+          <thead>
+            <tr>
+              <th>Shop Name</th>
+              <th>Valid Orders</th>
+              <th>Product Sales</th>
+              <th>Shipping Collected</th>
+              <th>10% Commission</th>
+              <th>Seller Net + Ship</th>
+              <th>Billing Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-commission-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0; font-size:1.05rem; color:var(--primary-deep);">📦 All Marketplace Products Moderation</h3>
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table>
+          <thead>
+            <tr>
+              <th>Shop</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Sold</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- =========================================================
+     MODALS: IOS GUIDE, AUTH, RECOVERY, PROFILE SETTINGS,
+     CART + COD/QR PAYMENT, PRINT RECEIPT, & LIVE CHAT
+     ========================================================= -->
+
+<!-- IOS ADD TO HOME SCREEN GUIDE MODAL -->
+<div id="ios-install-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeIosInstallModal()">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0; color:var(--primary-deep);">📲 Install MarketHub on iPhone / iPad</h3>
+      <button type="button" class="secondary sm" onclick="closeIosInstallModal()">✕</button>
+    </div>
+    <p style="font-size:0.86rem; color:var(--text-secondary); line-height:1.55; margin:0.75rem 0;">
+      Para maging full-screen mobile app sa iOS Safari:
+    </p>
+    <ol style="font-size:0.86rem; color:var(--text); line-height:1.65; padding-left:1.25rem; margin:0 0 1rem;">
+      <li>I-tap ang <strong>Share icon</strong> (box na may arrow pataas) sa ibaba ng Safari screen.</li>
+      <li>Mag-scroll pababa at pindutin ang <strong>"Add to Home Screen"</strong>.</li>
+      <li>I-tap ang <strong>"Add"</strong> sa kanang itaas.</li>
+    </ol>
+    <button type="button" class="shop-cta" style="width:100%;" onclick="closeIosInstallModal()">Naintindihan</button>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="auth-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeAuthModal()">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0; color:var(--primary-deep);" id="auth-modal-title">Welcome to MarketHub</h3>
+      <button type="button" class="secondary sm" onclick="closeAuthModal()">✕</button>
+    </div>
+
+    <div id="auth-tabs-bar" class="auth-tabs">
+      <button type="button" id="tab-signin" class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
+      <button type="button" id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+
+    <div id="google-oauth-box">
+      <button type="button" id="btn-google-signin" class="google-btn" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google (Gmail)
+      </button>
+      <div class="auth-divider">or continue with email &amp; password</div>
+    </div>
+
+    <form id="form-signin" onsubmit="signIn(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+      <div>
+        <label class="field-label">Email Address</label>
+        <input type="email" id="login-email" placeholder="you@gmail.com" required />
+      </div>
+      <div>
+        <div class="row-between" style="margin-bottom:0.28rem;">
+          <label class="field-label" style="margin:0;">Password</label>
+          <button type="button" class="text-link-btn" onclick="switchAuthTab('forgot')">Forgot Password?</button>
+        </div>
+        <input type="password" id="login-password" placeholder="Enter your password" required />
+      </div>
+      <button type="submit" id="btn-submit-signin" class="shop-cta">Sign In</button>
+    </form>
+
+    <form id="form-forgot" class="hidden" onsubmit="sendPasswordReset(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+      <div style="background:var(--primary-soft); border:1px solid #bbf7d0; border-radius:6px; padding:0.75rem 0.9rem; font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">
+        Enter the Gmail / email address registered to your account or shop. We will send a secure password reset link to your inbox.
+      </div>
+      <div>
+        <label class="field-label">Registered Email Address *</label>
+        <input type="email" id="forgot-email" placeholder="you@gmail.com" required />
+      </div>
+      <button type="submit" id="btn-submit-forgot" class="shop-cta">Send Password Reset Link</button>
+      <div style="text-align:center;">
+        <button type="button" class="text-link-btn" onclick="switchAuthTab('signin')">← Back to Sign In</button>
+      </div>
+    </form>
+
+    <form id="form-register" class="hidden" onsubmit="signUp(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
+      <div>
+        <label class="field-label">Complete Name *</label>
+        <input type="text" id="reg-name" placeholder="e.g., Juan Dela Cruz" required />
+      </div>
+      <div>
+        <label class="field-label">Contact Number *</label>
+        <input type="tel" id="reg-phone" placeholder="e.g., 0917 123 4567" required />
+      </div>
+      <div>
+        <label class="field-label">Complete Delivery Address (Include Barangay &amp; Municipality, e.g., Dangay, Roxas) *</label>
+        <textarea id="reg-address" rows="2" placeholder="House/Street, Barangay (e.g., Dangay), Roxas, Oriental Mindoro" required></textarea>
+      </div>
+      <div class="form-grid" style="gap:0.75rem;">
+        <div>
+          <label class="field-label">Email Address *</label>
+          <input type="email" id="reg-email" placeholder="you@gmail.com" required />
+        </div>
+        <div>
+          <label class="field-label">Password *</label>
+          <input type="password" id="reg-password" minlength="6" placeholder="Min. 6 characters" required />
+        </div>
+      </div>
+      <button type="submit" id="btn-submit-register" class="shop-cta">Complete Registration</button>
+    </form>
+  </div>
+</div>
+
+<!-- SET NEW PASSWORD MODAL -->
+<div id="recovery-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0; color:var(--primary-deep);">🔐 Set Your New Password</h3>
+      <button type="button" class="secondary sm" onclick="closeRecoveryModal()">✕</button>
+    </div>
+    <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 0.9rem;">
+      Your reset link is verified. Enter a new password below to regain access to your account and shop.
+    </p>
+    <form onsubmit="completePasswordReset(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+      <div>
+        <label class="field-label">New Password (Min. 6 characters) *</label>
+        <input type="password" id="recovery-new-password" minlength="6" placeholder="Enter new password" required />
+      </div>
+      <div>
+        <label class="field-label">Confirm New Password *</label>
+        <input type="password" id="recovery-confirm-password" minlength="6" placeholder="Re-type new password" required />
+      </div>
+      <button type="submit" id="btn-save-new-password" class="shop-cta">Update Password &amp; Sign In</button>
+    </form>
+  </div>
+</div>
+
+<!-- USER & SELLER PROFILE, SHIPPING ADDRESS & PASSWORD SETTINGS MODAL -->
+<div id="profile-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeProfileModal()">
+  <div class="modal">
+    <div class="row-between">
+      <h3 style="margin:0; color:var(--primary-deep);">⚙️ Profile, Shipping Address &amp; Security</h3>
+      <button type="button" class="secondary sm" onclick="closeProfileModal()">✕</button>
+    </div>
+
+    <div class="auth-tabs">
+      <button type="button" id="prof-tab-info" class="auth-tab active" onclick="switchProfileTab('info')">👤 Profile &amp; Address</button>
+      <button type="button" id="prof-tab-security" class="auth-tab" onclick="switchProfileTab('security')">🔐 Password &amp; Recovery</button>
+    </div>
+
+    <form id="profile-info-form" onsubmit="saveUserProfile(event)" style="display:flex; flex-direction:column; gap:0.8rem;">
+      <div>
+        <label class="field-label">Complete Name *</label>
+        <input type="text" id="prof-name" required />
+      </div>
+      <div>
+        <label class="field-label">Contact Number *</label>
+        <input type="tel" id="prof-phone" required />
+      </div>
+      <div>
+        <label class="field-label">Default Shipping / Delivery Address (Include Barangay) *</label>
+        <textarea id="prof-address" rows="2" placeholder="House/Street, Barangay (e.g., Dangay), Roxas, Oriental Mindoro" required></textarea>
+      </div>
+      <div>
+        <label class="field-label">Account Email</label>
+        <input type="email" id="prof-email" disabled style="background:#f8fafc; color:var(--muted);" />
+      </div>
+      <button type="submit" class="shop-cta">Save Profile &amp; Shipping Address</button>
+    </form>
+
+    <div id="profile-security-pane" class="hidden" style="display:flex; flex-direction:column; gap:0.9rem;">
+      <form onsubmit="updatePasswordFromSettings(event)" style="display:flex; flex-direction:column; gap:0.75rem; background:#f8fbf9; border:1px solid var(--border); border-radius:8px; padding:0.9rem;">
+        <strong style="font-size:0.88rem; color:var(--primary-deep);">Change Account Password</strong>
+        <div>
+          <label class="field-label">New Password (Min. 6 characters) *</label>
+          <input type="password" id="settings-new-pass" minlength="6" placeholder="Enter new password" required />
+        </div>
+        <div>
+          <label class="field-label">Confirm New Password *</label>
+          <input type="password" id="settings-confirm-pass" minlength="6" placeholder="Re-type new password" required />
+        </div>
+        <button type="submit" id="btn-settings-update-pass" class="shop-cta sm">Update Password Now</button>
+      </form>
+
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem; font-size:0.82rem; color:#92400e;">
+        <strong>Forgot Password / Email Reset Link:</strong><br/>
+        Send a password reset link directly to <strong id="settings-reset-email-label">your email</strong>.
+        <div style="margin-top:0.55rem;">
+          <button type="button" class="secondary sm" onclick="sendResetLinkFromProfileSettings()">📧 Send Password Reset Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART & EXPRESS BUY NOW CHECKOUT MODAL (COD + SCAN QR + BARANGAY SHIPPING) -->
+<div id="cart-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeCart()">
+  <div class="modal">
+    <div class="row-between">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <h3 style="margin:0; color:var(--primary-deep);" id="cart-modal-title">🛒 Shopping Cart</h3>
+        <span id="express-buy-badge" class="badge seller hidden">⚡ Buy Now</span>
+      </div>
+      <button type="button" class="secondary sm" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cart-items-container" style="margin: 0.9rem 0;"></div>
+    <div id="checkout-section" class="hidden">
+      <hr style="border:0; border-top:1px solid var(--border); margin:0.9rem 0;" />
+
+      <!-- PAYMENT METHOD SELECTOR: COD OR SCAN QR -->
+      <div style="margin-bottom:0.85rem;">
+        <label class="field-label" style="color:var(--primary-deep);">💳 Select Payment Method *</label>
+        <div class="payment-choice-grid">
+          <div id="pay-choice-cod" class="payment-choice-card active" onclick="selectCheckoutPaymentMethod('COD')">
+            <span style="font-size:1.35rem;">💵</span>
+            <div>
+              <strong style="font-size:0.85rem; display:block;">Cash on Delivery (COD)</strong>
+              <small style="font-size:0.72rem; color:var(--muted);">Pay cash upon delivery</small>
+            </div>
+          </div>
+          <div id="pay-choice-qr" class="payment-choice-card" onclick="selectCheckoutPaymentMethod('QR')">
+            <span style="font-size:1.35rem;">📱</span>
+            <div>
+              <strong style="font-size:0.85rem; display:block;">Scan E-Wallet QR</strong>
+              <small style="font-size:0.72rem; color:var(--muted);">GCash, Maya, MariBank, etc.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- SELLER QR CODE DISPLAY PANEL -->
+        <div id="checkout-qr-panel" class="qr-payment-panel hidden">
+          <div id="checkout-qr-list"></div>
+          <div style="margin-top:0.65rem;">
+            <label class="field-label">Payment Reference No. / Sender Account Name *</label>
+            <input type="text" id="checkout-qr-ref" placeholder="e.g., GCash Ref #1234567890 — Juan D." />
+          </div>
+        </div>
+      </div>
+
+      <div class="row-between" style="margin-bottom:0.55rem;">
+        <h4 style="margin:0; color:var(--primary-deep);">Customer Info &amp; Barangay Address *</h4>
+        <button type="button" id="btn-toggle-checkout-edit" class="secondary sm" onclick="toggleCheckoutEdit()">Edit Details</button>
+      </div>
+
+      <div id="checkout-missing-alert" class="error-box hidden" style="margin-bottom:0.7rem; padding:0.65rem 0.85rem;">
+        ⚠️ <strong>Required:</strong> Please fill up your Complete Name, Contact Number, and Delivery Address (include your Barangay, e.g., Dangay) before placing an order.
+      </div>
+
+      <div id="checkout-autofill-card" class="delivery-summary-card">
+        <div class="row-between">
+          <strong style="color:var(--green);">✓ Saved Customer Info &amp; Address</strong>
+          <span class="badge seller">Auto-Filled</span>
+        </div>
+        <div style="margin-top:0.4rem; font-size:0.83rem; color:var(--text-secondary);">
+          <div><strong>Recipient:</strong> <span id="display-checkout-name">—</span></div>
+          <div><strong>Contact No.:</strong> <span id="display-checkout-phone">—</span></div>
+          <div><strong>Delivery Address:</strong> <span id="display-checkout-address">—</span></div>
+        </div>
+      </div>
+
+      <div id="checkout-edit-fields" class="hidden" style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:0.8rem;">
+        <div>
+          <label class="field-label">Recipient Full Name *</label>
+          <input type="text" id="checkout-name" placeholder="e.g., Juan Dela Cruz" oninput="syncCheckoutPreview(); renderCartModal();" />
+        </div>
+        <div>
+          <label class="field-label">Contact Number *</label>
+          <input type="tel" id="checkout-phone" placeholder="e.g., 0917 123 4567" oninput="syncCheckoutPreview()" />
+        </div>
+        <div>
+          <label class="field-label">Complete Delivery Address (Include Barangay, e.g., Dangay, Roxas) *</label>
+          <textarea id="checkout-address" rows="2" placeholder="e.g., Brgy. Dangay, Roxas, Oriental Mindoro" oninput="syncCheckoutPreview(); renderCartModal();"></textarea>
+        </div>
+      </div>
+
+      <div class="policy-notice-box">
+        ⚠️ <strong>IMPORTANT ORDER POLICY — NO TO CANCEL AFTER SHIPPING:</strong><br/>
+        • Shipping fee automatically adjusts based on your Barangay / location.<br/>
+        • Cancellation is allowed <strong>only while Pending</strong>. Once <strong>Shipped</strong>, <strong>NO CANCELLATION</strong> applies.
+      </div>
+
+      <label style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.8rem; color:var(--text-secondary); cursor:pointer; margin-bottom:0.85rem;">
+        <input type="checkbox" id="checkout-policy-agree" checked style="width:auto; margin-top:2px;" />
+        <span>I confirm my Barangay delivery address is accurate and I agree to the <strong>No to Cancel after Shipping</strong> policy.</span>
+      </label>
+
+      <button type="button" id="btn-place-order" onclick="checkout()" class="shop-cta" style="width:100%; padding:0.75rem; font-size:0.95rem;">
+        Place Order Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINTABLE DELIVERY RECEIPT / WAYBILL MODAL -->
+<div id="receipt-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeReceiptModal()">
+  <div class="modal" style="max-width:520px;">
+    <div class="row-between no-print" style="margin-bottom:0.85rem;">
+      <h3 style="margin:0; color:var(--primary-deep);">🖨️ Delivery Receipt &amp; Waybill</h3>
+      <div style="display:flex; gap:0.45rem;">
+        <button type="button" class="shop-cta sm" onclick="window.print()">🖨️ Print Receipt</button>
+        <button type="button" class="secondary sm" onclick="closeReceiptModal()">✕</button>
+      </div>
+    </div>
+    <div id="receipt-printable-area" class="receipt-sheet"></div>
+  </div>
+</div>
+
+<!-- LIVE CHAT MODAL -->
+<div id="chat-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeChatModal()">
+  <div class="modal chat-modal-box">
+    <div class="chat-header-bar">
+      <div>
+        <strong style="font-size:1rem; display:block;" id="chat-modal-title">💬 MarketHub Live Chat</strong>
+        <small style="font-size:0.75rem; opacity:0.9;" id="chat-modal-subtitle">Direct message between Buyer &amp; Seller</small>
+      </div>
+      <div style="display:flex; gap:0.4rem;">
+        <button type="button" class="secondary sm" onclick="loadChatMessages(true)">↻</button>
+        <button type="button" class="secondary sm" onclick="closeChatModal()">✕</button>
+      </div>
+    </div>
+
+    <div class="chat-body-split">
+      <div class="chat-threads-col" id="chat-threads-list"></div>
+      <div class="chat-messages-col">
+        <div id="chat-active-banner" style="padding:0.55rem 0.85rem; background:#f8fbf9; border-bottom:1px solid var(--border); font-size:0.8rem; font-weight:700; color:var(--primary-deep);">
+          Select a shop or order conversation
+        </div>
+        <div class="chat-messages-feed" id="chat-messages-feed"></div>
+        <form class="chat-input-bar" onsubmit="sendChatMessage(event)">
+          <input type="text" id="chat-message-input" placeholder="Type your message to seller/buyer..." autocomplete="off" required />
+          <button type="submit" id="btn-send-chat" class="shop-cta sm">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
 <script>
   /* =========================================================
      1. SUPABASE CONFIGURATION & STATE
